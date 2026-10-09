@@ -1,0 +1,2262 @@
+------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/yueqian/Downloads/graph_Qian_Fan_2025_ILRReview.log
+  log type:  text
+ opened on:   3 Dec 2025, 09:21:29
+
+. 
+. /*
+> Stata packages coefplot and cleanplots need to be installed to produce the graphs
+> coefplot - https://repec.sowi.unibe.ch/stata/coefplot/
+> cleanplots - https://www.trentonmize.com/software/cleanplots
+> */
+. 
+. // version control
+. version 18.0
+
+. clear all
+
+. set more off
+
+. matrix drop _all
+
+. set linesize 120
+
+. 
+. // set up macros
+. global date "09062024"
+
+. 
+. global par "i.female i.r i.ed3 age lnearn health painkill kidund6 kid6to12 kid13to17 i.spouse i.wkhours durcare durhw 
+> ib22.ind14 i.region"
+
+. 
+. global occ "mean_unemp mean_female_acs mean_white_acs mean_col_acs mean_parttime_acs lnwkearn"
+
+. 
+. global notpar "i.female i.r i.ed3 age lnearn health painkill i.spouse i.wkhours durcare durhw ib22.ind14 i.region"
+
+. 
+. 
+. ***********************************************************
+. *****main analysis: two way interaction********************
+. ***********************************************************
+. use reg_sample, clear
+
+. count
+  8,945
+
+. 
+. // label variables to more easily create graph with loops
+. label var par "Parents"
+
+. gen notpar = not_par
+
+. label var notpar "Non-parents"
+
+. label var per_negative4 "Negative affect"
+
+. 
+. 
+. // two-way interactions
+. foreach v in negative4{
+  2.                 
+.         reg per_`v' ib2.loc6 i.pandemic loc6#pandemic ///
+>                 mean_home i.par ///
+>                 $par $occ [pw=wbwt], vce(cluster hocc)
+  3.         estimates store `v'2
+  4.         outreg2 using "$date results", excel dec(3) alpha(0.001, 0.01, 0.05, 0.1) symbol(***, **, *, +) 
+  5. }
+(sum of wgt is 93,768,746,541.05)
+
+Linear regression                               Number of obs     =      8,945
+                                                F(48, 371)        =      19.28
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.0968
+                                                Root MSE          =     .96256
+
+                                        (Std. err. adjusted for 372 clusters in hocc)
+-------------------------------------------------------------------------------------
+                    |               Robust
+      per_negative4 | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+--------------------+----------------------------------------------------------------
+               loc6 |
+         only home  |   -.154679   .0553713    -2.79   0.005      -.26356    -.045798
+         1.pandemic |   .0170402    .044841     0.38   0.704    -.0711342    .1052146
+                    |
+      loc6#pandemic |
+       only home#1  |    .148142   .0871439     1.70   0.090     -.023216    .3194999
+                    |
+          mean_home |  -.0316459   .1903032    -0.17   0.868    -.4058541    .3425624
+              1.par |    .038762    .050919     0.76   0.447     -.061364    .1388879
+                    |
+             female |
+             women  |   .1541424    .032452     4.75   0.000     .0903295    .2179552
+                    |
+                  r |
+             black  |    .005511   .0495802     0.11   0.912    -.0919823    .1030044
+          Hispanic  |  -.0467993   .0398725    -1.17   0.241    -.1252037    .0316051
+             other  |  -.0095899   .0564572    -0.17   0.865    -.1206063    .1014264
+                    |
+              1.ed3 |   .1224682   .0369879     3.31   0.001      .049736    .1952005
+                age |  -.0053851   .0015918    -3.38   0.001    -.0085151    -.002255
+             lnearn |   .0332607   .0210622     1.58   0.115    -.0081556     .074677
+             health |  -.2410602   .0131331   -18.36   0.000    -.2668849   -.2152355
+           painkill |   .3214779   .0322525     9.97   0.000     .2580574    .3848985
+            kidund6 |   .0087469   .0505091     0.17   0.863    -.0905732     .108067
+           kid6to12 |   .0060754    .033863     0.18   0.858    -.0605122    .0726629
+          kid13to17 |  -.0782894   .0449254    -1.74   0.082    -.1666298    .0100509
+                    |
+             spouse |
+        sp non-emp  |  -.0325674   .0509359    -0.64   0.523    -.1327266    .0675918
+           sp part  |  -.0062822   .0612035    -0.10   0.918    -.1266316    .1140671
+           sp full  |  -.0747385   .0354378    -2.11   0.036    -.1444226   -.0050544
+           sp long  |   .0059048   .0489825     0.12   0.904    -.0904133    .1022229
+           sp vary  |  -.2095567   .1034382    -2.03   0.043    -.4129554    -.006158
+                    |
+            wkhours |
+             35-49  |   .0706388   .0485334     1.46   0.146    -.0247962    .1660739
+               50+  |   .2345305   .0602018     3.90   0.000      .116151    .3529101
+              vary  |   .3203625   .0841522     3.81   0.000     .1548873    .4858377
+                    |
+            durcare |   -.008239   .0103504    -0.80   0.427    -.0285919    .0121139
+              durhw |  -.0101656   .0100211    -1.01   0.311    -.0298709    .0095398
+                    |
+              ind14 |
+       Agriculture  |   .0929906   .0641336     1.45   0.148    -.0331203    .2191015
+            Mining  |  -.2635663   .1066879    -2.47   0.014    -.4733552   -.0537775
+      Construction  |  -.1455425   .0637976    -2.28   0.023    -.2709927   -.0200923
+     Manufacturing  |  -.0393698   .0589858    -0.67   0.505    -.1553582    .0766186
+             trade  |  -.1040789   .0539779    -1.93   0.055    -.2102198    .0020621
+    Transportation  |  -.1151712    .061544    -1.87   0.062    -.2361901    .0058477
+       Information  |  -.2583575   .0886022    -2.92   0.004     -.432583    -.084132
+           Finance  |  -.0706116   .0579605    -1.22   0.224     -.184584    .0433608
+Educational_health  |  -.0214568   .0471233    -0.46   0.649    -.1141189    .0712054
+           Leisure  |   .0010717   .0704778     0.02   0.988    -.1375143    .1396577
+             Other  |  -.2071883   .0770581    -2.69   0.007    -.3587136    -.055663
+    administration  |  -.0958167   .0618127    -1.55   0.122    -.2173639    .0257306
+                    |
+             region |
+           Midwest  |  -.0608307   .0432257    -1.41   0.160    -.1458288    .0241673
+             South  |  -.0540468    .042028    -1.29   0.199    -.1366898    .0285962
+              West  |  -.0177273   .0416368    -0.43   0.671    -.0996011    .0641465
+                    |
+         mean_unemp |    .571733   .8248258     0.69   0.489    -1.050187    2.193653
+    mean_female_acs |  -.0078708   .0812974    -0.10   0.923    -.1677324    .1519907
+     mean_white_acs |   .1328487   .2039042     0.65   0.515    -.2681041    .5338015
+       mean_col_acs |  -.0283225    .127168    -0.22   0.824     -.278383     .221738
+  mean_parttime_acs |   .0557271   .2051421     0.27   0.786      -.34766    .4591142
+           lnwkearn |   .0292797   .0980677     0.30   0.765    -.1635585    .2221179
+              _cons |   2.070573   .6798274     3.05   0.002     .7337749    3.407371
+-------------------------------------------------------------------------------------
+09062024 results.xml
+dir : seeout
+
+. 
+. // post-estimation test
+. foreach p in 0 1{
+  2.         foreach v in negative4{
+  3.                         
+.                 estimates restore `v'2 
+  4.                 margins, dydx(loc6) at(pandemic=`p')
+  5.                 
+. }
+  6. }
+(results negative42 are active now)
+
+Average marginal effects                                 Number of obs = 8,945
+Model VCE: Robust
+
+Expression: Linear prediction, predict()
+dy/dx wrt:  1.loc6
+At: pandemic = 0
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |      dy/dx   std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        loc6 |
+  only home  |   -.154679   .0553713    -2.79   0.005      -.26356    -.045798
+------------------------------------------------------------------------------
+Note: dy/dx for factor levels is the discrete change from the base level.
+(results negative42 are active now)
+
+Average marginal effects                                 Number of obs = 8,945
+Model VCE: Robust
+
+Expression: Linear prediction, predict()
+dy/dx wrt:  1.loc6
+At: pandemic = 1
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |      dy/dx   std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+        loc6 |
+  only home  |   -.006537   .0642179    -0.10   0.919    -.1328138    .1197398
+------------------------------------------------------------------------------
+Note: dy/dx for factor levels is the discrete change from the base level.
+
+. 
+. // two-way interactions: graphs
+. foreach p in 0 1{
+  2.         foreach v in negative4{
+  3.                         
+.                 estimates restore `v'2 
+  4.                 margins loc6, at(pandemic=`p') post
+  5.                 estimates store all`p'`v'2
+  6.                 
+. }
+  7. }
+(results negative42 are active now)
+
+Predictive margins                                       Number of obs = 8,945
+Model VCE: Robust
+
+Expression: Linear prediction, predict()
+At: pandemic = 0
+
+-------------------------------------------------------------------------------
+              |            Delta-method
+              |     Margin   std. err.      t    P>|t|     [95% conf. interval]
+--------------+----------------------------------------------------------------
+         loc6 |
+   only home  |   1.505456   .0531884    28.30   0.000     1.400867    1.610044
+only on site  |   1.660135   .0153711   108.00   0.000      1.62991     1.69036
+-------------------------------------------------------------------------------
+(results negative42 are active now)
+
+Predictive margins                                       Number of obs = 8,945
+Model VCE: Robust
+
+Expression: Linear prediction, predict()
+At: pandemic = 1
+
+-------------------------------------------------------------------------------
+              |            Delta-method
+              |     Margin   std. err.      t    P>|t|     [95% conf. interval]
+--------------+----------------------------------------------------------------
+         loc6 |
+   only home  |   1.670638   .0524219    31.87   0.000     1.567557    1.773719
+only on site  |   1.677175   .0428966    39.10   0.000     1.592824    1.761526
+-------------------------------------------------------------------------------
+
+. 
+. // two-way interactions: graphs (negative4)
+. foreach v in negative4{
+  2.         
+.         coefplot (all0`v'2, recast(bar) barwidth(0.3) fcolor(red*.5) ///
+>                 ciopt(recast(rcap) lcolor(red)) citop lcolor(%0)) ///
+>                 || (all1`v'2, recast(bar) barwidth(0.3) fcolor(eltblue*.5) ///
+>                 ciopt(recast(rcap) lcolor(eltblue)) citop lcolor(%0))  ///
+>                 || , vertical format(%9.2f) ///
+>                 ytitle("`: var label per_`v''") ///
+>                 mlabel mlabpos(2) mlabcolor(black) ///
+>                 xlabel(1 "Working from home" 2 "Working away from home", tlength(0)) ///
+>                 legend(position(6) row(1)) ///
+>                 ylabel(0(.5)2) ///
+>                 xscale(lstyle(none)) ///
+>                 bylabels("Pre-pandemic (2010, 2012, 2013)" "Pandemic (2021)") ///
+>                 norecycle byopts(legen(off))
+  3.         graph save all`v'2
+  4. 
+. }
+file allnegative42.gph saved
+
+. 
+. graph export "Figure 1.pdf"
+file /Users/yueqian/Downloads/Figure 1.pdf saved as PDF format
+
+. 
+. 
+. ***********************************************************
+. *****main analysis: two way interaction by parent status***
+. ***********************************************************
+. estimates clear
+
+. 
+. // two-way interactions
+. foreach s in par notpar{
+  2.         foreach v in negative4{
+  3.                 
+.                 display "sample = `s'"
+  4.                 reg per_`v' ib2.loc6 i.pandemic loc6#pandemic ///
+>                         mean_home ///
+>                         $`s' $occ [pw=wbwt] if `s'==1, vce(cluster hocc)
+  5.                 estimates store `s'_`v'2
+  6.                 outreg2 using "$date results", excel bdec(3) alpha(0.001, 0.01, 0.05, 0.1) symbol(***, **, *, +)
+  7.         
+. }
+  8. }
+sample = par
+(sum of wgt is 38,646,362,427.94)
+
+Linear regression                               Number of obs     =      4,751
+                                                F(47, 349)        =      14.27
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.1077
+                                                Root MSE          =     .95021
+
+                                        (Std. err. adjusted for 350 clusters in hocc)
+-------------------------------------------------------------------------------------
+                    |               Robust
+      per_negative4 | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+--------------------+----------------------------------------------------------------
+               loc6 |
+         only home  |  -.2531073   .0580603    -4.36   0.000    -.3672993   -.1389153
+         1.pandemic |   .0242505   .0602048     0.40   0.687    -.0941592    .1426603
+                    |
+      loc6#pandemic |
+       only home#1  |   .2528766   .0974082     2.60   0.010     .0612958    .4444575
+                    |
+          mean_home |   .0039657   .2023755     0.02   0.984    -.3940633    .4019947
+                    |
+             female |
+             women  |   .1411659   .0526498     2.68   0.008     .0376151    .2447167
+                    |
+                  r |
+             black  |  -.0290051   .0653037    -0.44   0.657    -.1574434    .0994333
+          Hispanic  |  -.0882214   .0564577    -1.56   0.119    -.1992616    .0228188
+             other  |  -.0792734   .0757866    -1.05   0.296    -.2283293    .0697825
+                    |
+              1.ed3 |    .070914   .0443619     1.60   0.111    -.0163362    .1581643
+                age |   .0000936   .0034271     0.03   0.978    -.0066467    .0068339
+             lnearn |   .0473988   .0238832     1.98   0.048     .0004256    .0943719
+             health |  -.2491514    .018157   -13.72   0.000    -.2848624   -.2134405
+           painkill |   .3299904   .0415452     7.94   0.000     .2482798    .4117009
+            kidund6 |   .0537304   .0533885     1.01   0.315    -.0512732    .1587341
+           kid6to12 |   .0057606   .0352552     0.16   0.870    -.0635788    .0751001
+          kid13to17 |  -.1083934   .0457144    -2.37   0.018    -.1983038   -.0184829
+                    |
+             spouse |
+        sp non-emp  |  -.1114241   .0678123    -1.64   0.101    -.2447963    .0219482
+           sp part  |  -.1711339    .065431    -2.62   0.009    -.2998226   -.0424451
+           sp full  |   -.106189   .0598788    -1.77   0.077    -.2239578    .0115798
+           sp long  |  -.0510072   .0626828    -0.81   0.416    -.1742908    .0722763
+           sp vary  |  -.2500414   .1344229    -1.86   0.064    -.5144223    .0143396
+                    |
+            wkhours |
+             35-49  |   .0836215   .0582493     1.44   0.152    -.0309424    .1981854
+               50+  |   .2458392   .0767047     3.21   0.001     .0949776    .3967008
+              vary  |   .1701963   .1337863     1.27   0.204    -.0929325     .433325
+                    |
+            durcare |   .0042123   .0107319     0.39   0.695     -.016895    .0253196
+              durhw |   .0030552   .0140224     0.22   0.828    -.0245238    .0306342
+                    |
+              ind14 |
+       Agriculture  |  -.0580598   .0929972    -0.62   0.533    -.2409653    .1248458
+            Mining  |  -.1242627   .1390348    -0.89   0.372    -.3977141    .1491888
+      Construction  |  -.1071564   .0833268    -1.29   0.199    -.2710422    .0567294
+     Manufacturing  |   -.053459   .0656876    -0.81   0.416    -.1826522    .0757343
+             trade  |  -.0938217   .0681446    -1.38   0.169    -.2278474    .0402039
+    Transportation  |   .0151163    .085022     0.18   0.859    -.1521036    .1823361
+       Information  |  -.1041692   .0994983    -1.05   0.296    -.2998609    .0915225
+           Finance  |   .0183636   .0770172     0.24   0.812    -.1331126    .1698398
+Educational_health  |   .0428534    .061211     0.70   0.484    -.0775355    .1632423
+           Leisure  |  -.0196744   .0946246    -0.21   0.835    -.2057805    .1664317
+             Other  |  -.1353767   .0725842    -1.87   0.063    -.2781342    .0073808
+    administration  |  -.0402023   .0729589    -0.55   0.582    -.1836966    .1032921
+                    |
+             region |
+           Midwest  |  -.1111608   .0501241    -2.22   0.027    -.2097441   -.0125775
+             South  |  -.0721802   .0525186    -1.37   0.170    -.1754729    .0311125
+              West  |  -.0295986   .0557212    -0.53   0.596    -.1391902     .079993
+                    |
+         mean_unemp |   .9275417   1.193495     0.78   0.438    -1.419806    3.274889
+    mean_female_acs |   .0556956   .0993255     0.56   0.575    -.1396563    .2510474
+     mean_white_acs |   -.244255   .1960804    -1.25   0.214    -.6299029     .141393
+       mean_col_acs |  -.1263358   .1374541    -0.92   0.359    -.3966784    .1440069
+  mean_parttime_acs |  -.0564392   .2378362    -0.24   0.813    -.5242117    .4113333
+           lnwkearn |   .1437417   .1079429     1.33   0.184    -.0685586    .3560421
+              _cons |   1.296744   .7878634     1.65   0.101    -.2528132    2.846302
+-------------------------------------------------------------------------------------
+09062024 results.xml
+dir : seeout
+sample = notpar
+(sum of wgt is 55,122,384,113.1)
+
+Linear regression                               Number of obs     =      4,194
+                                                F(44, 346)        =       9.48
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.1013
+                                                Root MSE          =     .96875
+
+                                        (Std. err. adjusted for 347 clusters in hocc)
+-------------------------------------------------------------------------------------
+                    |               Robust
+      per_negative4 | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+--------------------+----------------------------------------------------------------
+               loc6 |
+         only home  |  -.0872712   .1022335    -0.85   0.394    -.2883485     .113806
+         1.pandemic |   .0039068    .060146     0.06   0.948    -.1143911    .1222046
+                    |
+      loc6#pandemic |
+       only home#1  |   .0724419   .1399073     0.52   0.605     -.202734    .3476178
+                    |
+          mean_home |  -.0499486   .2568238    -0.19   0.846     -.555081    .4551838
+                    |
+             female |
+             women  |   .1591993   .0437931     3.64   0.000      .073065    .2453335
+                    |
+                  r |
+             black  |   .0273046   .0654547     0.42   0.677    -.1014345    .1560438
+          Hispanic  |  -.0246479   .0589751    -0.42   0.676    -.1406428     .091347
+             other  |   .0392188   .0821214     0.48   0.633    -.1223011    .2007387
+                    |
+              1.ed3 |   .1412745   .0548978     2.57   0.010      .033299    .2492499
+                age |  -.0060034   .0018764    -3.20   0.002     -.009694   -.0023128
+             lnearn |   .0216871   .0282193     0.77   0.443    -.0338158      .07719
+             health |  -.2375455   .0189836   -12.51   0.000    -.2748832   -.2002078
+           painkill |   .3206808   .0453883     7.07   0.000     .2314092    .4099524
+                    |
+             spouse |
+        sp non-emp  |   .0173341   .0805917     0.22   0.830    -.1411771    .1758454
+           sp part  |    .201534   .1346246     1.50   0.135    -.0632516    .4663197
+           sp full  |   -.087962   .0502337    -1.75   0.081    -.1867638    .0108398
+           sp long  |   .0469062   .0797806     0.59   0.557    -.1100099    .2038223
+           sp vary  |   -.178795   .1625172    -1.10   0.272    -.4984409    .1408509
+                    |
+            wkhours |
+             35-49  |   .0790031    .073216     1.08   0.281    -.0650012    .2230075
+               50+  |   .2493246    .085925     2.90   0.004     .0803235    .4183256
+              vary  |   .4218369   .1211979     3.48   0.001     .1834597    .6602142
+                    |
+            durcare |  -.0470975    .033332    -1.41   0.159    -.1126564    .0184613
+              durhw |  -.0187598    .014624    -1.28   0.200    -.0475229    .0100034
+                    |
+              ind14 |
+       Agriculture  |   .2340647   .1034488     2.26   0.024      .030597    .4375324
+            Mining  |  -.4133587   .1788644    -2.31   0.021    -.7651571   -.0615603
+      Construction  |  -.1670918   .1000418    -1.67   0.096    -.3638585    .0296749
+     Manufacturing  |  -.0221708   .0798789    -0.28   0.782    -.1792801    .1349385
+             trade  |  -.1185403   .0676923    -1.75   0.081    -.2516804    .0145999
+    Transportation  |  -.2063859   .0945331    -2.18   0.030    -.3923178    -.020454
+       Information  |  -.3848631   .1207597    -3.19   0.002    -.6223785   -.1473477
+           Finance  |  -.1324795   .0824541    -1.61   0.109    -.2946538    .0296948
+Educational_health  |   -.072278   .0658097    -1.10   0.273    -.2017154    .0571594
+           Leisure  |   .0015443    .089917     0.02   0.986    -.1753083     .178397
+             Other  |  -.2650091   .1180653    -2.24   0.025    -.4972252    -.032793
+    administration  |  -.1500516   .0991737    -1.51   0.131    -.3451107    .0450076
+                    |
+             region |
+           Midwest  |  -.0197386   .0619558    -0.32   0.750     -.141596    .1021188
+             South  |  -.0412791   .0553872    -0.75   0.457     -.150217    .0676587
+              West  |  -.0094062   .0583086    -0.16   0.872    -.1240901    .1052777
+                    |
+         mean_unemp |    .312587   1.099412     0.28   0.776    -1.849785    2.474959
+    mean_female_acs |  -.0436931   .1151104    -0.38   0.704    -.2700974    .1827112
+     mean_white_acs |   .3711134   .2914548     1.27   0.204    -.2021327    .9443595
+       mean_col_acs |   .0339109   .1599859     0.21   0.832    -.2807564    .3485782
+  mean_parttime_acs |   .1088561   .2838986     0.38   0.702    -.4495281    .6672403
+           lnwkearn |   -.032135   .1400192    -0.23   0.819    -.3075308    .2432608
+              _cons |   2.427508   .9630878     2.52   0.012     .5332645    4.321751
+-------------------------------------------------------------------------------------
+09062024 results.xml
+dir : seeout
+
+. 
+. // post-estimation test
+. foreach s in par notpar{
+  2.         foreach p in 1 2{
+  3.                         foreach v in negative4{
+  4.                         
+.                 estimates restore `s'_`v'2  
+  5.                 margins, dydx(pandemic) at(loc6=`p')
+  6.                 
+. }
+  7. }
+  8. }
+(results par_negative42 are active now)
+
+Average marginal effects                                 Number of obs = 4,751
+Model VCE: Robust
+
+Expression: Linear prediction, predict()
+dy/dx wrt:  1.pandemic
+At: loc6 = 1
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |      dy/dx   std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+  1.pandemic |   .2771272    .092509     3.00   0.003     .0951818    .4590725
+------------------------------------------------------------------------------
+Note: dy/dx for factor levels is the discrete change from the base level.
+(results par_negative42 are active now)
+
+Average marginal effects                                 Number of obs = 4,751
+Model VCE: Robust
+
+Expression: Linear prediction, predict()
+dy/dx wrt:  1.pandemic
+At: loc6 = 2
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |      dy/dx   std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+  1.pandemic |   .0242505   .0602048     0.40   0.687    -.0941592    .1426603
+------------------------------------------------------------------------------
+Note: dy/dx for factor levels is the discrete change from the base level.
+(results notpar_negative42 are active now)
+
+Average marginal effects                                 Number of obs = 4,194
+Model VCE: Robust
+
+Expression: Linear prediction, predict()
+dy/dx wrt:  1.pandemic
+At: loc6 = 1
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |      dy/dx   std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+  1.pandemic |   .0763487   .1180263     0.65   0.518    -.1557907     .308488
+------------------------------------------------------------------------------
+Note: dy/dx for factor levels is the discrete change from the base level.
+(results notpar_negative42 are active now)
+
+Average marginal effects                                 Number of obs = 4,194
+Model VCE: Robust
+
+Expression: Linear prediction, predict()
+dy/dx wrt:  1.pandemic
+At: loc6 = 2
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |      dy/dx   std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+  1.pandemic |   .0039068    .060146     0.06   0.948    -.1143911    .1222046
+------------------------------------------------------------------------------
+Note: dy/dx for factor levels is the discrete change from the base level.
+
+. 
+. // two-way interactions: graphs
+. foreach s in par notpar{
+  2.         foreach p in 0 1{
+  3.                         foreach v in negative4{
+  4.                         
+.                                 estimates restore `s'_`v'2 
+  5.                                 margins loc6, at(pandemic=`p') post
+  6.                                 estimates store `s'`p'`v'2
+  7.                 
+. }
+  8. }
+  9. }
+(results par_negative42 are active now)
+
+Predictive margins                                       Number of obs = 4,751
+Model VCE: Robust
+
+Expression: Linear prediction, predict()
+At: pandemic = 0
+
+-------------------------------------------------------------------------------
+              |            Delta-method
+              |     Margin   std. err.      t    P>|t|     [95% conf. interval]
+--------------+----------------------------------------------------------------
+         loc6 |
+   only home  |   1.406085   .0526282    26.72   0.000     1.302577    1.509593
+only on site  |   1.659192   .0183193    90.57   0.000     1.623162    1.695223
+-------------------------------------------------------------------------------
+(results par_negative42 are active now)
+
+Predictive margins                                       Number of obs = 4,751
+Model VCE: Robust
+
+Expression: Linear prediction, predict()
+At: pandemic = 1
+
+-------------------------------------------------------------------------------
+              |            Delta-method
+              |     Margin   std. err.      t    P>|t|     [95% conf. interval]
+--------------+----------------------------------------------------------------
+         loc6 |
+   only home  |   1.683212   .0874298    19.25   0.000     1.511257    1.855168
+only on site  |   1.683443   .0555139    30.32   0.000     1.574259    1.792627
+-------------------------------------------------------------------------------
+(results notpar_negative42 are active now)
+
+Predictive margins                                       Number of obs = 4,194
+Model VCE: Robust
+
+Expression: Linear prediction, predict()
+At: pandemic = 0
+
+-------------------------------------------------------------------------------
+              |            Delta-method
+              |     Margin   std. err.      t    P>|t|     [95% conf. interval]
+--------------+----------------------------------------------------------------
+         loc6 |
+   only home  |   1.577628   .0978495    16.12   0.000     1.385173    1.770083
+only on site  |   1.664899   .0216162    77.02   0.000     1.622384    1.707415
+-------------------------------------------------------------------------------
+(results notpar_negative42 are active now)
+
+Predictive margins                                       Number of obs = 4,194
+Model VCE: Robust
+
+Expression: Linear prediction, predict()
+At: pandemic = 1
+
+-------------------------------------------------------------------------------
+              |            Delta-method
+              |     Margin   std. err.      t    P>|t|     [95% conf. interval]
+--------------+----------------------------------------------------------------
+         loc6 |
+   only home  |   1.653977    .072388    22.85   0.000     1.511601    1.796353
+only on site  |   1.668806   .0582365    28.66   0.000     1.554264    1.783348
+-------------------------------------------------------------------------------
+
+. 
+. foreach s in par{
+  2.         foreach v in negative4{
+  3.         
+.                 coefplot (`s'0`v'2, recast(bar) barwidth(0.3) fcolor(red*.5) ///
+>                         ciopt(recast(rcap) lcolor(red)) citop lcolor(%0)) ///
+>                         (`s'1`v'2, recast(bar) barwidth(0.3) fcolor(eltblue*.5) ///
+>                         ciopt(recast(rcap) lcolor(eltblue)) citop lcolor(%0)), ///
+>                         bylabel(loc6) ///
+>                         || (not`s'0`v'2, recast(bar) barwidth(0.3) fcolor(red*.5) ///
+>                         ciopt(recast(rcap) lcolor(red)) citop lcolor(%0)) ///
+>                         (not`s'1`v'2, recast(bar) barwidth(0.3) fcolor(eltblue*.5) ///
+>                         ciopt(recast(rcap) lcolor(eltblue)) citop lcolor(%0)), ///
+>                         bylabel(loc6) ///
+>                         || , vertical format(%9.2f) ///
+>                         ytitle("`: var label per_`v''") ///
+>                         plotlabels("Pre-pandemic (2010, 2012, 2013)" "Pandemic (2021)") ///
+>                         mlabel mlabpos(2) mlabcolor(black) ///
+>                         xlabel(1 "Working from home" 2 "Working away from home", tlength(0)) ///
+>                         ylabel(0(.5)2) ///
+>                         xscale(lstyle(none)) ///
+>                         bylabels("`: var label `s''" "`: var label not`s''") ///
+>                         byopts(legend(position(6))) ///
+>                         legend(row(1))
+  4.                 graph save `s'`v'2
+  5. 
+. }
+  6. }
+file parnegative42.gph saved
+
+. 
+. graph export "Figure 2.pdf"
+file /Users/yueqian/Downloads/Figure 2.pdf saved as PDF format
+
+. 
+. 
+. ***********************************************************
+. *****full models: three way interaction by parent status***
+. ***********************************************************
+. estimates clear
+
+. 
+. // parents
+. foreach s in par notpar{
+  2.         foreach v in negative4{
+  3.                 
+.                 display "sample = `s'"
+  4.                 reg per_`v' ib2.loc6 i.pandemic mean_home ///
+>                         loc6#pandemic c.mean_home#loc6 c.mean_home#pandemic ///
+>                         c.mean_home#loc6#pandemic ///
+>                         $`s' $occ [pw=wbwt] if `s'==1, vce(cluster hocc)
+  5.                 estimates store `s'_`v'_occ
+  6.                 outreg2 using "$date results", excel bdec(3) alpha(0.001, 0.01, 0.05, 0.1) symbol(***, **, *, +)
+  7.                 
+. }
+  8. }
+sample = par
+(sum of wgt is 38,646,362,427.94)
+
+Linear regression                               Number of obs     =      4,751
+                                                F(50, 349)        =      15.28
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.1120
+                                                Root MSE          =     .94825
+
+                                              (Std. err. adjusted for 350 clusters in hocc)
+-------------------------------------------------------------------------------------------
+                          |               Robust
+            per_negative4 | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+--------------------------+----------------------------------------------------------------
+                     loc6 |
+               only home  |  -.5442631   .0999938    -5.44   0.000    -.7409294   -.3475968
+               1.pandemic |   .0581888   .1020539     0.57   0.569    -.1425293    .2589068
+                mean_home |   .0730461   .2315686     0.32   0.753    -.3823995    .5284918
+                          |
+            loc6#pandemic |
+             only home#1  |   1.016973   .2405682     4.23   0.000     .5438273    1.490119
+                          |
+         loc6#c.mean_home |
+               only home  |    .918823   .2846071     3.23   0.001     .3590621    1.478584
+                          |
+     pandemic#c.mean_home |
+                       1  |  -.2301344    .435901    -0.53   0.598    -1.087458    .6271889
+                          |
+loc6#pandemic#c.mean_home |
+             only home#1  |  -2.415185   .6980187    -3.46   0.001    -3.788038   -1.042333
+                          |
+                   female |
+                   women  |   .1453118   .0522095     2.78   0.006     .0426269    .2479967
+                          |
+                        r |
+                   black  |  -.0294825    .065565    -0.45   0.653    -.1584347    .0994696
+                Hispanic  |  -.0858268   .0563845    -1.52   0.129     -.196723    .0250693
+                   other  |  -.0703578   .0749132    -0.94   0.348    -.2176959    .0769804
+                          |
+                    1.ed3 |   .0670763    .044337     1.51   0.131    -.0201251    .1542777
+                      age |   .0005696   .0034025     0.17   0.867    -.0061224    .0072616
+                   lnearn |   .0444607   .0232857     1.91   0.057    -.0013373    .0902588
+                   health |  -.2486964   .0180556   -13.77   0.000    -.2842079   -.2131849
+                 painkill |   .3260885   .0414063     7.88   0.000     .2446512    .4075258
+                  kidund6 |   .0600387   .0536518     1.12   0.264    -.0454828    .1655603
+                 kid6to12 |   .0098329   .0350445     0.28   0.779    -.0590922    .0787579
+                kid13to17 |  -.1054634      .0457    -2.31   0.022    -.1953454   -.0155813
+                          |
+                   spouse |
+              sp non-emp  |  -.1147238   .0675749    -1.70   0.090    -.2476291    .0181815
+                 sp part  |  -.1674342   .0657654    -2.55   0.011    -.2967807   -.0380878
+                 sp full  |  -.1059099   .0599775    -1.77   0.078    -.2238727    .0120529
+                 sp long  |  -.0534968   .0624598    -0.86   0.392    -.1763418    .0693482
+                 sp vary  |  -.2721942      .1359    -2.00   0.046    -.5394803   -.0049081
+                          |
+                  wkhours |
+                   35-49  |   .0872871   .0580329     1.50   0.133    -.0268511    .2014252
+                     50+  |   .2476993   .0771901     3.21   0.001      .095883    .3995156
+                    vary  |   .1718887   .1333438     1.29   0.198    -.0903699    .4341473
+                          |
+                  durcare |   .0034723   .0107491     0.32   0.747    -.0176688    .0246133
+                    durhw |   .0018719   .0140066     0.13   0.894    -.0256761    .0294198
+                          |
+                    ind14 |
+             Agriculture  |   -.065449   .0955594    -0.68   0.494    -.2533938    .1224958
+                  Mining  |  -.1292386    .139917    -0.92   0.356    -.4044252    .1459481
+            Construction  |  -.1126002   .0819722    -1.37   0.170    -.2738219    .0486214
+           Manufacturing  |  -.0560939   .0656585    -0.85   0.394      -.18523    .0730421
+                   trade  |  -.0960588   .0668606    -1.44   0.152    -.2275592    .0354416
+          Transportation  |   .0153687   .0836115     0.18   0.854    -.1490771    .1798144
+             Information  |  -.0975457   .1042108    -0.94   0.350     -.302506    .1074145
+                 Finance  |   .0163849   .0773575     0.21   0.832    -.1357606    .1685304
+      Educational_health  |   .0403455   .0610605     0.66   0.509    -.0797474    .1604384
+                 Leisure  |   -.021636   .0920707    -0.23   0.814    -.2027193    .1594473
+                   Other  |   -.131027    .072035    -1.82   0.070    -.2727043    .0106502
+          administration  |  -.0420682   .0720027    -0.58   0.559    -.1836821    .0995456
+                          |
+                   region |
+                 Midwest  |  -.1083967   .0498741    -2.17   0.030    -.2064883   -.0103051
+                   South  |  -.0714613   .0526645    -1.36   0.176    -.1750411    .0321185
+                    West  |  -.0339753    .055538    -0.61   0.541    -.1432066     .075256
+                          |
+               mean_unemp |   .8760437   1.181924     0.74   0.459    -1.448546    3.200634
+          mean_female_acs |   .0417932   .0978833     0.43   0.670    -.1507221    .2343085
+           mean_white_acs |  -.2437974    .190331    -1.28   0.201    -.6181375    .1305428
+             mean_col_acs |  -.1270237   .1388195    -0.92   0.361    -.4000517    .1460043
+        mean_parttime_acs |  -.0551653   .2338044    -0.24   0.814    -.5150081    .4046775
+                 lnwkearn |   .1330773   .1035695     1.28   0.200    -.0706216    .3367762
+                    _cons |   1.364339    .757694     1.80   0.073    -.1258818     2.85456
+-------------------------------------------------------------------------------------------
+09062024 results.xml
+dir : seeout
+sample = notpar
+(sum of wgt is 55,122,384,113.1)
+
+Linear regression                               Number of obs     =      4,194
+                                                F(47, 346)        =       9.23
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.1040
+                                                Root MSE          =     .96761
+
+                                              (Std. err. adjusted for 347 clusters in hocc)
+-------------------------------------------------------------------------------------------
+                          |               Robust
+            per_negative4 | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+--------------------------+----------------------------------------------------------------
+                     loc6 |
+               only home  |    .329495   .2235293     1.47   0.141    -.1101523    .7691423
+               1.pandemic |   -.011695   .0929897    -0.13   0.900    -.1945913    .1712012
+                mean_home |   .1468107   .2699387     0.54   0.587    -.3841165     .677738
+                          |
+            loc6#pandemic |
+             only home#1  |   -.189398   .2992645    -0.63   0.527    -.7780045    .3992086
+                          |
+         loc6#c.mean_home |
+               only home  |  -1.553969   .6492398    -2.39   0.017    -2.830923    -.277016
+                          |
+     pandemic#c.mean_home |
+                       1  |   .1190248   .4253405     0.28   0.780    -.7175537    .9556032
+                          |
+loc6#pandemic#c.mean_home |
+             only home#1  |   .8561606   1.114436     0.77   0.443     -1.33576    3.048081
+                          |
+                   female |
+                   women  |    .161026   .0435955     3.69   0.000     .0752805    .2467716
+                          |
+                        r |
+                   black  |   .0208447    .064384     0.32   0.746    -.1057885    .1474779
+                Hispanic  |  -.0210544   .0584288    -0.36   0.719    -.1359747     .093866
+                   other  |   .0353434   .0819725     0.43   0.667    -.1258837    .1965705
+                          |
+                    1.ed3 |   .1368629   .0553764     2.47   0.014     .0279463    .2457796
+                      age |  -.0057752   .0018473    -3.13   0.002    -.0094085   -.0021419
+                   lnearn |   .0231545   .0280057     0.83   0.409    -.0319283    .0782374
+                   health |   -.236928   .0190637   -12.43   0.000    -.2744233   -.1994327
+                 painkill |   .3163981   .0451007     7.02   0.000      .227692    .4051041
+                          |
+                   spouse |
+              sp non-emp  |   .0139623   .0805342     0.17   0.862    -.1444359    .1723604
+                 sp part  |   .1940965   .1305167     1.49   0.138    -.0626095    .4508025
+                 sp full  |  -.0939855    .050579    -1.86   0.064    -.1934664    .0054955
+                 sp long  |   .0409635   .0814914     0.50   0.616    -.1193174    .2012443
+                 sp vary  |  -.1714824   .1625313    -1.06   0.292    -.4911562    .1481913
+                          |
+                  wkhours |
+                   35-49  |   .0769555   .0732119     1.05   0.294    -.0670409    .2209519
+                     50+  |   .2439383    .084942     2.87   0.004     .0768706    .4110061
+                    vary  |   .4147936    .122118     3.40   0.001     .1746066    .6549806
+                          |
+                  durcare |   -.046505   .0334531    -1.39   0.165     -.112302    .0192919
+                    durhw |  -.0188061   .0146119    -1.29   0.199    -.0475455    .0099333
+                          |
+                    ind14 |
+             Agriculture  |   .1715117   .1108933     1.55   0.123     -.046598    .3896215
+                  Mining  |  -.4085522   .1800581    -2.27   0.024    -.7626983   -.0544061
+            Construction  |  -.1632465   .1008341    -1.62   0.106    -.3615716    .0350785
+           Manufacturing  |  -.0163165   .0795185    -0.21   0.838     -.172717     .140084
+                   trade  |     -.1191   .0677447    -1.76   0.080    -.2523432    .0141431
+          Transportation  |   -.208164   .0935138    -2.23   0.027    -.3920911    -.024237
+             Information  |  -.3950087   .1197482    -3.30   0.001    -.6305347   -.1594827
+                 Finance  |  -.1362986   .0834291    -1.63   0.103    -.3003907    .0277935
+      Educational_health  |  -.0754594   .0662884    -1.14   0.256    -.2058384    .0549196
+                 Leisure  |   .0035108   .0906079     0.04   0.969    -.1747007    .1817223
+                   Other  |  -.2725866    .116922    -2.33   0.020    -.5025539   -.0426193
+          administration  |  -.1543932   .1000389    -1.54   0.124    -.3511541    .0423678
+                          |
+                   region |
+                 Midwest  |  -.0263508    .061532    -0.43   0.669    -.1473748    .0946731
+                   South  |  -.0465127   .0550682    -0.84   0.399    -.1548233    .0617978
+                    West  |  -.0183743   .0580085    -0.32   0.752     -.132468    .0957194
+                          |
+               mean_unemp |     .25768   1.101588     0.23   0.815    -1.908972    2.424332
+          mean_female_acs |  -.0648626   .1152574    -0.56   0.574    -.2915559    .1618306
+           mean_white_acs |   .3602832   .2863009     1.26   0.209     -.202826    .9233924
+             mean_col_acs |   .0301809   .1581632     0.19   0.849    -.2809014    .3412631
+        mean_parttime_acs |   .1092611    .284864     0.38   0.702    -.4510219     .669544
+                 lnwkearn |  -.0563087   .1400494    -0.40   0.688    -.3317639    .2191465
+                    _cons |   2.579044   .9653382     2.67   0.008     .6803743    4.477713
+-------------------------------------------------------------------------------------------
+09062024 results.xml
+dir : seeout
+
+. 
+. // post-estimation test
+. foreach s in par{
+  2.         foreach p in 1{
+  3.                         foreach v in negative4{
+  4.                         
+.                 estimates restore `s'_`v'_occ  
+  5.                 margins pandemic, at(loc6=`p' mean_home=(.1 .4))
+  6.                 margins, dydx(pandemic) at(loc6=`p' mean_home=(.1 .4))
+  7.                 
+. }
+  8. }
+  9. }
+(results par_negative4_occ are active now)
+
+Predictive margins                                       Number of obs = 4,751
+Model VCE: Robust
+
+Expression: Linear prediction, predict()
+1._at: loc6      =  1
+       mean_home = .1
+2._at: loc6      =  1
+       mean_home = .4
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+_at#pandemic |
+        1 0  |   1.202079   .0728905    16.49   0.000     1.058719    1.345439
+        1 1  |   2.012709   .1673977    12.02   0.000     1.683474    2.341944
+        2 0  |    1.49964   .0593705    25.26   0.000     1.382871    1.616409
+        2 1  |   1.516673   .0783177    19.37   0.000     1.362639    1.670707
+------------------------------------------------------------------------------
+
+Average marginal effects                                 Number of obs = 4,751
+Model VCE: Robust
+
+Expression: Linear prediction, predict()
+dy/dx wrt:  1.pandemic
+1._at: loc6      =  1
+       mean_home = .1
+2._at: loc6      =  1
+       mean_home = .4
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |      dy/dx   std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+0.pandemic   |  (base outcome)
+-------------+----------------------------------------------------------------
+1.pandemic   |
+         _at |
+          1  |   .8106298   .1733775     4.68   0.000     .4696336    1.151626
+          2  |   .0170339   .0678027     0.25   0.802    -.1163195    .1503873
+------------------------------------------------------------------------------
+Note: dy/dx for factor levels is the discrete change from the base level.
+
+. 
+. 
+. foreach s in par notpar{
+  2.         foreach p in 0 1{
+  3.                 foreach loc in 1 2{
+  4.                         foreach v in negative4{
+  5.                         
+.                                 estimates restore `s'_`v'_occ
+  6.                                 margins, at(pandemic=`p' loc6=`loc' mean_home=(0(.1).6)) post
+  7.                                 estimates store `s'`p'`loc'`v'
+  8.                 
+. }
+  9. }
+ 10. }
+ 11. }
+(results par_negative4_occ are active now)
+
+Predictive margins                                       Number of obs = 4,751
+Model VCE: Robust
+
+Expression: Linear prediction, predict()
+1._at: loc6      =  1
+       pandemic  =  0
+       mean_home =  0
+2._at: loc6      =  1
+       pandemic  =  0
+       mean_home = .1
+3._at: loc6      =  1
+       pandemic  =  0
+       mean_home = .2
+4._at: loc6      =  1
+       pandemic  =  0
+       mean_home = .3
+5._at: loc6      =  1
+       pandemic  =  0
+       mean_home = .4
+6._at: loc6      =  1
+       pandemic  =  0
+       mean_home = .5
+7._at: loc6      =  1
+       pandemic  =  0
+       mean_home = .6
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+         _at |
+          1  |   1.102892   .0949423    11.62   0.000     .9161608    1.289623
+          2  |   1.202079   .0728905    16.49   0.000     1.058719    1.345439
+          3  |   1.301266   .0562538    23.13   0.000     1.190627    1.411905
+          4  |   1.400453   .0506797    27.63   0.000     1.300777    1.500129
+          5  |    1.49964   .0593705    25.26   0.000     1.382871    1.616409
+          6  |   1.598827   .0776773    20.58   0.000     1.446052    1.751601
+          7  |   1.698013   .1004746    16.90   0.000     1.500401    1.895625
+------------------------------------------------------------------------------
+(results par_negative4_occ are active now)
+
+Predictive margins                                       Number of obs = 4,751
+Model VCE: Robust
+
+Expression: Linear prediction, predict()
+1._at: loc6      =  2
+       pandemic  =  0
+       mean_home =  0
+2._at: loc6      =  2
+       pandemic  =  0
+       mean_home = .1
+3._at: loc6      =  2
+       pandemic  =  0
+       mean_home = .2
+4._at: loc6      =  2
+       pandemic  =  0
+       mean_home = .3
+5._at: loc6      =  2
+       pandemic  =  0
+       mean_home = .4
+6._at: loc6      =  2
+       pandemic  =  0
+       mean_home = .5
+7._at: loc6      =  2
+       pandemic  =  0
+       mean_home = .6
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+         _at |
+          1  |   1.647155    .043886    37.53   0.000     1.560841    1.733469
+          2  |    1.65446   .0248238    66.65   0.000     1.605637    1.703283
+          3  |   1.661764   .0194664    85.37   0.000     1.623478     1.70005
+          4  |   1.669069   .0348445    47.90   0.000     1.600537    1.737601
+          5  |   1.676373   .0558733    30.00   0.000     1.566483    1.786264
+          6  |   1.683678   .0781152    21.55   0.000     1.530042    1.837314
+          7  |   1.690983   .1007702    16.78   0.000     1.492789    1.889176
+------------------------------------------------------------------------------
+(results par_negative4_occ are active now)
+
+Predictive margins                                       Number of obs = 4,751
+Model VCE: Robust
+
+Expression: Linear prediction, predict()
+1._at: loc6      =  1
+       pandemic  =  1
+       mean_home =  0
+2._at: loc6      =  1
+       pandemic  =  1
+       mean_home = .1
+3._at: loc6      =  1
+       pandemic  =  1
+       mean_home = .2
+4._at: loc6      =  1
+       pandemic  =  1
+       mean_home = .3
+5._at: loc6      =  1
+       pandemic  =  1
+       mean_home = .4
+6._at: loc6      =  1
+       pandemic  =  1
+       mean_home = .5
+7._at: loc6      =  1
+       pandemic  =  1
+       mean_home = .6
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+         _at |
+          1  |   2.178054   .2206397     9.87   0.000     1.744103    2.612004
+          2  |   2.012709   .1673977    12.02   0.000     1.683474    2.341944
+          3  |   1.847364   .1185073    15.59   0.000     1.614285    2.080442
+          4  |   1.682019   .0821455    20.48   0.000     1.520456    1.843581
+          5  |   1.516673   .0783177    19.37   0.000     1.362639    1.670707
+          6  |   1.351328   .1104596    12.23   0.000     1.134078    1.568579
+          7  |   1.185983   .1579584     7.51   0.000     .8753131    1.496654
+------------------------------------------------------------------------------
+(results par_negative4_occ are active now)
+
+Predictive margins                                       Number of obs = 4,751
+Model VCE: Robust
+
+Expression: Linear prediction, predict()
+1._at: loc6      =  2
+       pandemic  =  1
+       mean_home =  0
+2._at: loc6      =  2
+       pandemic  =  1
+       mean_home = .1
+3._at: loc6      =  2
+       pandemic  =  1
+       mean_home = .2
+4._at: loc6      =  2
+       pandemic  =  1
+       mean_home = .3
+5._at: loc6      =  2
+       pandemic  =  1
+       mean_home = .4
+6._at: loc6      =  2
+       pandemic  =  1
+       mean_home = .5
+7._at: loc6      =  2
+       pandemic  =  1
+       mean_home = .6
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+         _at |
+          1  |   1.705344   .1017949    16.75   0.000     1.505135    1.905552
+          2  |   1.689635   .0682077    24.77   0.000     1.555485    1.823785
+          3  |   1.673926   .0511462    32.73   0.000     1.573333     1.77452
+          4  |   1.658217   .0652162    25.43   0.000     1.529951    1.786483
+          5  |   1.642509   .0977953    16.80   0.000     1.450166    1.834851
+          6  |     1.6268    .136192    11.94   0.000     1.358939     1.89466
+          7  |   1.611091   .1766526     9.12   0.000     1.263653    1.958528
+------------------------------------------------------------------------------
+(results notpar_negative4_occ are active now)
+
+Predictive margins                                       Number of obs = 4,194
+Model VCE: Robust
+
+Expression: Linear prediction, predict()
+1._at: loc6      =  1
+       pandemic  =  0
+       mean_home =  0
+2._at: loc6      =  1
+       pandemic  =  0
+       mean_home = .1
+3._at: loc6      =  1
+       pandemic  =  0
+       mean_home = .2
+4._at: loc6      =  1
+       pandemic  =  0
+       mean_home = .3
+5._at: loc6      =  1
+       pandemic  =  0
+       mean_home = .4
+6._at: loc6      =  1
+       pandemic  =  0
+       mean_home = .5
+7._at: loc6      =  1
+       pandemic  =  0
+       mean_home = .6
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+         _at |
+          1  |   1.972134   .2108846     9.35   0.000     1.557357    2.386911
+          2  |   1.831418   .1584451    11.56   0.000     1.519781    2.143055
+          3  |   1.690702   .1173539    14.41   0.000     1.459885    1.921519
+          4  |   1.549986   .1023403    15.15   0.000     1.348699    1.751274
+          5  |    1.40927   .1233276    11.43   0.000     1.166704    1.651836
+          6  |   1.268554   .1672733     7.58   0.000     .9395539    1.597555
+          7  |   1.127839   .2208746     5.11   0.000     .6934126    1.562264
+------------------------------------------------------------------------------
+(results notpar_negative4_occ are active now)
+
+Predictive margins                                       Number of obs = 4,194
+Model VCE: Robust
+
+Expression: Linear prediction, predict()
+1._at: loc6      =  2
+       pandemic  =  0
+       mean_home =  0
+2._at: loc6      =  2
+       pandemic  =  0
+       mean_home = .1
+3._at: loc6      =  2
+       pandemic  =  0
+       mean_home = .2
+4._at: loc6      =  2
+       pandemic  =  0
+       mean_home = .3
+5._at: loc6      =  2
+       pandemic  =  0
+       mean_home = .4
+6._at: loc6      =  2
+       pandemic  =  0
+       mean_home = .5
+7._at: loc6      =  2
+       pandemic  =  0
+       mean_home = .6
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+         _at |
+          1  |   1.642639    .050713    32.39   0.000     1.542894    1.742383
+          2  |    1.65732   .0285111    58.13   0.000     1.601243    1.713397
+          3  |   1.672001   .0226121    73.94   0.000     1.627526    1.716475
+          4  |   1.686682   .0408297    41.31   0.000     1.606376    1.766988
+          5  |   1.701363   .0654229    26.01   0.000     1.572686     1.83004
+          6  |   1.716044   .0913816    18.78   0.000     1.536311    1.895777
+          7  |   1.730725   .1178065    14.69   0.000     1.499018    1.962432
+------------------------------------------------------------------------------
+(results notpar_negative4_occ are active now)
+
+Predictive margins                                       Number of obs = 4,194
+Model VCE: Robust
+
+Expression: Linear prediction, predict()
+1._at: loc6      =  1
+       pandemic  =  1
+       mean_home =  0
+2._at: loc6      =  1
+       pandemic  =  1
+       mean_home = .1
+3._at: loc6      =  1
+       pandemic  =  1
+       mean_home = .2
+4._at: loc6      =  1
+       pandemic  =  1
+       mean_home = .3
+5._at: loc6      =  1
+       pandemic  =  1
+       mean_home = .4
+6._at: loc6      =  1
+       pandemic  =  1
+       mean_home = .5
+7._at: loc6      =  1
+       pandemic  =  1
+       mean_home = .6
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+         _at |
+          1  |   1.771041    .173996    10.18   0.000     1.428818    2.113264
+          2  |   1.727843   .1202243    14.37   0.000     1.491381    1.964306
+          3  |   1.684646   .0826433    20.38   0.000     1.522099    1.847193
+          4  |   1.641449   .0860391    19.08   0.000     1.472223    1.810674
+          5  |   1.598251   .1271703    12.57   0.000     1.348127    1.848376
+          6  |   1.555054   .1820401     8.54   0.000      1.19701    1.913099
+          7  |   1.511857   .2414575     6.26   0.000     1.036948    1.986766
+------------------------------------------------------------------------------
+(results notpar_negative4_occ are active now)
+
+Predictive margins                                       Number of obs = 4,194
+Model VCE: Robust
+
+Expression: Linear prediction, predict()
+1._at: loc6      =  2
+       pandemic  =  1
+       mean_home =  0
+2._at: loc6      =  2
+       pandemic  =  1
+       mean_home = .1
+3._at: loc6      =  2
+       pandemic  =  1
+       mean_home = .2
+4._at: loc6      =  2
+       pandemic  =  1
+       mean_home = .3
+5._at: loc6      =  2
+       pandemic  =  1
+       mean_home = .4
+6._at: loc6      =  2
+       pandemic  =  1
+       mean_home = .5
+7._at: loc6      =  2
+       pandemic  =  1
+       mean_home = .6
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+         _at |
+          1  |   1.630944   .0984028    16.57   0.000     1.437401    1.824487
+          2  |   1.657527   .0648783    25.55   0.000     1.529922    1.785133
+          3  |   1.684111   .0603368    27.91   0.000     1.565438    1.802784
+          4  |   1.710694   .0893146    19.15   0.000     1.535026    1.886362
+          5  |   1.737278   .1312208    13.24   0.000     1.479187    1.995369
+          6  |   1.763861   .1771044     9.96   0.000     1.415525    2.112198
+          7  |   1.790445   .2245401     7.97   0.000      1.34881     2.23208
+------------------------------------------------------------------------------
+
+. 
+. foreach s in par{
+  2.         foreach v in negative4{
+  3.         
+.                 coefplot (`s'01`v', label("Pre-pandemic (2010, 2012, 2013)") ///
+>                         recast(line) lcolor(red) ///
+>                         ciopts(recast(rarea) fcolor(red%50) lcolor(red*.5) lpattern(dash))) ///
+>                         (`s'11`v', label("Pandemic (2021)") ///
+>                         recast(line) lcolor(eltblue) ///
+>                         ciopts(recast(rarea) fcolor(eltblue%50) lcolor(eltblue*.5) lpattern(dash))), ///
+>                         bylabel("`: var label `s'' working from home") ///
+>                         || (`s'02`v', label("Pre-pandemic (2010, 2012, 2013)") ///
+>                         recast(line) lcolor(red) ///
+>                         ciopts(recast(rarea) fcolor(red%50) lcolor(red*.5) lpattern(dash))) ///
+>                         (`s'12`v', label("Pandemic (2021)") ///
+>                         recast(line) lcolor(eltblue) ///
+>                         ciopts(recast(rarea) fcolor(eltblue%50) lcolor(eltblue*.5) lpattern(dash))), ///
+>                         bylabel("`: var label `s'' working away from home") ///
+>                         || (not`s'01`v', label("Pre-pandemic (2010, 2012, 2013)") ///
+>                         recast(line) lcolor(red) ///
+>                         ciopts(recast(rarea) fcolor(red%50) lcolor(red*.5) lpattern(dash))) ///
+>                         (not`s'11`v', label("Pandemic (2021)") ///
+>                         recast(line) lcolor(eltblue) ///
+>                         ciopts(recast(rarea) fcolor(eltblue%50) lcolor(eltblue*.5) lpattern(dash))), ///
+>                         bylabel("`: var label not`s'' working from home") ///
+>                         || (not`s'02`v', label("Pre-pandemic (2010, 2012, 2013)") ///
+>                         recast(line) lcolor(red) ///
+>                         ciopts(recast(rarea) fcolor(red%50) lcolor(red*.5) lpattern(dash))) ///
+>                         (not`s'12`v', label("Pandemic (2021)") ///
+>                         recast(line) lcolor(eltblue) ///
+>                         ciopts(recast(rarea) fcolor(eltblue%50) lcolor(eltblue*.5) lpattern(dash))), ///
+>                         bylabel("`: var label not`s'' working away from home") ///
+>                         vertical format(%9.2f) ///
+>                         xlabel(1 "0" 2 ".1" 3 ".2" 4 ".3" 5 ".4" 6 ".5" 7 ".6") ///
+>                         xtitle("Occupational teleworkability", size(small)) ///
+>                         ytitle("`: var label per_`v''") ///
+>                         ylabel(0(.5)3) ///
+>                         byopts(legend(position(6))) ///
+>                         offset(0) ///
+>                         legend(row(1))
+  4.                 graph save `s'`v'3full_occ
+  5. 
+. }
+  6. }
+file parnegative43full_occ.gph saved
+
+. 
+. graph export "Figure 3.pdf"
+file /Users/yueqian/Downloads/Figure 3.pdf saved as PDF format
+
+. 
+. 
+. ***********************************************************
+. **************************oxford data**********************
+. ***********************************************************
+. 
+. ***********************************************************
+. ***main analysis: three way interaction by parent status***
+. ***********************************************************
+. estimates clear
+
+. 
+. use "$root/reg_sample", clear
+
+. count
+  8,945
+
+. 
+. merge m:1 statefip date using "$root/oxford"
+
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                        62,140
+        from master                     7,545  (_merge==1)
+        from using                     54,595  (_merge==2)
+
+    Matched                             1,400  (_merge==3)
+    -----------------------------------------
+
+. bysort _merge: tab year, m
+
+------------------------------------------------------------------------------------------------------------------------
+-> _merge = Master only (1)
+
+Survey year |      Freq.     Percent        Cum.
+------------+-----------------------------------
+       2010 |      2,904       38.49       38.49
+       2012 |      2,420       32.07       70.56
+       2013 |      2,221       29.44      100.00
+------------+-----------------------------------
+      Total |      7,545      100.00
+
+------------------------------------------------------------------------------------------------------------------------
+-> _merge = Using only (2)
+
+Survey year |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          . |     54,595      100.00      100.00
+------------+-----------------------------------
+      Total |     54,595      100.00
+
+------------------------------------------------------------------------------------------------------------------------
+-> _merge = Matched (3)
+
+Survey year |      Freq.     Percent        Cum.
+------------+-----------------------------------
+       2021 |      1,400      100.00      100.00
+------------+-----------------------------------
+      Total |      1,400      100.00
+
+
+. drop if _merge==2
+(54,595 observations deleted)
+
+. drop _merge
+
+. 
+. tab c1m_schoolclosing, m
+
+ C1M_School |
+    closing |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |        133        1.49        1.49
+          1 |        800        8.94       10.43
+          2 |        457        5.11       15.54
+          3 |         10        0.11       15.65
+          . |      7,545       84.35      100.00
+------------+-----------------------------------
+      Total |      8,945      100.00
+
+. /*
+> 0 - no measures
+> 1 - recommend closing or all schools open with alterations resulting in significant differences compared to non-Covid-
+> 19 operations
+> 2 - require closing (only some levels or categories, eg just high school, or just public schools)
+> 3 - require closing all levels
+> */
+. gen opandemic = pandemic
+
+. replace pandemic = 1 if year==2021 & (c1m_schoolclosing==0 | c1m_schoolclosing==1)
+(0 real changes made)
+
+. replace pandemic = 2 if year==2021 & (c1m_schoolclosing==2 | c1m_schoolclosing==3)
+(467 real changes made)
+
+. tab pandemic, m
+
+   pandemic |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |      7,545       84.35       84.35
+          1 |        933       10.43       94.78
+          2 |        467        5.22      100.00
+------------+-----------------------------------
+      Total |      8,945      100.00
+
+. 
+. 
+. // label variables to more easily create graph with loops
+. label var par "Parents"
+
+. gen notpar = not_par
+
+. label var notpar "Non-parents"
+
+. label var per_negative4 "Negative affect"
+
+. 
+. ***********************************************************
+. *****full models: three way interaction by parent status***
+. ***********************************************************
+. estimates clear
+
+. 
+. // parents
+. foreach s in par notpar{
+  2.         foreach v in negative4{
+  3. 
+.         
+.                 display "sample = `s'"
+  4.                 reg per_`v' ib2.loc6 i.pandemic mean_home ///
+>                         loc6#pandemic c.mean_home#loc6 c.mean_home#pandemic ///
+>                         c.mean_home#loc6#pandemic ///
+>                         $`s' $occ [pw=wbwt] if `s'==1, vce(cluster hocc)
+  5.                 estimates store `s'_`v'_occ
+  6.                 outreg2 using "$date results", excel bdec(3) alpha(0.001, 0.01, 0.05, 0.1) symbol(***, **, *, +)
+  7.         
+. }
+  8. }
+sample = par
+(sum of wgt is 38,646,362,427.94)
+
+Linear regression                               Number of obs     =      4,751
+                                                F(54, 349)        =      15.01
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.1156
+                                                Root MSE          =     .94669
+
+                                              (Std. err. adjusted for 350 clusters in hocc)
+-------------------------------------------------------------------------------------------
+                          |               Robust
+            per_negative4 | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+--------------------------+----------------------------------------------------------------
+                     loc6 |
+               only home  |  -.5412667   .0999636    -5.41   0.000    -.7378735     -.34466
+                          |
+                 pandemic |
+                       1  |  -.0432345   .1332142    -0.32   0.746    -.3052381    .2187692
+                       2  |   .2384173    .134102     1.78   0.076    -.0253324     .502167
+                          |
+                mean_home |   .0663919   .2329931     0.28   0.776    -.3918554    .5246392
+                          |
+            loc6#pandemic |
+             only home#1  |    .958344   .2811722     3.41   0.001     .4053389    1.511349
+             only home#2  |   1.255377   .4309151     2.91   0.004     .4078601    2.102894
+                          |
+         loc6#c.mean_home |
+               only home  |   .9149213   .2834878     3.23   0.001     .3573618    1.472481
+                          |
+     pandemic#c.mean_home |
+                       1  |   .1754509   .5243739     0.33   0.738    -.8558796    1.206781
+                       2  |  -1.058108   .6194955    -1.71   0.089    -2.276522    .1603061
+                          |
+loc6#pandemic#c.mean_home |
+             only home#1  |  -2.786205   .8458599    -3.29   0.001    -4.449829   -1.122581
+             only home#2  |   -2.18184   1.236114    -1.77   0.078    -4.613009    .2493294
+                          |
+                   female |
+                   women  |   .1375611   .0526828     2.61   0.009     .0339455    .2411767
+                          |
+                        r |
+                   black  |  -.0368005   .0673025    -0.55   0.585      -.16917    .0955689
+                Hispanic  |  -.0916151   .0554142    -1.65   0.099     -.200603    .0173728
+                   other  |   -.076393    .074371    -1.03   0.305    -.2226647    .0698788
+                          |
+                    1.ed3 |   .0706401   .0441608     1.60   0.111    -.0162147    .1574949
+                      age |   .0005397   .0034021     0.16   0.874    -.0061516     .007231
+                   lnearn |   .0444126   .0223802     1.98   0.048     .0003954    .0884297
+                   health |  -.2499797   .0179105   -13.96   0.000    -.2852058   -.2147535
+                 painkill |   .3318516   .0411468     8.07   0.000     .2509248    .4127785
+                  kidund6 |    .061078    .053667     1.14   0.256    -.0444735    .1666295
+                 kid6to12 |   .0057191   .0346793     0.16   0.869    -.0624877    .0739259
+                kid13to17 |    -.10444   .0459224    -2.27   0.024    -.1947595   -.0141206
+                          |
+                   spouse |
+              sp non-emp  |  -.1271816   .0674311    -1.89   0.060     -.259804    .0054409
+                 sp part  |  -.1756774   .0660035    -2.66   0.008    -.3054921   -.0458627
+                 sp full  |  -.1121829   .0595789    -1.88   0.061    -.2293617    .0049959
+                 sp long  |   -.060824   .0616962    -0.99   0.325    -.1821672    .0605192
+                 sp vary  |  -.2614905   .1336555    -1.96   0.051    -.5243622    .0013811
+                          |
+                  wkhours |
+                   35-49  |   .0783131   .0574842     1.36   0.174     -.034746    .1913721
+                     50+  |   .2397332   .0763573     3.14   0.002     .0895548    .3899116
+                    vary  |   .1520977   .1330694     1.14   0.254    -.1096212    .4138166
+                          |
+                  durcare |   .0029323   .0107659     0.27   0.786    -.0182419    .0241064
+                    durhw |    .001208   .0139349     0.09   0.931     -.026199     .028615
+                          |
+                    ind14 |
+             Agriculture  |  -.0555531    .094291    -0.59   0.556    -.2410033     .129897
+                  Mining  |   -.138244   .1421858    -0.97   0.332    -.4178929    .1414049
+            Construction  |  -.1169122   .0790694    -1.48   0.140    -.2724247    .0386003
+           Manufacturing  |  -.0521684    .065836    -0.79   0.429    -.1816537     .077317
+                   trade  |  -.0894305   .0667454    -1.34   0.181    -.2207044    .0418433
+          Transportation  |   .0215446   .0836288     0.26   0.797    -.1429352    .1860243
+             Information  |  -.0879858   .1028365    -0.86   0.393    -.2902431    .1142715
+                 Finance  |   .0243521   .0768986     0.32   0.752    -.1268909    .1755951
+      Educational_health  |    .051117   .0618936     0.83   0.409    -.0706145    .1728485
+                 Leisure  |  -.0233608   .0926064    -0.25   0.801    -.2054977    .1587761
+                   Other  |  -.1325619   .0721169    -1.84   0.067    -.2744003    .0092765
+          administration  |  -.0493207   .0700105    -0.70   0.482    -.1870162    .0883749
+                          |
+                   region |
+                 Midwest  |  -.1086145   .0494032    -2.20   0.029    -.2057801    -.011449
+                   South  |  -.0597525   .0534806    -1.12   0.265    -.1649372    .0454323
+                    West  |  -.0232698   .0557665    -0.42   0.677    -.1329506    .0864109
+                          |
+               mean_unemp |   .8730557    1.17736     0.74   0.459    -1.442559     3.18867
+          mean_female_acs |    .034133   .0972691     0.35   0.726    -.1571743    .2254403
+           mean_white_acs |  -.2189745   .1842306    -1.19   0.235    -.5813164    .1433673
+             mean_col_acs |  -.1300183    .137448    -0.95   0.345    -.4003489    .1403123
+        mean_parttime_acs |  -.0780888   .2308978    -0.34   0.735     -.532215    .3760375
+                 lnwkearn |   .1250084    .101606     1.23   0.219    -.0748287    .3248456
+                    _cons |   1.431905   .7422137     1.93   0.055    -.0278693     2.89168
+-------------------------------------------------------------------------------------------
+09062024 results.xml
+dir : seeout
+sample = notpar
+(sum of wgt is 55,122,384,113.1)
+
+Linear regression                               Number of obs     =      4,194
+                                                F(51, 346)        =       9.06
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.1066
+                                                Root MSE          =     .96672
+
+                                              (Std. err. adjusted for 347 clusters in hocc)
+-------------------------------------------------------------------------------------------
+                          |               Robust
+            per_negative4 | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+--------------------------+----------------------------------------------------------------
+                     loc6 |
+               only home  |    .327024   .2231713     1.47   0.144     -.111919    .7659671
+                          |
+                 pandemic |
+                       1  |   .0497589   .1063027     0.47   0.640     -.159322    .2588397
+                       2  |   -.123284   .1497774    -0.82   0.411    -.4178728    .1713047
+                          |
+                mean_home |   .1228192    .267946     0.46   0.647    -.4041887    .6498271
+                          |
+            loc6#pandemic |
+             only home#1  |  -.0190253   .3257424    -0.06   0.953    -.6597097    .6216591
+             only home#2  |  -.5690815   .3852154    -1.48   0.141     -1.32674     .188577
+                          |
+         loc6#c.mean_home |
+               only home  |  -1.549979   .6488352    -2.39   0.017    -2.826136   -.2738211
+                          |
+     pandemic#c.mean_home |
+                       1  |   .0504912   .4721047     0.11   0.915     -.878065    .9790474
+                       2  |   .1596584   .7339396     0.22   0.828    -1.283886    1.603203
+                          |
+loc6#pandemic#c.mean_home |
+             only home#1  |  -.0538393   1.173989    -0.05   0.963    -2.362893    2.255214
+             only home#2  |   2.773616   1.474338     1.88   0.061    -.1261764    5.673408
+                          |
+                   female |
+                   women  |   .1605779   .0436511     3.68   0.000     .0747231    .2464328
+                          |
+                        r |
+                   black  |   .0237367   .0643023     0.37   0.712     -.102736    .1502094
+                Hispanic  |  -.0166699   .0576694    -0.29   0.773    -.1300967    .0967569
+                   other  |   .0392918   .0824451     0.48   0.634    -.1228649    .2014484
+                          |
+                    1.ed3 |    .136723   .0549768     2.49   0.013     .0285923    .2448538
+                      age |  -.0057781    .001853    -3.12   0.002    -.0094226   -.0021335
+                   lnearn |   .0245432   .0276584     0.89   0.375    -.0298566    .0789429
+                   health |  -.2366456   .0190696   -12.41   0.000    -.2741524   -.1991387
+                 painkill |   .3168231    .044649     7.10   0.000     .2290056    .4046407
+                          |
+                   spouse |
+              sp non-emp  |   .0135556   .0810257     0.17   0.867    -.1458093    .1729204
+                 sp part  |   .1975209   .1309707     1.51   0.132    -.0600779    .4551197
+                 sp full  |  -.0971697   .0507371    -1.92   0.056    -.1969616    .0026222
+                 sp long  |   .0441829   .0819132     0.54   0.590    -.1169276    .2052934
+                 sp vary  |  -.1720421   .1609799    -1.07   0.286    -.4886644    .1445802
+                          |
+                  wkhours |
+                   35-49  |   .0747659   .0727391     1.03   0.305    -.0683007    .2178324
+                     50+  |   .2344026   .0849497     2.76   0.006     .0673199    .4014853
+                    vary  |   .4030554   .1215156     3.32   0.001     .1640532    .6420576
+                          |
+                  durcare |  -.0462575   .0336235    -1.38   0.170    -.1123896    .0198747
+                    durhw |  -.0178576   .0144777    -1.23   0.218     -.046333    .0106178
+                          |
+                    ind14 |
+             Agriculture  |   .1778409   .1107716     1.61   0.109    -.0400295    .3957113
+                  Mining  |  -.4100376   .1791923    -2.29   0.023     -.762481   -.0575943
+            Construction  |  -.1599717   .1011559    -1.58   0.115    -.3589295     .038986
+           Manufacturing  |  -.0186009   .0799039    -0.23   0.816    -.1757595    .1385577
+                   trade  |  -.1181735   .0681594    -1.73   0.084    -.2522324    .0158853
+          Transportation  |  -.2132697   .0950236    -2.24   0.025    -.4001664   -.0263731
+             Information  |  -.3783784   .1197567    -3.16   0.002    -.6139211   -.1428357
+                 Finance  |  -.1355409   .0839136    -1.62   0.107    -.3005859    .0295042
+      Educational_health  |  -.0738623   .0660556    -1.12   0.264    -.2037834    .0560588
+                 Leisure  |   .0052842   .0910454     0.06   0.954     -.173788    .1843563
+                   Other  |  -.2679427   .1166205    -2.30   0.022     -.497317   -.0385684
+          administration  |  -.1538758   .1011266    -1.52   0.129    -.3527761    .0450245
+                          |
+                   region |
+                 Midwest  |  -.0288514   .0612708    -0.47   0.638    -.1493615    .0916587
+                   South  |  -.0498097     .05436    -0.92   0.360    -.1567273    .0571079
+                    West  |  -.0239462   .0587126    -0.41   0.684    -.1394247    .0915323
+                          |
+               mean_unemp |   .2244302   1.107277     0.20   0.839     -1.95341     2.40227
+          mean_female_acs |  -.0613284   .1143387    -0.54   0.592    -.2862148     .163558
+           mean_white_acs |   .3331041   .2865831     1.16   0.246    -.2305601    .8967684
+             mean_col_acs |   .0385452   .1558443     0.25   0.805    -.2679762    .3450665
+        mean_parttime_acs |   .1023736   .2845603     0.36   0.719    -.4573122    .6620593
+                 lnwkearn |  -.0507301    .138826    -0.37   0.715    -.3237792    .2223189
+                    _cons |     2.5531   .9579913     2.67   0.008     .6688803    4.437319
+-------------------------------------------------------------------------------------------
+09062024 results.xml
+dir : seeout
+
+. 
+. 
+. // post-estimation test
+. foreach s in par{
+  2.         foreach p in 1{
+  3.                         foreach v in negative4{
+  4.                         
+.                 estimates restore `s'_`v'_occ  
+  5.                 margins pandemic, at(loc6=`p' mean_home=(.1)) 
+  6.                 margins pandemic, at(loc6=`p' mean_home=(.1)) pwcompare(pveffects)
+  7.                 
+. }
+  8. }
+  9. }
+(results par_negative4_occ are active now)
+
+Predictive margins                                       Number of obs = 4,751
+Model VCE: Robust
+
+Expression: Linear prediction, predict()
+At: loc6      =  1
+    mean_home = .1
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+    pandemic |
+          0  |   1.204803   .0726305    16.59   0.000     1.061955    1.347652
+          1  |   1.858837   .1893434     9.82   0.000      1.48644    2.231235
+          2  |   2.374603   .3017185     7.87   0.000     1.781188    2.968018
+------------------------------------------------------------------------------
+
+Pairwise comparisons of predictive margins               Number of obs = 4,751
+Model VCE: Robust
+
+Expression: Linear prediction, predict()
+At: loc6      =  1
+    mean_home = .1
+
+-----------------------------------------------------
+             |            Delta-method    Unadjusted
+             |   Contrast   std. err.      t    P>|t|
+-------------+---------------------------------------
+    pandemic |
+     1 vs 0  |   .6540341   .1893848     3.45   0.001
+     2 vs 0  |     1.1698   .3103903     3.77   0.000
+     2 vs 1  |   .5157657    .354826     1.45   0.147
+-----------------------------------------------------
+
+. 
+. 
+. foreach s in par notpar{
+  2.         foreach p in 0 1 2{
+  3.                 foreach loc in 1 2{
+  4.                         foreach v in negative4{
+  5.                         
+.                                 estimates restore `s'_`v'_occ
+  6.                                 margins, at(pandemic=`p' loc6=`loc' mean_home=(0(.1).6)) post
+  7.                                 estimates store `s'`p'`loc'`v'
+  8.                 
+. }
+  9. }
+ 10. }
+ 11. }
+(results par_negative4_occ are active now)
+
+Predictive margins                                       Number of obs = 4,751
+Model VCE: Robust
+
+Expression: Linear prediction, predict()
+1._at: loc6      =  1
+       pandemic  =  0
+       mean_home =  0
+2._at: loc6      =  1
+       pandemic  =  0
+       mean_home = .1
+3._at: loc6      =  1
+       pandemic  =  0
+       mean_home = .2
+4._at: loc6      =  1
+       pandemic  =  0
+       mean_home = .3
+5._at: loc6      =  1
+       pandemic  =  0
+       mean_home = .4
+6._at: loc6      =  1
+       pandemic  =  0
+       mean_home = .5
+7._at: loc6      =  1
+       pandemic  =  0
+       mean_home = .6
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+         _at |
+          1  |   1.106672   .0943201    11.73   0.000     .9211646    1.292179
+          2  |   1.204803   .0726305    16.59   0.000     1.061955    1.347652
+          3  |   1.302934   .0563873    23.11   0.000     1.192033    1.413836
+          4  |   1.401066   .0510813    27.43   0.000       1.3006    1.501532
+          5  |   1.499197   .0597034    25.11   0.000     1.381773    1.616621
+          6  |   1.597328   .0777504    20.54   0.000      1.44441    1.750247
+          7  |    1.69546   .1002557    16.91   0.000     1.498278    1.892641
+------------------------------------------------------------------------------
+(results par_negative4_occ are active now)
+
+Predictive margins                                       Number of obs = 4,751
+Model VCE: Robust
+
+Expression: Linear prediction, predict()
+1._at: loc6      =  2
+       pandemic  =  0
+       mean_home =  0
+2._at: loc6      =  2
+       pandemic  =  0
+       mean_home = .1
+3._at: loc6      =  2
+       pandemic  =  0
+       mean_home = .2
+4._at: loc6      =  2
+       pandemic  =  0
+       mean_home = .3
+5._at: loc6      =  2
+       pandemic  =  0
+       mean_home = .4
+6._at: loc6      =  2
+       pandemic  =  0
+       mean_home = .5
+7._at: loc6      =  2
+       pandemic  =  0
+       mean_home = .6
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+         _at |
+          1  |   1.647939   .0442978    37.20   0.000     1.560814    1.735063
+          2  |   1.654578   .0250248    66.12   0.000     1.605359    1.703796
+          3  |   1.661217   .0193884    85.68   0.000     1.623084     1.69935
+          4  |   1.667856   .0348036    47.92   0.000     1.599405    1.736307
+          5  |   1.674495   .0559678    29.92   0.000     1.564419    1.784572
+          6  |   1.681135   .0783531    21.46   0.000     1.527031    1.835238
+          7  |   1.687774   .1011521    16.69   0.000     1.488829    1.886718
+------------------------------------------------------------------------------
+(results par_negative4_occ are active now)
+
+Predictive margins                                       Number of obs = 4,751
+Model VCE: Robust
+
+Expression: Linear prediction, predict()
+1._at: loc6      =  1
+       pandemic  =  1
+       mean_home =  0
+2._at: loc6      =  1
+       pandemic  =  1
+       mean_home = .1
+3._at: loc6      =  1
+       pandemic  =  1
+       mean_home = .2
+4._at: loc6      =  1
+       pandemic  =  1
+       mean_home = .3
+5._at: loc6      =  1
+       pandemic  =  1
+       mean_home = .4
+6._at: loc6      =  1
+       pandemic  =  1
+       mean_home = .5
+7._at: loc6      =  1
+       pandemic  =  1
+       mean_home = .6
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+         _at |
+          1  |   2.021781   .2549319     7.93   0.000     1.520385    2.523177
+          2  |   1.858837   .1893434     9.82   0.000      1.48644    2.231235
+          3  |   1.695893   .1270767    13.35   0.000     1.445961    1.945826
+          4  |   1.532949   .0767003    19.99   0.000     1.382096    1.683802
+          5  |   1.370005   .0710935    19.27   0.000     1.230179    1.509831
+          6  |   1.207061   .1168868    10.33   0.000     .9771697    1.436952
+          7  |   1.044117   .1780664     5.86   0.000     .6938983    1.394335
+------------------------------------------------------------------------------
+(results par_negative4_occ are active now)
+
+Predictive margins                                       Number of obs = 4,751
+Model VCE: Robust
+
+Expression: Linear prediction, predict()
+1._at: loc6      =  2
+       pandemic  =  1
+       mean_home =  0
+2._at: loc6      =  2
+       pandemic  =  1
+       mean_home = .1
+3._at: loc6      =  2
+       pandemic  =  1
+       mean_home = .2
+4._at: loc6      =  2
+       pandemic  =  1
+       mean_home = .3
+5._at: loc6      =  2
+       pandemic  =  1
+       mean_home = .4
+6._at: loc6      =  2
+       pandemic  =  1
+       mean_home = .5
+7._at: loc6      =  2
+       pandemic  =  1
+       mean_home = .6
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+         _at |
+          1  |   1.604704   .1295112    12.39   0.000     1.349984    1.859425
+          2  |   1.628888    .087953    18.52   0.000     1.455904    1.801873
+          3  |   1.653073   .0622728    26.55   0.000     1.530595     1.77555
+          4  |   1.677257   .0721088    23.26   0.000     1.535434    1.819079
+          5  |   1.701441   .1081714    15.73   0.000     1.488691    1.914191
+          6  |   1.725626   .1529118    11.29   0.000     1.424881     2.02637
+          7  |    1.74981   .2006055     8.72   0.000     1.355262    2.144358
+------------------------------------------------------------------------------
+(results par_negative4_occ are active now)
+
+Predictive margins                                       Number of obs = 4,751
+Model VCE: Robust
+
+Expression: Linear prediction, predict()
+1._at: loc6      =  1
+       pandemic  =  2
+       mean_home =  0
+2._at: loc6      =  1
+       pandemic  =  2
+       mean_home = .1
+3._at: loc6      =  1
+       pandemic  =  2
+       mean_home = .2
+4._at: loc6      =  1
+       pandemic  =  2
+       mean_home = .3
+5._at: loc6      =  1
+       pandemic  =  2
+       mean_home = .4
+6._at: loc6      =  1
+       pandemic  =  2
+       mean_home = .5
+7._at: loc6      =  1
+       pandemic  =  2
+       mean_home = .6
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+         _at |
+          1  |   2.600466    .398558     6.52   0.000     1.816589    3.384344
+          2  |   2.374603   .3017185     7.87   0.000     1.781188    2.968018
+          3  |   2.148739   .2100919    10.23   0.000     1.735534    2.561945
+          4  |   1.922876   .1347675    14.27   0.000     1.657817    2.187935
+          5  |   1.697013   .1144771    14.82   0.000     1.471861    1.922164
+          6  |   1.471149   .1701964     8.64   0.000     1.136409    1.805889
+          7  |   1.245286   .2564131     4.86   0.000     .7409762    1.749595
+------------------------------------------------------------------------------
+(results par_negative4_occ are active now)
+
+Predictive margins                                       Number of obs = 4,751
+Model VCE: Robust
+
+Expression: Linear prediction, predict()
+1._at: loc6      =  2
+       pandemic  =  2
+       mean_home =  0
+2._at: loc6      =  2
+       pandemic  =  2
+       mean_home = .1
+3._at: loc6      =  2
+       pandemic  =  2
+       mean_home = .2
+4._at: loc6      =  2
+       pandemic  =  2
+       mean_home = .3
+5._at: loc6      =  2
+       pandemic  =  2
+       mean_home = .4
+6._at: loc6      =  2
+       pandemic  =  2
+       mean_home = .5
+7._at: loc6      =  2
+       pandemic  =  2
+       mean_home = .6
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+         _at |
+          1  |   1.886356   .1394129    13.53   0.000     1.612161    2.160551
+          2  |   1.787184   .0972619    18.37   0.000     1.595891    1.978478
+          3  |   1.688013   .0861273    19.60   0.000     1.518619    1.857406
+          4  |   1.588841   .1153692    13.77   0.000     1.361935    1.815747
+          5  |   1.489669    .164731     9.04   0.000     1.165679     1.81366
+          6  |   1.390498   .2211259     6.29   0.000     .9555907    1.825405
+          7  |   1.291326   .2803412     4.61   0.000     .7399554    1.842697
+------------------------------------------------------------------------------
+(results notpar_negative4_occ are active now)
+
+Predictive margins                                       Number of obs = 4,194
+Model VCE: Robust
+
+Expression: Linear prediction, predict()
+1._at: loc6      =  1
+       pandemic  =  0
+       mean_home =  0
+2._at: loc6      =  1
+       pandemic  =  0
+       mean_home = .1
+3._at: loc6      =  1
+       pandemic  =  0
+       mean_home = .2
+4._at: loc6      =  1
+       pandemic  =  0
+       mean_home = .3
+5._at: loc6      =  1
+       pandemic  =  0
+       mean_home = .4
+6._at: loc6      =  1
+       pandemic  =  0
+       mean_home = .5
+7._at: loc6      =  1
+       pandemic  =  0
+       mean_home = .6
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+         _at |
+          1  |   1.973785   .2105778     9.37   0.000     1.559611    2.387959
+          2  |   1.831069   .1581845    11.58   0.000     1.519945    2.142193
+          3  |   1.688353   .1171718    14.41   0.000     1.457895    1.918812
+          4  |   1.545637   .1022921    15.11   0.000     1.344445     1.74683
+          5  |   1.402921   .1233923    11.37   0.000     1.160228    1.645615
+          6  |   1.260205   .1673774     7.53   0.000     .9310001    1.589411
+          7  |   1.117489   .2209803     5.06   0.000     .6828557    1.552123
+------------------------------------------------------------------------------
+(results notpar_negative4_occ are active now)
+
+Predictive margins                                       Number of obs = 4,194
+Model VCE: Robust
+
+Expression: Linear prediction, predict()
+1._at: loc6      =  2
+       pandemic  =  0
+       mean_home =  0
+2._at: loc6      =  2
+       pandemic  =  0
+       mean_home = .1
+3._at: loc6      =  2
+       pandemic  =  0
+       mean_home = .2
+4._at: loc6      =  2
+       pandemic  =  0
+       mean_home = .3
+5._at: loc6      =  2
+       pandemic  =  0
+       mean_home = .4
+6._at: loc6      =  2
+       pandemic  =  0
+       mean_home = .5
+7._at: loc6      =  2
+       pandemic  =  0
+       mean_home = .6
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+         _at |
+          1  |   1.646761   .0502972    32.74   0.000     1.547834    1.745688
+          2  |   1.659043   .0283686    58.48   0.000     1.603246     1.71484
+          3  |   1.671325   .0227079    73.60   0.000     1.626662    1.715988
+          4  |   1.683607   .0407728    41.29   0.000     1.603413      1.7638
+          5  |   1.695889   .0651544    26.03   0.000      1.56774    1.824037
+          6  |   1.708171   .0909047    18.79   0.000     1.529375    1.886966
+          7  |   1.720453   .1171245    14.69   0.000     1.490087    1.950818
+------------------------------------------------------------------------------
+(results notpar_negative4_occ are active now)
+
+Predictive margins                                       Number of obs = 4,194
+Model VCE: Robust
+
+Expression: Linear prediction, predict()
+1._at: loc6      =  1
+       pandemic  =  1
+       mean_home =  0
+2._at: loc6      =  1
+       pandemic  =  1
+       mean_home = .1
+3._at: loc6      =  1
+       pandemic  =  1
+       mean_home = .2
+4._at: loc6      =  1
+       pandemic  =  1
+       mean_home = .3
+5._at: loc6      =  1
+       pandemic  =  1
+       mean_home = .4
+6._at: loc6      =  1
+       pandemic  =  1
+       mean_home = .5
+7._at: loc6      =  1
+       pandemic  =  1
+       mean_home = .6
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+         _at |
+          1  |   2.004519   .2187288     9.16   0.000     1.574313    2.434724
+          2  |   1.861468   .1554857    11.97   0.000     1.555652    2.167284
+          3  |   1.718417   .1049102    16.38   0.000     1.512075    1.924759
+          4  |   1.575366   .0912869    17.26   0.000     1.395819    1.754914
+          5  |   1.432316   .1271113    11.27   0.000     1.182308    1.682324
+          6  |   1.289265   .1856827     6.94   0.000     .9240559    1.654474
+          7  |   1.146214   .2515864     4.56   0.000      .651383    1.641045
+------------------------------------------------------------------------------
+(results notpar_negative4_occ are active now)
+
+Predictive margins                                       Number of obs = 4,194
+Model VCE: Robust
+
+Expression: Linear prediction, predict()
+1._at: loc6      =  2
+       pandemic  =  1
+       mean_home =  0
+2._at: loc6      =  2
+       pandemic  =  1
+       mean_home = .1
+3._at: loc6      =  2
+       pandemic  =  1
+       mean_home = .2
+4._at: loc6      =  2
+       pandemic  =  1
+       mean_home = .3
+5._at: loc6      =  2
+       pandemic  =  1
+       mean_home = .4
+6._at: loc6      =  2
+       pandemic  =  1
+       mean_home = .5
+7._at: loc6      =  2
+       pandemic  =  1
+       mean_home = .6
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+         _at |
+          1  |    1.69652   .1106061    15.34   0.000     1.478975    1.914065
+          2  |   1.713851   .0787382    21.77   0.000     1.558985    1.868717
+          3  |   1.731182   .0772266    22.42   0.000     1.579289    1.883075
+          4  |   1.748513   .1073613    16.29   0.000      1.53735    1.959676
+          5  |   1.765844   .1512851    11.67   0.000      1.46829    2.063398
+          6  |   1.783175   .2001154     8.91   0.000     1.389579    2.176771
+          7  |   1.800506   .2510048     7.17   0.000     1.306819    2.294193
+------------------------------------------------------------------------------
+(results notpar_negative4_occ are active now)
+
+Predictive margins                                       Number of obs = 4,194
+Model VCE: Robust
+
+Expression: Linear prediction, predict()
+1._at: loc6      =  1
+       pandemic  =  2
+       mean_home =  0
+2._at: loc6      =  1
+       pandemic  =  2
+       mean_home = .1
+3._at: loc6      =  1
+       pandemic  =  2
+       mean_home = .2
+4._at: loc6      =  1
+       pandemic  =  2
+       mean_home = .3
+5._at: loc6      =  1
+       pandemic  =  2
+       mean_home = .4
+6._at: loc6      =  1
+       pandemic  =  2
+       mean_home = .5
+7._at: loc6      =  1
+       pandemic  =  2
+       mean_home = .6
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+         _at |
+          1  |    1.28142   .2519667     5.09   0.000     .7858405    1.776999
+          2  |   1.432031     .17585     8.14   0.000     1.086162      1.7779
+          3  |   1.582642   .1172226    13.50   0.000     1.352084    1.813201
+          4  |   1.733254   .1092748    15.86   0.000     1.518327     1.94818
+          5  |   1.883865   .1597584    11.79   0.000     1.569646    2.198085
+          6  |   2.034477   .2334232     8.72   0.000      1.57537    2.493584
+          7  |   2.185088   .3143755     6.95   0.000     1.566761    2.803416
+------------------------------------------------------------------------------
+(results notpar_negative4_occ are active now)
+
+Predictive margins                                       Number of obs = 4,194
+Model VCE: Robust
+
+Expression: Linear prediction, predict()
+1._at: loc6      =  2
+       pandemic  =  2
+       mean_home =  0
+2._at: loc6      =  2
+       pandemic  =  2
+       mean_home = .1
+3._at: loc6      =  2
+       pandemic  =  2
+       mean_home = .2
+4._at: loc6      =  2
+       pandemic  =  2
+       mean_home = .3
+5._at: loc6      =  2
+       pandemic  =  2
+       mean_home = .4
+6._at: loc6      =  2
+       pandemic  =  2
+       mean_home = .5
+7._at: loc6      =  2
+       pandemic  =  2
+       mean_home = .6
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+         _at |
+          1  |   1.523477   .1536705     9.91   0.000     1.221231    1.825723
+          2  |   1.551725   .1023679    15.16   0.000     1.350383    1.753066
+          3  |   1.579973   .0960511    16.45   0.000     1.391055     1.76889
+          4  |    1.60822   .1409062    11.41   0.000      1.33108    1.885361
+          5  |   1.636468   .2058284     7.95   0.000     1.231636      2.0413
+          6  |   1.664716   .2770528     6.01   0.000     1.119796    2.209635
+          7  |   1.692964   .3507609     4.83   0.000     1.003072    2.382855
+------------------------------------------------------------------------------
+
+. 
+. foreach s in par{
+  2.         foreach v in negative4{
+  3.         
+.                 coefplot (`s'01`v', label("Pre-pandemic (2010, 2012, 2013)") ///
+>                         recast(line) lcolor(red) ///
+>                         ciopts(recast(rarea) fcolor(red%50) lcolor(red*.5) lpattern(dash))) ///
+>                         (`s'11`v', label("Pandemic (2021), School Open") ///
+>                         recast(line) lcolor(eltblue) ///
+>                         ciopts(recast(rarea) fcolor(eltblue%50) lcolor(eltblue*.5) lpattern(dash))) ///
+>                         (`s'21`v', label("Pandemic (2021), School Closure") ///
+>                         recast(line) lcolor(blue) ///
+>                         ciopts(recast(rarea) fcolor(blue%50) lcolor(blue*.5) lpattern(dash))), ///
+>                         bylabel("`: var label `s'' working from home") ///
+>                         || (`s'02`v', label("Pre-pandemic (2010, 2012, 2013)") ///
+>                         recast(line) lcolor(red) ///
+>                         ciopts(recast(rarea) fcolor(red%50) lcolor(red*.5) lpattern(dash))) ///
+>                         (`s'12`v', label("Pandemic (2021), School Open") ///
+>                         recast(line) lcolor(eltblue) ///
+>                         ciopts(recast(rarea) fcolor(eltblue%50) lcolor(eltblue*.5) lpattern(dash))) ///
+>                         (`s'22`v', label("Pandemic (2021), School Closure") ///
+>                         recast(line) lcolor(blue) ///
+>                         ciopts(recast(rarea) fcolor(blue%50) lcolor(blue*.5) lpattern(dash))), ///
+>                         bylabel("`: var label `s'' working away from home") ///
+>                         || (not`s'01`v', label("Pre-pandemic (2010, 2012, 2013)") ///
+>                         recast(line) lcolor(red) ///
+>                         ciopts(recast(rarea) fcolor(red%50) lcolor(red*.5) lpattern(dash))) ///
+>                         (not`s'11`v', label("Pandemic (2021), School Open") ///
+>                         recast(line) lcolor(eltblue) ///
+>                         ciopts(recast(rarea) fcolor(eltblue%50) lcolor(eltblue*.5) lpattern(dash))) ///
+>                         (not`s'21`v', label("Pandemic (2021), School Closure") ///
+>                         recast(line) lcolor(blue) ///
+>                         ciopts(recast(rarea) fcolor(blue%50) lcolor(blue*.5) lpattern(dash))), ///
+>                         bylabel("`: var label not`s'' working from home") ///
+>                         || (not`s'02`v', label("Pre-pandemic (2010, 2012, 2013)") ///
+>                         recast(line) lcolor(red) ///
+>                         ciopts(recast(rarea) fcolor(red%50) lcolor(red*.5) lpattern(dash))) ///
+>                         (not`s'12`v', label("Pandemic (2021), School Open") ///
+>                         recast(line) lcolor(eltblue) ///
+>                         ciopts(recast(rarea) fcolor(eltblue%50) lcolor(eltblue*.5) lpattern(dash))) ///
+>                         (not`s'22`v', label("Pandemic (2021), School Closure") ///
+>                         recast(line) lcolor(blue) ///
+>                         ciopts(recast(rarea) fcolor(blue%50) lcolor(blue*.5) lpattern(dash))), ///
+>                         bylabel("`: var label not`s'' working away from home") ///
+>                         vertical format(%9.2f) ///
+>                         xlabel(1 "0" 2 ".1" 3 ".2" 4 ".3" 5 ".4" 6 ".5" 7 ".6") ///
+>                         xtitle("Occupational teleworkability", size(small)) ///
+>                         ytitle("`: var label per_`v''") ///
+>                         ylabel(0(.5)3) ///
+>                         byopts(legend(position(6))) ///
+>                         offset(0) ///
+>                         legend(row(1) stack)
+  4.                 graph save `s'`v'3full_occ_oxford
+  5. 
+. }
+  6. }
+file parnegative43full_occ_oxford.gph saved
+
+. 
+. graph export "Figure 4.pdf"
+file /Users/yueqian/Downloads/Figure 4.pdf saved as PDF format
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /Users/yueqian/Downloads/graph_Qian_Fan_2025_ILRReview.log
+  log type:  text
+ closed on:   3 Dec 2025, 09:21:45
+------------------------------------------------------------------------------------------------------------------------

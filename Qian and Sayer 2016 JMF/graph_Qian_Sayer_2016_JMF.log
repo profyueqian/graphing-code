@@ -1,0 +1,202 @@
+------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/yueqian/Desktop/graph_Qian_Sayer_2016_JMF.log
+  log type:  text
+ opened on:  15 Aug 2025, 17:04:09
+
+. 
+. **************************************************************************
+. *********Stata codes used to produce Figure 1*****************************
+. /* Qian, Yue, & Sayer, Liana C. (2016). Division of labor, gender ideology, and marital satisf
+> action in East Asia. Journal of Marriage and Family, 78(2), 383-400. https://doi.org/10.1111/j
+> omf.12274
+> */
+. **************************************************************************
+. 
+. // #0
+. // program setup
+. version 12.0
+
+. clear all
+
+. set more off
+
+. matrix drop _all
+
+. set linesize 120
+
+. 
+. * we used Stata's default graphic scheme
+. set scheme s2color, perm
+(set scheme preference recorded)
+
+. 
+. 
+. // #1
+. // open data
+. clear
+
+. use "regsample", clear
+
+. 
+. 
+. // #2
+. // graph Figure 1
+. reg ms4 rel_hw gi2 c.rel_hw#c.gi2 rel_wrhrs totalw_hw age lessHS college goodhealth low_fses high_fses d_presch minor 
+> d_adult coresid if tw==1 & female==1, cluster(cluster)
+
+Linear regression                               Number of obs     =        367
+                                                F(15, 18)         =      48.70
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.1094
+                                                Root MSE          =     .70876
+
+                                 (Std. err. adjusted for 19 clusters in cluster)
+--------------------------------------------------------------------------------
+               |               Robust
+           ms4 | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+---------------+----------------------------------------------------------------
+        rel_hw |   .0060916   .0055101     1.11   0.283    -.0054847    .0176679
+           gi2 |   .1455644    .100742     1.44   0.166    -.0660866    .3572155
+               |
+c.rel_hw#c.gi2 |  -.0026491   .0012088    -2.19   0.042    -.0051888   -.0001094
+               |
+     rel_wrhrs |  -.0034029    .001197    -2.84   0.011    -.0059178    -.000888
+     totalw_hw |   .0242242   .0157771     1.54   0.142    -.0089223    .0573707
+           age |  -.0066197   .0052551    -1.26   0.224    -.0176604    .0044209
+        lessHS |   .0324039   .1038773     0.31   0.759    -.1858342    .2506421
+       college |    .111091   .0922835     1.20   0.244    -.0827895    .3049715
+    goodhealth |   .1456592   .1027251     1.42   0.173    -.0701582    .3614766
+      low_fses |  -.1470231   .0834382    -1.76   0.095    -.3223202     .028274
+     high_fses |   .1743147   .1383673     1.26   0.224    -.1163841    .4650136
+      d_presch |   .0742034   .1149274     0.65   0.527    -.1672501    .3156568
+         minor |  -.0641075   .0434465    -1.48   0.157    -.1553853    .0271703
+       d_adult |   .0245583   .0966564     0.25   0.802    -.1785093    .2276258
+       coresid |  -.0928175   .0905458    -1.03   0.319    -.2830472    .0974123
+         _cons |   2.906003   .6235724     4.66   0.000     1.595927     4.21608
+--------------------------------------------------------------------------------
+
+. margins, at(rel_hw=(10(10)100) gi2=(1(3)7)) vsquish
+
+Predictive margins                                         Number of obs = 367
+Model VCE: Robust
+
+Expression: Linear prediction, predict()
+1._at:  rel_hw =  10
+        gi2    =   1
+2._at:  rel_hw =  10
+        gi2    =   4
+3._at:  rel_hw =  10
+        gi2    =   7
+4._at:  rel_hw =  20
+        gi2    =   1
+5._at:  rel_hw =  20
+        gi2    =   4
+6._at:  rel_hw =  20
+        gi2    =   7
+7._at:  rel_hw =  30
+        gi2    =   1
+8._at:  rel_hw =  30
+        gi2    =   4
+9._at:  rel_hw =  30
+        gi2    =   7
+10._at: rel_hw =  40
+        gi2    =   1
+11._at: rel_hw =  40
+        gi2    =   4
+12._at: rel_hw =  40
+        gi2    =   7
+13._at: rel_hw =  50
+        gi2    =   1
+14._at: rel_hw =  50
+        gi2    =   4
+15._at: rel_hw =  50
+        gi2    =   7
+16._at: rel_hw =  60
+        gi2    =   1
+17._at: rel_hw =  60
+        gi2    =   4
+18._at: rel_hw =  60
+        gi2    =   7
+19._at: rel_hw =  70
+        gi2    =   1
+20._at: rel_hw =  70
+        gi2    =   4
+21._at: rel_hw =  70
+        gi2    =   7
+22._at: rel_hw =  80
+        gi2    =   1
+23._at: rel_hw =  80
+        gi2    =   4
+24._at: rel_hw =  80
+        gi2    =   7
+25._at: rel_hw =  90
+        gi2    =   1
+26._at: rel_hw =  90
+        gi2    =   4
+27._at: rel_hw =  90
+        gi2    =   7
+28._at: rel_hw = 100
+        gi2    =   1
+29._at: rel_hw = 100
+        gi2    =   4
+30._at: rel_hw = 100
+        gi2    =   7
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+         _at |
+          1  |   2.922303   .3210351     9.10   0.000     2.293086     3.55152
+          2  |   3.279523   .1420646    23.08   0.000     3.001081    3.557964
+          3  |   3.636742   .2825708    12.87   0.000     3.082914    4.190571
+          4  |   2.956728   .2775492    10.65   0.000     2.412741    3.500714
+          5  |   3.234474   .1218671    26.54   0.000     2.995619    3.473329
+          6  |    3.51222   .2456408    14.30   0.000     3.030773    3.993667
+          7  |   2.991153   .2343024    12.77   0.000     2.531928    3.450377
+          8  |   3.189425   .1019177    31.29   0.000      2.98967     3.38918
+          9  |   3.387698   .2095996    16.16   0.000     2.976891    3.798506
+         10  |   3.025578   .1914567    15.80   0.000     2.650329    3.400826
+         11  |   3.144377   .0823969    38.16   0.000     2.982882    3.305872
+         12  |   3.263176   .1749974    18.65   0.000     2.920188    3.606165
+         13  |   3.060003   .1493577    20.49   0.000     2.767267    3.352738
+         14  |   3.099328   .0637001    48.65   0.000     2.974478    3.224178
+         15  |   3.138654   .1428834    21.97   0.000     2.858608    3.418701
+         16  |   3.094427   .1088751    28.42   0.000     2.881036    3.307819
+         17  |    3.05428   .0468248    65.23   0.000     2.962505    3.146055
+         18  |   3.014132   .1153549    26.13   0.000     2.788041    3.240224
+         19  |   3.128852   .0727588    43.00   0.000     2.986248    3.271457
+         20  |   3.009231   .0345518    87.09   0.000     2.941511    3.076952
+         21  |    2.88961   .0964225    29.97   0.000     2.700626    3.078595
+         22  |   3.163277    .051263    61.71   0.000     3.062804    3.263751
+         23  |   2.964183   .0325807    90.98   0.000     2.900326     3.02804
+         24  |   2.765088   .0915825    30.19   0.000      2.58559    2.944587
+         25  |   3.197702   .0620963    51.50   0.000     3.075996    3.319409
+         26  |   2.919134   .0423743    68.89   0.000     2.836082    3.002186
+         27  |   2.640566   .1028441    25.68   0.000     2.438996    2.842137
+         28  |   3.232127   .0947524    34.11   0.000     3.046416    3.417839
+         29  |   2.874086   .0582758    49.32   0.000     2.759867    2.988304
+         30  |   2.516044   .1259601    19.97   0.000     2.269167    2.762921
+------------------------------------------------------------------------------
+
+. ** Figure 1. Predicted Marital Satisfaction, by Relative Share of Housework and Gender Ideology, Taiwanese Women
+. marginsplot, plot1opts(lcolor(black) lpattern("shortdash")) plot2opts(lcolor(black) lpattern("solid")) plot3opts(lcolo
+> r(black) lpattern("longdash")) ///
+>         noci x(rel_hw) recast(line) ytitle("Marital Satisfaction", size(large)) xlabel(0(10)100, labsize(small)) ylabe
+> l(2.4(0.2)3.8) xtitle("Relative Share of Housework", size(medlarge)) ///
+>         legend(order(1 "GI = 1" 2 "GI = 4" 3 "GI = 7") cols(3)) ///
+>         title("")
+
+Variables that uniquely identify margins: rel_hw gi2
+
+. graph export "graph_Qian_Sayer_2016_JMF_Figure1.pdf"
+file /Users/yueqian/Desktop/graph_Qian_Sayer_2016_JMF_Figure1.pdf saved as PDF format
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /Users/yueqian/Desktop/graph_Qian_Sayer_2016_JMF.log
+  log type:  text
+ closed on:  15 Aug 2025, 17:04:10
+------------------------------------------------------------------------------------------------------------------------

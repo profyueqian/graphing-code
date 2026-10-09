@@ -1,0 +1,866 @@
+------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/yueqian/Downloads/graph_Yavorsky_et_al_2025_GWO.log
+  log type:  text
+ opened on:  31 Aug 2025, 21:37:50
+
+. 
+. 
+. **************************************************************************
+. *********Stata codes used to produce Figures 1-5**************************
+. /* 
+> Yavorsky, J. E., Qian, Y., & Glauber, R. (2025). Workplace Productivity: Gender, Parenthood, a
+> nd Career Consequences in the United States. Gender, Work & Organization. https://doi.org/10.1
+> 111/gwao.70027
+> */
+. **************************************************************************
+. 
+. /*
+> Stata packages coefplot and cleanplots need to be installed to produce the graphs
+> coefplot - https://repec.sowi.unibe.ch/stata/coefplot/
+> cleanplots - https://www.trentonmize.com/software/cleanplots
+> */
+. 
+. 
+. // #0
+. // program setup
+. version 18.0
+
+. clear all
+
+. set more off
+
+. matrix drop _all
+
+. set linesize 120
+
+. 
+. 
+. // #1
+. // open data
+. use regsample, clear
+
+. 
+. 
+. // #2
+. // two-way interaction - Figure 1
+. reg rewards_avg i.v_female ib2.v_prod survey ///
+>         v_female#v_prod 
+
+      Source |       SS           df       MS      Number of obs   =       975
+-------------+----------------------------------   F(6, 968)       =     62.82
+       Model |  676.506546         6  112.751091   Prob > F        =    0.0000
+    Residual |  1737.41642       968  1.79485167   R-squared       =    0.2803
+-------------+----------------------------------   Adj R-squared   =    0.2758
+       Total |  2413.92297       974  2.47836034   Root MSE        =    1.3397
+
+--------------------------------------------------------------------------------------
+         rewards_avg | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+---------------------+----------------------------------------------------------------
+            v_female |
+           1_Female  |  -.4024974   .1489909    -2.70   0.007    -.6948799    -.110115
+                     |
+              v_prod |
+         0_Increase  |    1.78385   .1474061    12.10   0.000     1.494578    2.073123
+         1_Constant  |   1.149119   .1509879     7.61   0.000     .8528181    1.445421
+                     |
+              survey |    .022374   .0956082     0.23   0.815    -.1652491    .2099972
+                     |
+     v_female#v_prod |
+1_Female#0_Increase  |   .3652509   .2080874     1.76   0.080    -.0431035    .7736053
+1_Female#1_Constant  |   .3904951   .2131652     1.83   0.067    -.0278242    .8088143
+                     |
+               _cons |   2.559067   .1226708    20.86   0.000     2.318335    2.799798
+--------------------------------------------------------------------------------------
+
+. estimates store n975
+
+. 
+. ***** margins for graph
+. foreach p in 0 1{
+  2.                         
+.         estimates restore n975
+  3.         margins v_prod, at(v_female=`p') post
+  4.         estimates store two`p'
+  5.                 
+. }
+(results n975 are active now)
+
+Predictive margins                                         Number of obs = 975
+Model VCE: OLS
+
+Expression: Linear prediction, predict()
+At: v_female = 0
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+      v_prod |
+ 0_Increase  |   4.359003   .1043278    41.78   0.000     4.154269    4.563738
+ 1_Constant  |   3.724272   .1093902    34.05   0.000     3.509603    3.938942
+ 2_Decrease  |   2.575153   .1040468    24.75   0.000      2.37097    2.779336
+------------------------------------------------------------------------------
+(results n975 are active now)
+
+Predictive margins                                         Number of obs = 975
+Model VCE: OLS
+
+Expression: Linear prediction, predict()
+At: v_female = 1
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+      v_prod |
+ 0_Increase  |   4.321757   .1007396    42.90   0.000     4.124064     4.51945
+ 1_Constant  |    3.71227   .1062698    34.93   0.000     3.503724    3.920816
+ 2_Decrease  |   2.172656   .1065924    20.38   0.000     1.963477    2.381834
+------------------------------------------------------------------------------
+
+. ** two0 are predictions for men and two1 are predictions for women
+. 
+. ***** graph: gray scheme
+. coefplot (two0, recast(bar) barwidth(0.3) fcolor(gs10%80) ///
+>                 lcolor(%0) ciopt(recast(rcap) lcolor(gs10)) citop) ///
+>                 (two1, recast(bar) barwidth(0.3) fcolor(black%80) ///
+>                 lcolor(%0) ciopt(recast(rcap) lcolor(black)) citop) ///
+>                 , vertical format(%9.2f) ///
+>                 ytitle("Career rewards") ///
+>                 mlabel mlabpos(2) mlabcolor(black) ///
+>                 ylabel(1(1)7) ///
+>                 legend(pos(6) row(1) lab(1 "Fathers") lab(3 "Mothers")) ///
+>                 coeflabels(0.v_prod = "Productivity increases" 1.v_prod = "Productivity constant" ///
+>                 2.v_prod = "Productivity decreases", tlength(0))
+
+. graph export "graph_Yavorsky_et_al_2025_GWO_Figure1.pdf"        
+file /Users/yueqian/Downloads/graph_Yavorsky_et_al_2025_GWO_Figure1.pdf saved as PDF format
+
+. 
+. 
+. // #3
+. // mediation models - graph for "productivity decrease" group only - Figure 2
+. foreach m in competent professionally_oriented interest_adv{
+  2.                         
+.         reg rewards_avg i.v_female ib2.v_prod survey ///
+>                 v_female#v_prod ///
+>                 `m'
+  3.                 estimates store m`m'
+  4.                 
+. }
+
+      Source |       SS           df       MS      Number of obs   =       975
+-------------+----------------------------------   F(7, 967)       =    125.50
+       Model |  1149.10019         7   164.15717   Prob > F        =    0.0000
+    Residual |  1264.82278       967  1.30798633   R-squared       =    0.4760
+-------------+----------------------------------   Adj R-squared   =    0.4722
+       Total |  2413.92297       974  2.47836034   Root MSE        =    1.1437
+
+--------------------------------------------------------------------------------------
+         rewards_avg | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+---------------------+----------------------------------------------------------------
+            v_female |
+           1_Female  |  -.4495457   .1272124    -3.53   0.000    -.6991899   -.1999016
+                     |
+              v_prod |
+         0_Increase  |   .6917505   .1383311     5.00   0.000     .4202867    .9632142
+         1_Constant  |   .0922269   .1403744     0.66   0.511    -.1832466    .3677004
+                     |
+              survey |   .0887022   .0816919     1.09   0.278    -.0716116     .249016
+                     |
+     v_female#v_prod |
+1_Female#0_Increase  |   .3266461   .1776485     1.84   0.066    -.0219748    .6752671
+1_Female#1_Constant  |   .4822161   .1820356     2.65   0.008     .1249857    .8394464
+                     |
+           competent |   .6203289   .0326347    19.01   0.000     .5562859    .6843719
+               _cons |   .0263716   .1694686     0.16   0.876    -.3061969    .3589402
+--------------------------------------------------------------------------------------
+
+      Source |       SS           df       MS      Number of obs   =       975
+-------------+----------------------------------   F(7, 967)       =    158.67
+       Model |  1290.42629         7  184.346613   Prob > F        =    0.0000
+    Residual |  1123.49668       967  1.16183731   R-squared       =    0.5346
+-------------+----------------------------------   Adj R-squared   =    0.5312
+       Total |  2413.92297       974  2.47836034   Root MSE        =    1.0779
+
+-----------------------------------------------------------------------------------------
+            rewards_avg | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+------------------------+----------------------------------------------------------------
+               v_female |
+              1_Female  |  -.3547546   .1198901    -2.96   0.003    -.5900295   -.1194798
+                        |
+                 v_prod |
+            0_Increase  |   .8743575   .1250227     6.99   0.000     .6290104    1.119705
+            1_Constant  |   .3307379   .1265882     2.61   0.009     .0823186    .5791572
+                        |
+                 survey |   .1420365   .0770984     1.84   0.066     -.009263    .2933361
+                        |
+        v_female#v_prod |
+   1_Female#0_Increase  |   .2749721   .1674648     1.64   0.101    -.0536643    .6036084
+   1_Female#1_Constant  |   .4751411   .1715437     2.77   0.006     .1385002     .811782
+                        |
+professionally_oriented |   .5833869   .0253789    22.99   0.000     .5335827     .633191
+                  _cons |   .3139237   .1388535     2.26   0.024     .0414347    .5864127
+-----------------------------------------------------------------------------------------
+
+      Source |       SS           df       MS      Number of obs   =       975
+-------------+----------------------------------   F(7, 967)       =    289.48
+       Model |  1634.11627         7  233.445181   Prob > F        =    0.0000
+    Residual |  779.806701       967  .806418512   R-squared       =    0.6770
+-------------+----------------------------------   Adj R-squared   =    0.6746
+       Total |  2413.92297       974  2.47836034   Root MSE        =    .89801
+
+--------------------------------------------------------------------------------------
+         rewards_avg | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+---------------------+----------------------------------------------------------------
+            v_female |
+           1_Female  |  -.4130773   .0998683    -4.14   0.000    -.6090609   -.2170936
+                     |
+              v_prod |
+         0_Increase  |   .8122036   .1027501     7.90   0.000     .6105648    1.013842
+         1_Constant  |   .5027631   .1029298     4.88   0.000     .3007715    .7047547
+                     |
+              survey |   .1399813   .0641765     2.18   0.029     .0140401    .2659226
+                     |
+     v_female#v_prod |
+1_Female#0_Increase  |   .2486003    .139521     1.78   0.075    -.0251985    .5223992
+1_Female#1_Constant  |   .3035143   .1429059     2.12   0.034     .0230729    .5839557
+                     |
+        interest_adv |   .7126787   .0206814    34.46   0.000     .6720932    .7532643
+               _cons |   .4878015   .1018521     4.79   0.000     .2879249     .687678
+--------------------------------------------------------------------------------------
+
+. 
+. coefplot (n975, label("No mediator")) ///
+>         (mcompetent, label("Add competence")) ///
+>         (mprofessionally_oriented, label("Add professional commitment")) ///
+>         (minterest_adv, label("Add interest in advancement")) ///
+>         , keep(1.v_female) vertical yscale(range(-1 0.5)) ylabel(-1(0.5)0.5) yline(0) ///
+>         legend(rows(1) position(6)) ///
+>         coeflabels(1.v_female = "Gender gap in career rewards (mothers – fathers)", ///
+>         tlength(0) labcolor(white)) ///
+>         mlabel mlabpos(2) mlabcolor(black) mlabformat(%9.2f) ///
+>         ytitle("Gender gap in career rewards (mothers – fathers)", size(small))
+
+. graph export "graph_Yavorsky_et_al_2025_GWO_Figure2.pdf"
+file /Users/yueqian/Downloads/graph_Yavorsky_et_al_2025_GWO_Figure2.pdf saved as PDF format
+
+. 
+. 
+. // #4
+. // regression models, three-way interactions - Figure 3
+. fre resp_female
+
+resp_female
+----------------------------------------------------------------
+                   |      Freq.    Percent      Valid       Cum.
+-------------------+--------------------------------------------
+Valid   0 0_Male   |        503      51.59      51.59      51.59
+        1 1_Female |        472      48.41      48.41     100.00
+        Total      |        975     100.00     100.00           
+----------------------------------------------------------------
+
+. gen resp_male = resp_female==0
+
+. tab resp_female resp_male, m
+
+                      |       resp_male
+          resp_female |         0          1 |     Total
+----------------------+----------------------+----------
+               0_Male |         0        503 |       503 
+             1_Female |       472          0 |       472 
+----------------------+----------------------+----------
+                Total |       472        503 |       975 
+
+. 
+. estimates clear
+
+. reg rewards_avg i.v_female ib2.v_prod survey ///
+>         v_female#v_prod ///
+>         i.resp_male ///
+>         resp_male#v_female resp_male#v_prod ///
+>         resp_male#v_female#v_prod
+
+      Source |       SS           df       MS      Number of obs   =       975
+-------------+----------------------------------   F(12, 962)      =     32.08
+       Model |  689.962944        12   57.496912   Prob > F        =    0.0000
+    Residual |  1723.96002       962  1.79205824   R-squared       =    0.2858
+-------------+----------------------------------   Adj R-squared   =    0.2769
+       Total |  2413.92297       974  2.47836034   Root MSE        =    1.3387
+
+-------------------------------------------------------------------------------------------
+              rewards_avg | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+--------------------------+----------------------------------------------------------------
+                 v_female |
+                1_Female  |  -.2389164   .2128572    -1.12   0.262    -.6566344    .1788016
+                          |
+                   v_prod |
+              0_Increase  |   2.033998   .2077034     9.79   0.000     1.626394    2.441602
+              1_Constant  |   1.116362   .2210335     5.05   0.000     .6825981    1.550125
+                          |
+                   survey |   .0200292   .0955862     0.21   0.834    -.1675523    .2076106
+                          |
+          v_female#v_prod |
+     1_Female#0_Increase  |   .1803875   .3000729     0.60   0.548    -.4084855    .7692605
+     1_Female#1_Constant  |   .5151286   .3067931     1.68   0.093    -.0869323    1.117189
+                          |
+              1.resp_male |   .3909777   .2082277     1.88   0.061    -.0176552    .7996106
+                          |
+       resp_male#v_female |
+              1#1_Female  |  -.3537618   .2984786    -1.19   0.236     -.939506    .2319824
+                          |
+         resp_male#v_prod |
+            1#0_Increase  |  -.5181489   .2948054    -1.76   0.079    -1.096685     .060387
+            1#1_Constant  |  -.0175676   .3039867    -0.06   0.954    -.6141211     .578986
+                          |
+resp_male#v_female#v_prod |
+   1#1_Female#0_Increase  |   .3968439   .4164373     0.95   0.341    -.4203863    1.214074
+   1#1_Female#1_Constant  |  -.1799928   .4287044    -0.42   0.675    -1.021297    .6613109
+                          |
+                    _cons |    2.37695   .1559913    15.24   0.000     2.070828    2.683073
+-------------------------------------------------------------------------------------------
+
+. estimates store mint3
+
+. 
+. ***** graph
+. foreach v in 1 0{
+  2.         foreach p in 0 1{
+  3.         
+.                 estimates restore mint3
+  4.                 margins v_prod, at(v_female=`p' resp_male=`v') post
+  5.                 estimates store dv_w`p'_m`v'
+  6. }
+  7. }
+(results mint3 are active now)
+
+Predictive margins                                         Number of obs = 975
+Model VCE: OLS
+
+Expression: Linear prediction, predict()
+At: v_female  = 0
+    resp_male = 1
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+      v_prod |
+ 0_Increase  |   4.298178   .1443592    29.77   0.000     4.014882    4.581473
+ 1_Constant  |   3.881123   .1435222    27.04   0.000      3.59947    4.162775
+ 2_Decrease  |   2.782329   .1515812    18.36   0.000     2.484861    3.079797
+------------------------------------------------------------------------------
+(results mint3 are active now)
+
+Predictive margins                                         Number of obs = 975
+Model VCE: OLS
+
+Expression: Linear prediction, predict()
+At: v_female  = 1
+    resp_male = 1
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+      v_prod |
+ 0_Increase  |   4.282731   .1373517    31.18   0.000     4.013187    4.552274
+ 1_Constant  |    3.62358   .1589216    22.80   0.000     3.311707    3.935453
+ 2_Decrease  |    2.18965   .1443592    15.17   0.000     1.906355    2.472946
+------------------------------------------------------------------------------
+(results mint3 are active now)
+
+Predictive margins                                         Number of obs = 975
+Model VCE: OLS
+
+Expression: Linear prediction, predict()
+At: v_female  = 0
+    resp_male = 0
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+      v_prod |
+ 0_Increase  |   4.425349   .1506628    29.37   0.000     4.129683    4.721014
+ 1_Constant  |   3.507712   .1686609    20.80   0.000     3.176727    3.838698
+ 2_Decrease  |   2.391351   .1428183    16.74   0.000      2.11108    2.671622
+------------------------------------------------------------------------------
+(results mint3 are active now)
+
+Predictive margins                                         Number of obs = 975
+Model VCE: OLS
+
+Expression: Linear prediction, predict()
+At: v_female  = 1
+    resp_male = 0
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+      v_prod |
+ 0_Increase  |    4.36682   .1479041    29.52   0.000     4.076568    4.657072
+ 1_Constant  |   3.783925   .1427057    26.52   0.000     3.503874    4.063975
+ 2_Decrease  |   2.152435   .1577732    13.64   0.000     1.842815    2.462054
+------------------------------------------------------------------------------
+
+. 
+. ***** gray scheme
+. coefplot (dv_w0_m1, ///
+>                 recast(bar) barwidth(0.3) fcolor(gs10%80) lcolor(%0) ciopt(recast(rcap) lcolor(gs10)) citop) ///
+>                 (dv_w1_m1, ///
+>                 recast(bar) barwidth(0.3) fcolor(black%80) lcolor(%0) ciopt(recast(rcap) lcolor(black)) citop), /// 
+>                 bylabel("Career rewards assigned by men managers") ///
+>                 || (dv_w0_m0, ///
+>                 recast(bar) barwidth(0.3) fcolor(gs10%80) lcolor(%0) ciopt(recast(rcap) lcolor(gs10)) citop) ///
+>                 (dv_w1_m0, ///
+>                 recast(bar) barwidth(0.3) fcolor(black%80) lcolor(%0) ciopt(recast(rcap) lcolor(black)) citop), ///
+>                 bylabel("Career rewards assigned by women managers")  ///
+>                 || , vertical format(%9.2f) ///
+>                 ytitle("Career rewards") ///
+>                 mlabel mlabpos(2) mlabcolor(black) ///
+>                 ylabel(1(1)7) byopts(rows(2)) ///
+>                 legend(pos(6) row(1) lab(1 "Fathers") lab(3 "Mothers")) ///
+>                 coeflabels(0.v_prod = "Productivity increases" 1.v_prod = "Productivity constant" ///
+>                 2.v_prod = "Productivity decreases", tlength(0))
+
+. graph export "graph_Yavorsky_et_al_2025_GWO_Figure3.pdf"        
+file /Users/yueqian/Downloads/graph_Yavorsky_et_al_2025_GWO_Figure3.pdf saved as PDF format
+
+.         
+. 
+. // #5
+. // mediation models (v_female), graph productivity decrease only - Figure 4
+. estimates clear
+
+. reg rewards_avg i.v_female ib2.v_prod survey ///
+>         v_female#v_prod ///
+>         i.resp_female ///
+>         resp_female#v_female resp_female#v_prod ///
+>         resp_female#v_female#v_prod
+
+      Source |       SS           df       MS      Number of obs   =       975
+-------------+----------------------------------   F(12, 962)      =     32.08
+       Model |  689.962944        12   57.496912   Prob > F        =    0.0000
+    Residual |  1723.96002       962  1.79205824   R-squared       =    0.2858
+-------------+----------------------------------   Adj R-squared   =    0.2769
+       Total |  2413.92297       974  2.47836034   Root MSE        =    1.3387
+
+-----------------------------------------------------------------------------------------------
+                  rewards_avg | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+------------------------------+----------------------------------------------------------------
+                     v_female |
+                    1_Female  |  -.5926782    .209332    -2.83   0.005    -1.003478   -.1818783
+                              |
+                       v_prod |
+                  0_Increase  |   1.515849    .209332     7.24   0.000     1.105049    1.926649
+                  1_Constant  |   1.098794   .2087505     5.26   0.000     .6891351    1.508453
+                              |
+                       survey |   .0200292   .0955862     0.21   0.834    -.1675523    .2076106
+                              |
+              v_female#v_prod |
+         1_Female#0_Increase  |   .5772314   .2890364     2.00   0.046     .0100169    1.144446
+         1_Female#1_Constant  |   .3351357     .29942     1.12   0.263     -.252456    .9227275
+                              |
+                  resp_female |
+                    1_Female  |  -.3909777   .2082277    -1.88   0.061    -.7996106    .0176552
+                              |
+         resp_female#v_female |
+           1_Female#1_Female  |   .3537618   .2984786     1.19   0.236    -.2319824     .939506
+                              |
+           resp_female#v_prod |
+         1_Female#0_Increase  |   .5181489   .2948054     1.76   0.079     -.060387    1.096685
+         1_Female#1_Constant  |   .0175676   .3039867     0.06   0.954     -.578986    .6141211
+                              |
+  resp_female#v_female#v_prod |
+1_Female#1_Female#0_Increase  |  -.3968439   .4164373    -0.95   0.341    -1.214074    .4203863
+1_Female#1_Female#1_Constant  |   .1799928   .4287044     0.42   0.675    -.6613109    1.021297
+                              |
+                        _cons |   2.767928   .1658853    16.69   0.000     2.442389    3.093467
+-----------------------------------------------------------------------------------------------
+
+.         estimate store mint0
+
+. 
+. foreach m in competent professionally_oriented interest_adv{
+  2.                         
+.         reg rewards_avg i.v_female ib2.v_prod survey ///
+>                 v_female#v_prod ///
+>                 i.resp_female ///
+>                 resp_female#v_female resp_female#v_prod ///
+>                 resp_female#v_female#v_prod ///
+>                 `m'
+  3.                 estimate store m`m'0
+  4. }
+
+      Source |       SS           df       MS      Number of obs   =       975
+-------------+----------------------------------   F(13, 961)      =     68.28
+       Model |   1159.0644        13  89.1588003   Prob > F        =    0.0000
+    Residual |  1254.85856       961  1.30578415   R-squared       =    0.4802
+-------------+----------------------------------   Adj R-squared   =    0.4731
+       Total |  2413.92297       974  2.47836034   Root MSE        =    1.1427
+
+-----------------------------------------------------------------------------------------------
+                  rewards_avg | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+------------------------------+----------------------------------------------------------------
+                     v_female |
+                    1_Female  |  -.4978144    .178758    -2.78   0.005    -.8486155   -.1470134
+                              |
+                       v_prod |
+                  0_Increase  |   .5773233   .1854218     3.11   0.002     .2134451    .9412016
+                  1_Constant  |    .232966   .1839537     1.27   0.206    -.1280314    .5939633
+                              |
+                       survey |   .0878423   .0816717     1.08   0.282    -.0724333    .2481178
+                              |
+              v_female#v_prod |
+         1_Female#0_Increase  |     .47684   .2467812     1.93   0.054    -.0074523    .9611323
+         1_Female#1_Constant  |   .2638267   .2556157     1.03   0.302    -.2378026    .7654561
+                              |
+                  resp_female |
+                    1_Female  |  -.0990274   .1784115    -0.56   0.579    -.4491484    .2510936
+                              |
+         resp_female#v_female |
+           1_Female#1_Female  |   .0896737   .2551651     0.35   0.725    -.4110713    .5904187
+                              |
+           resp_female#v_prod |
+         1_Female#0_Increase  |   .2242806   .2521261     0.89   0.374    -.2705006    .7190618
+         1_Female#1_Constant  |  -.3656147   .2602725    -1.40   0.160    -.8763827    .1451533
+                              |
+  resp_female#v_female#v_prod |
+1_Female#1_Female#0_Increase  |  -.3059512   .3555075    -0.86   0.390    -1.003612    .3917093
+1_Female#1_Female#1_Constant  |   .5043481   .3663464     1.38   0.169    -.2145832    1.223279
+                              |
+                    competent |   .6214789    .032789    18.95   0.000     .5571325    .6858253
+                        _cons |    .074842   .2005979     0.37   0.709    -.3188184    .4685024
+-----------------------------------------------------------------------------------------------
+
+      Source |       SS           df       MS      Number of obs   =       975
+-------------+----------------------------------   F(13, 961)      =     85.48
+       Model |  1294.48111        13  99.5754702   Prob > F        =    0.0000
+    Residual |  1119.44185       961  1.16487186   R-squared       =    0.5363
+-------------+----------------------------------   Adj R-squared   =    0.5300
+       Total |  2413.92297       974  2.47836034   Root MSE        =    1.0793
+
+-----------------------------------------------------------------------------------------------
+                  rewards_avg | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+------------------------------+----------------------------------------------------------------
+                     v_female |
+                    1_Female  |  -.3993387   .1689845    -2.36   0.018      -.73096   -.0677174
+                              |
+                       v_prod |
+                  0_Increase  |    .764311   .1719654     4.44   0.000     .4268399    1.101782
+                  1_Constant  |   .4104307   .1709936     2.40   0.017     .0748669    .7459946
+                              |
+                       survey |   .1408765   .0772475     1.82   0.069    -.0107168    .2924698
+                              |
+              v_female#v_prod |
+         1_Female#0_Increase  |   .4095513   .2331482     1.76   0.079     -.047987    .8670896
+         1_Female#1_Constant  |   .3668091   .2414077     1.52   0.129    -.1069379    .8405562
+                              |
+                  resp_female |
+                    1_Female  |  -.0564791   .1685219    -0.34   0.738    -.3871924    .2742343
+                              |
+         resp_female#v_female |
+           1_Female#1_Female  |    .088428   .2409263     0.37   0.714    -.3843744    .5612305
+                              |
+           resp_female#v_prod |
+         1_Female#0_Increase  |   .2290363   .2380218     0.96   0.336     -.238066    .6961387
+         1_Female#1_Constant  |  -.1991949   .2452701    -0.81   0.417    -.6805217    .2821319
+                              |
+  resp_female#v_female#v_prod |
+1_Female#1_Female#0_Increase  |  -.2767618   .3357887    -0.82   0.410    -.9357256    .3822019
+1_Female#1_Female#1_Constant  |   .2488925   .3456508     0.72   0.472     -.429425      .92721
+                              |
+      professionally_oriented |     .58181   .0255397    22.78   0.000       .53169      .63193
+                        _cons |   .3505025   .1707282     2.05   0.040     .0154594    .6855457
+-----------------------------------------------------------------------------------------------
+
+      Source |       SS           df       MS      Number of obs   =       975
+-------------+----------------------------------   F(13, 961)      =    156.95
+       Model |   1641.0028        13  126.230985   Prob > F        =    0.0000
+    Residual |  772.920167       961  .804287375   R-squared       =    0.6798
+-------------+----------------------------------   Adj R-squared   =    0.6755
+       Total |  2413.92297       974  2.47836034   Root MSE        =    .89682
+
+-----------------------------------------------------------------------------------------------
+                  rewards_avg | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+------------------------------+----------------------------------------------------------------
+                     v_female |
+                    1_Female  |   -.372551   .1403838    -2.65   0.008    -.6480452   -.0970568
+                              |
+                       v_prod |
+                  0_Increase  |   .7403431   .1420396     5.21   0.000     .4615996    1.019087
+                  1_Constant  |   .6167433   .1405491     4.39   0.000     .3409247    .8925619
+                              |
+                       survey |   .1420931   .0641344     2.22   0.027     .0162335    .2679526
+                              |
+              v_female#v_prod |
+         1_Female#0_Increase  |   .3007313   .1938011     1.55   0.121    -.0795908    .6810534
+         1_Female#1_Constant  |   .1822397   .2006398     0.91   0.364     -.211503    .5759824
+                              |
+                  resp_female |
+                    1_Female  |   .1638925   .1404282     1.17   0.243    -.1116887    .4394738
+                              |
+         resp_female#v_female |
+           1_Female#1_Female  |  -.0624722   .2003258    -0.31   0.755    -.4555988    .3306544
+                              |
+           resp_female#v_prod |
+         1_Female#0_Increase  |   .1548193   .1977815     0.78   0.434    -.2333141    .5429528
+         1_Female#1_Constant  |  -.2381571   .2037856    -1.17   0.243    -.6380732     .161759
+                              |
+  resp_female#v_female#v_prod |
+1_Female#1_Female#0_Increase  |  -.1284063   .2790931    -0.46   0.646    -.6761085    .4192959
+1_Female#1_Female#1_Constant  |     .22514   .2872051     0.78   0.433    -.3384814    .7887614
+                              |
+                 interest_adv |   .7171226   .0208545    34.39   0.000      .676197    .7580482
+                        _cons |   .3870651   .1309353     2.96   0.003     .1301131    .6440171
+-----------------------------------------------------------------------------------------------
+
+. 
+. coefplot (mint0, label("No mediator")) ///
+>         (mcompetent0, label("Add competence")) ///
+>         (mprofessionally_oriented0, label("Add professional commitment")) ///
+>         (minterest_adv0, label("Add interest in advancement")) ///
+>         , keep(1.v_female) vertical yscale(range(-1 0.5)) ylabel(-1(0.5)0.5) yline(0) ///
+>         legend(rows(1) position(6))  ///
+>         coeflabels(1.v_female = "Gender gap in career rewards (mothers – fathers)", ///
+>         tlength(0) labcolor(white)) ///
+>         mlabel mlabpos(2) mlabcolor(black) mlabformat(%9.2f) ///
+>         ytitle("Gender gap in career rewards (mothers – fathers)", size(small))
+
+. graph export "graph_Yavorsky_et_al_2025_GWO_Figure4.pdf"
+file /Users/yueqian/Downloads/graph_Yavorsky_et_al_2025_GWO_Figure4.pdf saved as PDF format
+
+. 
+. 
+. // #6
+. // mediation models (resp_male), graph productivity decrease only - Figure 5
+. fre v_female
+
+v_female
+----------------------------------------------------------------
+                   |      Freq.    Percent      Valid       Cum.
+-------------------+--------------------------------------------
+Valid   0 0_Male   |        481      49.33      49.33      49.33
+        1 1_Female |        494      50.67      50.67     100.00
+        Total      |        975     100.00     100.00           
+----------------------------------------------------------------
+
+. gen v_male = v_female==0
+
+. tab v_female v_male, m
+
+           |        v_male
+  v_female |         0          1 |     Total
+-----------+----------------------+----------
+    0_Male |         0        481 |       481 
+  1_Female |       494          0 |       494 
+-----------+----------------------+----------
+     Total |       494        481 |       975 
+
+. 
+. reg rewards_avg i.v_female ib2.v_prod survey ///
+>         v_female#v_prod ///
+>         i.resp_male ///
+>         resp_male#v_female resp_male#v_prod ///
+>         resp_male#v_female#v_prod
+
+      Source |       SS           df       MS      Number of obs   =       975
+-------------+----------------------------------   F(12, 962)      =     32.08
+       Model |  689.962944        12   57.496912   Prob > F        =    0.0000
+    Residual |  1723.96002       962  1.79205824   R-squared       =    0.2858
+-------------+----------------------------------   Adj R-squared   =    0.2769
+       Total |  2413.92297       974  2.47836034   Root MSE        =    1.3387
+
+-------------------------------------------------------------------------------------------
+              rewards_avg | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+--------------------------+----------------------------------------------------------------
+                 v_female |
+                1_Female  |  -.2389164   .2128572    -1.12   0.262    -.6566344    .1788016
+                          |
+                   v_prod |
+              0_Increase  |   2.033998   .2077034     9.79   0.000     1.626394    2.441602
+              1_Constant  |   1.116362   .2210335     5.05   0.000     .6825981    1.550125
+                          |
+                   survey |   .0200292   .0955862     0.21   0.834    -.1675523    .2076106
+                          |
+          v_female#v_prod |
+     1_Female#0_Increase  |   .1803875   .3000729     0.60   0.548    -.4084855    .7692605
+     1_Female#1_Constant  |   .5151286   .3067931     1.68   0.093    -.0869323    1.117189
+                          |
+              1.resp_male |   .3909777   .2082277     1.88   0.061    -.0176552    .7996106
+                          |
+       resp_male#v_female |
+              1#1_Female  |  -.3537618   .2984786    -1.19   0.236     -.939506    .2319824
+                          |
+         resp_male#v_prod |
+            1#0_Increase  |  -.5181489   .2948054    -1.76   0.079    -1.096685     .060387
+            1#1_Constant  |  -.0175676   .3039867    -0.06   0.954    -.6141211     .578986
+                          |
+resp_male#v_female#v_prod |
+   1#1_Female#0_Increase  |   .3968439   .4164373     0.95   0.341    -.4203863    1.214074
+   1#1_Female#1_Constant  |  -.1799928   .4287044    -0.42   0.675    -1.021297    .6613109
+                          |
+                    _cons |    2.37695   .1559913    15.24   0.000     2.070828    2.683073
+-------------------------------------------------------------------------------------------
+
+.         estimate store mint0
+
+. 
+. foreach m in competent professionally_oriented interest_adv{
+  2.                         
+.         reg rewards_avg i.v_female ib2.v_prod survey ///
+>                 v_female#v_prod ///
+>                 i.resp_male ///
+>                 resp_male#v_female resp_male#v_prod ///
+>                 resp_male#v_female#v_prod ///
+>                 `m'
+  3.                 estimate store m`m'0
+  4. }
+
+      Source |       SS           df       MS      Number of obs   =       975
+-------------+----------------------------------   F(13, 961)      =     68.28
+       Model |   1159.0644        13  89.1588003   Prob > F        =    0.0000
+    Residual |  1254.85856       961  1.30578415   R-squared       =    0.4802
+-------------+----------------------------------   Adj R-squared   =    0.4731
+       Total |  2413.92297       974  2.47836034   Root MSE        =    1.1427
+
+-------------------------------------------------------------------------------------------
+              rewards_avg | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+--------------------------+----------------------------------------------------------------
+                 v_female |
+                1_Female  |  -.4081408   .1819163    -2.24   0.025    -.7651398   -.0511417
+                          |
+                   v_prod |
+              0_Increase  |   .8016039   .1888443     4.24   0.000     .4310091    1.172199
+              1_Constant  |  -.1326487   .1998531    -0.66   0.507    -.5248477    .2595502
+                          |
+                   survey |   .0878423   .0816717     1.08   0.282    -.0724333    .2481178
+                          |
+          v_female#v_prod |
+     1_Female#0_Increase  |   .1708887   .2561458     0.67   0.505    -.3317809    .6735584
+     1_Female#1_Constant  |   .7681748   .2622218     2.93   0.003     .2535814    1.282768
+                          |
+              1.resp_male |   .0990274   .1784115     0.56   0.579    -.2510936    .4491484
+                          |
+       resp_male#v_female |
+              1#1_Female  |  -.0896737   .2551651    -0.35   0.725    -.5904187    .4110713
+                          |
+         resp_male#v_prod |
+            1#0_Increase  |  -.2242806   .2521261    -0.89   0.374    -.7190618    .2705006
+            1#1_Constant  |   .3656147   .2602725     1.40   0.160    -.1451533    .8763827
+                          |
+resp_male#v_female#v_prod |
+   1#1_Female#0_Increase  |   .3059512   .3555075     0.86   0.390    -.3917093    1.003612
+   1#1_Female#1_Constant  |  -.5043481   .3663464    -1.38   0.169    -1.223279    .2145832
+                          |
+                competent |   .6214789    .032789    18.95   0.000     .5571325    .6858253
+                    _cons |  -.0241855   .1837909    -0.13   0.895    -.3848633    .3364924
+-------------------------------------------------------------------------------------------
+
+      Source |       SS           df       MS      Number of obs   =       975
+-------------+----------------------------------   F(13, 961)      =     85.48
+       Model |  1294.48111        13  99.5754702   Prob > F        =    0.0000
+    Residual |  1119.44185       961  1.16487186   R-squared       =    0.5363
+-------------+----------------------------------   Adj R-squared   =    0.5300
+       Total |  2413.92297       974  2.47836034   Root MSE        =    1.0793
+
+-------------------------------------------------------------------------------------------
+              rewards_avg | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+--------------------------+----------------------------------------------------------------
+                 v_female |
+                1_Female  |  -.3109107   .1716426    -1.81   0.070    -.6477482    .0259268
+                          |
+                   v_prod |
+              0_Increase  |   .9933473   .1735772     5.72   0.000     .6527132    1.333981
+              1_Constant  |   .2112359   .1825811     1.16   0.248    -.1470678    .5695395
+                          |
+                   survey |   .1408765   .0772475     1.82   0.069    -.0107168    .2924698
+                          |
+          v_female#v_prod |
+     1_Female#0_Increase  |   .1327895   .2419391     0.55   0.583    -.3420003    .6075794
+     1_Female#1_Constant  |   .6157016   .2473875     2.49   0.013     .1302196    1.101184
+                          |
+              1.resp_male |   .0564791   .1685219     0.34   0.738    -.2742343    .3871924
+                          |
+       resp_male#v_female |
+              1#1_Female  |   -.088428   .2409263    -0.37   0.714    -.5612305    .3843744
+                          |
+         resp_male#v_prod |
+            1#0_Increase  |  -.2290363   .2380218    -0.96   0.336    -.6961387     .238066
+            1#1_Constant  |   .1991949   .2452701     0.81   0.417    -.2821319    .6805217
+                          |
+resp_male#v_female#v_prod |
+   1#1_Female#0_Increase  |   .2767618   .3357887     0.82   0.410    -.3822019    .9357256
+   1#1_Female#1_Constant  |  -.2488925   .3456508    -0.72   0.472      -.92721     .429425
+                          |
+  professionally_oriented |     .58181   .0255397    22.78   0.000       .53169      .63193
+                    _cons |   .2940234   .1554905     1.89   0.059    -.0111167    .5991636
+-------------------------------------------------------------------------------------------
+
+      Source |       SS           df       MS      Number of obs   =       975
+-------------+----------------------------------   F(13, 961)      =    156.95
+       Model |   1641.0028        13  126.230985   Prob > F        =    0.0000
+    Residual |  772.920167       961  .804287375   R-squared       =    0.6798
+-------------+----------------------------------   Adj R-squared   =    0.6755
+       Total |  2413.92297       974  2.47836034   Root MSE        =    .89682
+
+-------------------------------------------------------------------------------------------
+              rewards_avg | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+--------------------------+----------------------------------------------------------------
+                 v_female |
+                1_Female  |  -.4350232   .1427135    -3.05   0.002    -.7150892   -.1549572
+                          |
+                   v_prod |
+              0_Increase  |   .8951625   .1430337     6.26   0.000     .6144681    1.175857
+              1_Constant  |   .3785862   .1496233     2.53   0.012     .0849602    .6722123
+                          |
+                   survey |   .1420931   .0641344     2.22   0.027     .0162335    .2679526
+                          |
+          v_female#v_prod |
+     1_Female#0_Increase  |    .172325   .2010281     0.86   0.392    -.2221796    .5668296
+     1_Female#1_Constant  |   .4073797   .2055538     1.98   0.048     .0039935    .8107659
+                          |
+              1.resp_male |  -.1638925   .1404282    -1.17   0.243    -.4394738    .1116887
+                          |
+       resp_male#v_female |
+              1#1_Female  |   .0624722   .2003258     0.31   0.755    -.3306544    .4555988
+                          |
+         resp_male#v_prod |
+            1#0_Increase  |  -.1548193   .1977815    -0.78   0.434    -.5429528    .2333141
+            1#1_Constant  |   .2381571   .2037856     1.17   0.243     -.161759    .6380732
+                          |
+resp_male#v_female#v_prod |
+   1#1_Female#0_Increase  |   .1284063   .2790931     0.46   0.646    -.4192959    .6761085
+   1#1_Female#1_Constant  |    -.22514   .2872051    -0.78   0.433    -.7887614    .3384814
+                          |
+             interest_adv |   .7171226   .0208545    34.39   0.000      .676197    .7580482
+                    _cons |   .5509577   .1172207     4.70   0.000     .3209196    .7809957
+-------------------------------------------------------------------------------------------
+
+. 
+. coefplot (mint0, label("No mediator")) ///
+>         (mcompetent0, label("Add competence")) ///
+>         (mprofessionally_oriented0, label("Add professional commitment")) ///
+>         (minterest_adv0, label("Add interest in advancement")) ///
+>         , keep(1.resp_male) ///
+>         vertical yscale(range(-0.5 1)) ylabel(-0.5(0.5)1) yline(0) ///
+>         legend(rows(1) position(6)) ///
+>         coeflabels(1.v_female = "Difference in career rewards assigned by men vs. women managers", ///
+>         tlength(0) labcolor(white)) ///
+>         mlabel mlabpos(2) mlabcolor(black) mlabformat(%9.2f) ///
+>         ytitle("Difference in career rewards assigned by men vs. women managers", size(small))
+
+. graph export "graph_Yavorsky_et_al_2025_GWO_Figure5.pdf"
+file /Users/yueqian/Downloads/graph_Yavorsky_et_al_2025_GWO_Figure5.pdf saved as PDF format
+
+. 
+. 
+. log close
+      name:  <unnamed>
+       log:  /Users/yueqian/Downloads/graph_Yavorsky_et_al_2025_GWO.log
+  log type:  text
+ closed on:  31 Aug 2025, 21:37:54
+------------------------------------------------------------------------------------------------------------------------

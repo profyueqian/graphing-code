@@ -1,0 +1,495 @@
+------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/yueqian/Desktop/table_Qian_2018_JMF.log
+  log type:  text
+ opened on:  15 Aug 2025, 14:36:30
+
+. 
+. **************************************************************************
+. *********Stata codes used to produce Table 2 and Table 3******************
+. /* Qian, Yue. (2018). Educational assortative mating and income dynamics in couples: A longitu
+> dinal dyadic perspective. Journal of Marriage and Family, 80(3), 607-621. https://doi.org/10.1
+> 111/jomf.12470
+> */
+. **************************************************************************
+. 
+. /*
+> Stata package outreg2 needs to be installed to export regression results.
+> This module can be installed from within Stata by typing "ssc install outreg2". 
+> */
+. 
+. // #0
+. // program setup
+. version 14.0
+
+. clear all
+
+. set more off
+
+. matrix drop _all
+
+. set linesize 120
+
+. 
+. 
+. // #1
+. // open data
+. clear
+
+. use "regsample", clear
+
+. 
+. /* note about data structure
+> 
+> Data have two rows for each couple. Both rows contain all the variables in the models (for the wife row, all husband v
+> ariables = 0; for the husband row, all wife variables = 0). 
+>  
+> lninc is my dependent variable. My slope is marital duration. caseid_1979 is my couple id.
+>  
+> For the "wife" row, lninc is wife's income; f_int = 1, f_slope = marital duration, m_int = 0, m_slope = 0.
+> 
+> For the "husband" row, lninc is husband's income; f_int = 0, f_slope = 0, m_int = 1, m_slope = marital duration. 
+> 
+> */
+. 
+. 
+. // #2
+. // Table 2, Model 1
+. xtmixed lninc f_int ///
+>                           f_slope ///
+>                           f_slopesq ///
+>                           m_int ///
+>                           m_slope ///
+>                           m_slopesq, noconstant /// 
+>         || caseid_1979: f_slopesq m_slopesq, noconstant cov(identity) ///
+>         || caseid_1979: f_int m_int f_slope m_slope, ml noconstant cov(un)
+
+Performing EM optimization: 
+
+Performing gradient-based optimization: 
+
+Iteration 0:  Log likelihood = -264217.24  
+Iteration 1:  Log likelihood = -264133.85  (not concave)
+Iteration 2:  Log likelihood = -264075.04  
+Iteration 3:  Log likelihood =  -264059.4  
+Iteration 4:  Log likelihood = -264058.83  
+Iteration 5:  Log likelihood = -264058.82  
+
+Computing standard errors:
+
+Mixed-effects ML regression                       Number of obs    =   106,713
+Group variable: caseid_1979                       Number of groups =     6,426
+                                                  Obs per group:
+                                                               min =         1
+                                                               avg =      16.6
+                                                               max =        36
+                                                  Wald chi2(6)     = 157831.74
+Log likelihood = -264058.82                       Prob > chi2      =    0.0000
+
+------------------------------------------------------------------------------
+       lninc | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+       f_int |   7.839334   .0496152   158.00   0.000     7.742091    7.936578
+     f_slope |  -.1941631    .008122   -23.91   0.000    -.2100819   -.1782444
+   f_slopesq |    .011902   .0004093    29.08   0.000     .0110997    .0127043
+       m_int |    9.59929   .0320257   299.74   0.000      9.53652    9.662059
+     m_slope |   .0436597   .0070016     6.24   0.000     .0299367    .0573827
+   m_slopesq |  -.0013048   .0003882    -3.36   0.001    -.0020658   -.0005439
+------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------
+  Random-effects parameters  |   Estimate   Std. err.     [95% conf. interval]
+-----------------------------+------------------------------------------------
+caseid_1979: Identity        |
+     sd(f_slopesq m_slopesq) |   .0047598   .0003192      .0041735    .0054284
+-----------------------------+------------------------------------------------
+caseid_1979: Unstructured    |
+                   sd(f_int) |   3.429561   .0374874      3.356869    3.503828
+                   sd(m_int) |   1.687677   .0288772      1.632017    1.745235
+                 sd(f_slope) |   .2830794   .0047303      .2739584     .292504
+                 sd(m_slope) |   .0741857   .0075632      .0607493     .090594
+           corr(f_int,m_int) |    .346042   .0175979      .3110947    .3800547
+         corr(f_int,f_slope) |  -.4392943   .0157209     -.4695839   -.4079718
+         corr(f_int,m_slope) |  -.1245486   .0434585     -.2086102   -.0386602
+         corr(m_int,f_slope) |  -.2156986   .0237293     -.2616869   -.1687331
+         corr(m_int,m_slope) |  -.0526802   .0603008     -.1695908    .0656925
+       corr(f_slope,m_slope) |   .0432661   .0504177     -.0556515    .1413426
+-----------------------------+------------------------------------------------
+                sd(Residual) |    2.45587   .0060891      2.443965    2.467834
+------------------------------------------------------------------------------
+LR test vs. linear model: chi2(11) = 48444.28             Prob > chi2 = 0.0000
+
+Note: LR test is conservative and provided only for reference.
+
+. outreg2 using "table_Qian_2018_JMF", excel bdec(3) alpha(0.001, 0.01, 0.05, 0.1) symbol(***, **, *, +)
+table_Qian_2018_JMF.xml
+dir : seeout
+
+. 
+.         
+. // #3
+. // Table 3, Model 2     
+. xtmixed lninc f_int i.fhyper i.fhypo i.flhs i.fsc i.fc ///
+>                           f_slope fhyper#c.f_slope fhypo#c.f_slope flhs#c.f_slope fsc#c.f_slope fc#c.f_slope ///
+>                           f_slopesq fhyper#c.f_slopesq fhypo#c.f_slopesq flhs#c.f_slopesq fsc#c.f_slopesq fc#c.f_slopesq ///
+>                           m_int i.mhyper i.mhypo i.mlhs i.msc i.mc ///
+>                           m_slope mhyper#c.m_slope mhypo#c.m_slope mlhs#c.m_slope msc#c.m_slope mc#c.m_slope ///
+>                           m_slopesq mhyper#c.m_slopesq mhypo#c.m_slopesq mlhs#c.m_slopesq msc#c.m_slopesq mc#c.m_slopesq, noconstant /// 
+>         || caseid_1979: f_slopesq m_slopesq, noconstant cov(identity) ///
+>         || caseid_1979: f_int m_int f_slope m_slope, ml noconstant cov(un)
+
+Performing EM optimization: 
+
+Performing gradient-based optimization: 
+
+Iteration 0:  Log likelihood = -263410.44  
+Iteration 1:  Log likelihood = -263330.66  (not concave)
+Iteration 2:  Log likelihood = -263296.66  
+Iteration 3:  Log likelihood = -263246.48  
+Iteration 4:  Log likelihood = -263243.77  
+Iteration 5:  Log likelihood = -263243.71  
+Iteration 6:  Log likelihood = -263243.71  
+
+Computing standard errors:
+
+Mixed-effects ML regression                       Number of obs    =   106,713
+Group variable: caseid_1979                       Number of groups =     6,426
+                                                  Obs per group:
+                                                               min =         1
+                                                               avg =      16.6
+                                                               max =        36
+                                                  Wald chi2(36)    = 175232.03
+Log likelihood = -263243.71                       Prob > chi2      =    0.0000
+
+------------------------------------------------------------------------------------
+             lninc | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+-------------------+----------------------------------------------------------------
+             f_int |   7.690259   .0781154    98.45   0.000     7.537155    7.843362
+          1.fhyper |   .4301877   .1186474     3.63   0.000      .197643    .6627324
+           1.fhypo |  -.5439856   .1150432    -4.73   0.000    -.7694661   -.3185052
+            1.flhs |  -3.493904   .1389054   -25.15   0.000    -3.766154   -3.221655
+             1.fsc |   1.073896   .1174345     9.14   0.000     .8437286    1.304063
+              1.fc |   2.499157    .127679    19.57   0.000     2.248911    2.749403
+           f_slope |  -.2124314   .0140499   -15.12   0.000    -.2399687   -.1848941
+                   |
+  fhyper#c.f_slope |
+                1  |  -.0670131   .0213031    -3.15   0.002    -.1087663   -.0252598
+                   |
+   fhypo#c.f_slope |
+                1  |   .1861506   .0206556     9.01   0.000     .1456663    .2266349
+                   |
+    flhs#c.f_slope |
+                1  |   .2743011   .0263345    10.42   0.000     .2226864    .3259157
+                   |
+     fsc#c.f_slope |
+                1  |  -.0519179   .0210462    -2.47   0.014    -.0931676   -.0106681
+                   |
+      fc#c.f_slope |
+                1  |  -.1874621   .0222658    -8.42   0.000    -.2311022   -.1438219
+                   |
+         f_slopesq |   .0130245    .000717    18.17   0.000     .0116192    .0144298
+                   |
+fhyper#c.f_slopesq |
+                1  |   .0016957   .0010875     1.56   0.119    -.0004358    .0038272
+                   |
+ fhypo#c.f_slopesq |
+                1  |  -.0071472   .0010561    -6.77   0.000    -.0092171   -.0050773
+                   |
+  flhs#c.f_slopesq |
+                1  |  -.0077253   .0013694    -5.64   0.000    -.0104093   -.0050413
+                   |
+   fsc#c.f_slopesq |
+                1  |   .0008288   .0010708     0.77   0.439    -.0012698    .0029275
+                   |
+    fc#c.f_slopesq |
+                1  |   .0044367   .0011147     3.98   0.000      .002252    .0066213
+                   |
+             m_int |   9.560426   .0549163   174.09   0.000     9.452792     9.66806
+          1.mhyper |  -.2721737   .0841722    -3.23   0.001    -.4371481   -.1071993
+           1.mhypo |   .1137244   .0825211     1.38   0.168     -.048014    .2754629
+            1.mlhs |   -.611402   .0947066    -6.46   0.000    -.7970236   -.4257804
+             1.msc |   .2996107   .0868856     3.45   0.001      .129318    .4699034
+              1.mc |   .6444836   .0895414     7.20   0.000     .4689857    .8199815
+           m_slope |   .0206088   .0122401     1.68   0.092    -.0033813    .0445989
+                   |
+  mhyper#c.m_slope |
+                1  |   .0102962   .0185485     0.56   0.579    -.0260582    .0466506
+                   |
+   mhypo#c.m_slope |
+                1  |   .0089818   .0183635     0.49   0.625      -.02701    .0449736
+                   |
+    mlhs#c.m_slope |
+                1  |  -.0058435   .0218741    -0.27   0.789    -.0487159    .0370288
+                   |
+     msc#c.m_slope |
+                1  |    .015732   .0192462     0.82   0.414      -.02199    .0534539
+                   |
+      mc#c.m_slope |
+                1  |   .0717035   .0193887     3.70   0.000     .0337024    .1097046
+                   |
+         m_slopesq |  -.0006226   .0006817    -0.91   0.361    -.0019586    .0007135
+                   |
+mhyper#c.m_slopesq |
+                1  |  -.0000981   .0010309    -0.10   0.924    -.0021185    .0019224
+                   |
+ mhypo#c.m_slopesq |
+                1  |  -.0002313   .0010214    -0.23   0.821    -.0022333    .0017707
+                   |
+  mlhs#c.m_slopesq |
+                1  |  -.0011673   .0012282    -0.95   0.342    -.0035746      .00124
+                   |
+   msc#c.m_slopesq |
+                1  |   .0001413   .0010686     0.13   0.895    -.0019531    .0022356
+                   |
+    mc#c.m_slopesq |
+                1  |   -.002273   .0010685    -2.13   0.033    -.0043671   -.0001788
+------------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------
+  Random-effects parameters  |   Estimate   Std. err.     [95% conf. interval]
+-----------------------------+------------------------------------------------
+caseid_1979: Identity        |
+     sd(f_slopesq m_slopesq) |   .0048018   .0003137      .0042247    .0054576
+-----------------------------+------------------------------------------------
+caseid_1979: Unstructured    |
+                   sd(f_int) |   3.018329   .0346976      2.951084    3.087107
+                   sd(m_int) |   1.643401   .0287971      1.587918    1.700823
+                 sd(f_slope) |   .2718535   .0046975      .2628007     .281218
+                 sd(m_slope) |   .0700219   .0079143      .0561081    .0873861
+           corr(f_int,m_int) |   .2797274   .0187943      .2424947    .3161372
+         corr(f_int,f_slope) |  -.3757958   .0173828     -.4093477   -.3412289
+         corr(f_int,m_slope) |   -.255266   .0508093     -.3518588    -.153294
+         corr(m_int,f_slope) |  -.1541482   .0247106     -.2021734   -.1053834
+         corr(m_int,m_slope) |  -.1076486   .0597365     -.2227248    .0103863
+       corr(f_slope,m_slope) |   .1284815   .0549549      .0196755    .2342799
+-----------------------------+------------------------------------------------
+                sd(Residual) |   2.454837   .0060821      2.442945    2.466787
+------------------------------------------------------------------------------
+LR test vs. linear model: chi2(11) = 42826.55             Prob > chi2 = 0.0000
+
+Note: LR test is conservative and provided only for reference.
+
+. outreg2 using "table_Qian_2018_JMF", excel bdec(3) alpha(0.001, 0.01, 0.05, 0.1) symbol(***, **, *, +)
+table_Qian_2018_JMF.xml
+dir : seeout
+
+. 
+. 
+. // #4
+. // Table 3, Model 3     
+. xtmixed lninc f_int i.fhyper i.fhypo i.flhs i.fsc i.fc ///
+>                                         w_cafm i.fresp_wife i.fhispanic i.fblack ///
+>                           f_slope fhyper#c.f_slope fhypo#c.f_slope flhs#c.f_slope fsc#c.f_slope fc#c.f_slope ///
+>                                         c.w_cafm#c.f_slope fresp_wife#c.f_slope fhispanic#c.f_slope fblack#c.f_slope ///
+>                           f_slopesq fhyper#c.f_slopesq fhypo#c.f_slopesq flhs#c.f_slopesq fsc#c.f_slopesq fc#c.f_slopesq ///
+>                                         c.w_cafm#c.f_slopesq fresp_wife#c.f_slopesq fhispanic#c.f_slopesq fblack#c.f_slopesq ///
+>                           fminor reg_fthr ///
+>                           m_int i.mhyper i.mhypo i.mlhs i.msc i.mc ///
+>                                         h_cafm i.mresp_wife i.mhispanic i.mblack ///
+>                           m_slope mhyper#c.m_slope mhypo#c.m_slope mlhs#c.m_slope msc#c.m_slope mc#c.m_slope ///
+>                                         c.h_cafm#c.m_slope mresp_wife#c.m_slope mhispanic#c.m_slope mblack#c.m_slope ///
+>                           m_slopesq mhyper#c.m_slopesq mhypo#c.m_slopesq mlhs#c.m_slopesq msc#c.m_slopesq mc#c.m_slopesq ///
+>                                         c.h_cafm#c.m_slopesq mresp_wife#c.m_slopesq mhispanic#c.m_slopesq mblack#c.m_slopesq ///
+>                          mminor reg_mthr, noconstant ///
+>         || caseid_1979: f_slopesq m_slopesq, noconstant cov(identity) ///
+>         || caseid_1979: f_int m_int f_slope m_slope, ml noconstant cov(un)
+
+Performing EM optimization: 
+
+Performing gradient-based optimization: 
+
+Iteration 0:  Log likelihood = -243090.03  
+Iteration 1:  Log likelihood = -242933.22  
+Iteration 2:  Log likelihood = -242910.56  
+Iteration 3:  Log likelihood = -242903.53  
+Iteration 4:  Log likelihood = -242903.49  
+Iteration 5:  Log likelihood = -242903.49  
+
+Computing standard errors:
+
+Mixed-effects ML regression                       Number of obs    =   106,713
+Group variable: caseid_1979                       Number of groups =     6,426
+                                                  Obs per group:
+                                                               min =         1
+                                                               avg =      16.6
+                                                               max =        36
+                                                  Wald chi2(64)    = 344109.74
+Log likelihood = -242903.49                       Prob > chi2      =    0.0000
+
+----------------------------------------------------------------------------------------
+                 lninc | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+-----------------------+----------------------------------------------------------------
+                 f_int |   9.364977    .060354   155.17   0.000     9.246685    9.483269
+              1.fhyper |    .110913   .0725908     1.53   0.127    -.0313623    .2531883
+               1.fhypo |  -.1121698   .0700764    -1.60   0.109    -.2495171    .0251775
+                1.flhs |  -.9738783   .0892531   -10.91   0.000    -1.148811   -.7989454
+                 1.fsc |   .3033993   .0718525     4.22   0.000      .162571    .4442277
+                  1.fc |   .5351187     .08222     6.51   0.000     .3739705    .6962668
+                w_cafm |  -.0352144   .0058294    -6.04   0.000    -.0466398   -.0237889
+          1.fresp_wife |   .0051169   .0550452     0.09   0.926    -.1027697    .1130034
+           1.fhispanic |  -.3456827    .073824    -4.68   0.000    -.4903751   -.2009902
+              1.fblack |  -.1467875   .0718042    -2.04   0.041    -.2875212   -.0060537
+               f_slope |  -.0772835   .0142154    -5.44   0.000    -.1051452   -.0494219
+                       |
+      fhyper#c.f_slope |
+                    1  |   .0001887   .0163918     0.01   0.991    -.0319386    .0323159
+                       |
+       fhypo#c.f_slope |
+                    1  |   .0409167    .015875     2.58   0.010     .0098022    .0720312
+                       |
+        flhs#c.f_slope |
+                    1  |   .0623525    .020844     2.99   0.003      .021499    .1032059
+                       |
+         fsc#c.f_slope |
+                    1  |  -.0112714   .0162685    -0.69   0.488    -.0431572    .0206143
+                       |
+          fc#c.f_slope |
+                    1  |   .0196668   .0182534     1.08   0.281    -.0161093    .0554429
+                       |
+    c.w_cafm#c.f_slope |   .0064991   .0014785     4.40   0.000     .0036013     .009397
+                       |
+  fresp_wife#c.f_slope |
+                    1  |   .0090348   .0123636     0.73   0.465    -.0151975    .0332671
+                       |
+   fhispanic#c.f_slope |
+                    1  |   .0435901   .0164959     2.64   0.008     .0112587    .0759215
+                       |
+      fblack#c.f_slope |
+                    1  |   .0501288   .0167969     2.98   0.003     .0172074    .0830501
+                       |
+             f_slopesq |   .0046393   .0007418     6.25   0.000     .0031854    .0060931
+                       |
+    fhyper#c.f_slopesq |
+                    1  |  -.0000863   .0008704    -0.10   0.921    -.0017922    .0016197
+                       |
+     fhypo#c.f_slopesq |
+                    1  |  -.0019061   .0008442    -2.26   0.024    -.0035607   -.0002516
+                       |
+      flhs#c.f_slopesq |
+                    1  |  -.0023116   .0011264    -2.05   0.040    -.0045192   -.0001039
+                       |
+       fsc#c.f_slopesq |
+                    1  |   .0007003   .0008631     0.81   0.417    -.0009913    .0023919
+                       |
+        fc#c.f_slopesq |
+                    1  |  -.0007543   .0009619    -0.78   0.433    -.0026395    .0011309
+                       |
+  c.w_cafm#c.f_slopesq |  -.0003359   .0000852    -3.94   0.000    -.0005028    -.000169
+                       |
+fresp_wife#c.f_slopesq |
+                    1  |  -.0011343   .0006539    -1.73   0.083     -.002416    .0001474
+                       |
+ fhispanic#c.f_slopesq |
+                    1  |  -.0014815   .0008736    -1.70   0.090    -.0031938    .0002307
+                       |
+    fblack#c.f_slopesq |
+                    1  |   -.003726   .0009093    -4.10   0.000    -.0055082   -.0019438
+                       |
+                fminor |  -.2349075   .0171587   -13.69   0.000     -.268538    -.201277
+              reg_fthr |    .003132   .0000145   216.31   0.000     .0031036    .0031603
+                 m_int |   9.488656    .063397   149.67   0.000       9.3644    9.612912
+              1.mhyper |  -.2209787   .0772243    -2.86   0.004    -.3723355   -.0696219
+               1.mhypo |   .0350437   .0763557     0.46   0.646    -.1146107    .1846981
+                1.mlhs |  -.2885219   .0888014    -3.25   0.001    -.4625693   -.1144744
+                 1.msc |   .2382195   .0800938     2.97   0.003     .0812385    .3952004
+                  1.mc |   .4259381   .0859788     4.95   0.000     .2574228    .5944534
+                h_cafm |   .0022104   .0054931     0.40   0.687    -.0085558    .0129767
+          1.mresp_wife |  -.2469302   .0581311    -4.25   0.000     -.360865   -.1329954
+           1.mhispanic |   .0244989   .0779786     0.31   0.753    -.1283363    .1773341
+              1.mblack |  -.2704397   .0758676    -3.56   0.000    -.4191375    -.121742
+               m_slope |   -.005445   .0140925    -0.39   0.699    -.0330658    .0221757
+                       |
+      mhyper#c.m_slope |
+                    1  |   .0223284   .0163185     1.37   0.171    -.0096552    .0543121
+                       |
+       mhypo#c.m_slope |
+                    1  |   .0264315   .0162785     1.62   0.104    -.0054738    .0583368
+                       |
+        mlhs#c.m_slope |
+                    1  |  -.0307236   .0197177    -1.56   0.119    -.0693695    .0079224
+                       |
+         msc#c.m_slope |
+                    1  |   .0038406   .0170214     0.23   0.821    -.0295208     .037202
+                       |
+          mc#c.m_slope |
+                    1  |   .0634675   .0178658     3.55   0.000     .0284511    .0984839
+                       |
+    c.h_cafm#c.m_slope |  -.0048392   .0013428    -3.60   0.000     -.007471   -.0022074
+                       |
+  mresp_wife#c.m_slope |
+                    1  |   .0176331   .0123179     1.43   0.152    -.0065096    .0417758
+                       |
+   mhispanic#c.m_slope |
+                    1  |  -.0056728    .016463    -0.34   0.730    -.0379396     .026594
+                       |
+      mblack#c.m_slope |
+                    1  |  -.0257951    .016865    -1.53   0.126    -.0588498    .0072597
+                       |
+             m_slopesq |   .0003518   .0007258     0.48   0.628    -.0010707    .0017742
+                       |
+    mhyper#c.m_slopesq |
+                    1  |  -.0007326   .0008649    -0.85   0.397    -.0024278    .0009627
+                       |
+     mhypo#c.m_slopesq |
+                    1  |  -.0007401   .0008632    -0.86   0.391     -.002432    .0009518
+                       |
+      mlhs#c.m_slopesq |
+                    1  |  -.0001587   .0010632    -0.15   0.881    -.0022426    .0019251
+                       |
+       msc#c.m_slopesq |
+                    1  |   .0007119   .0009012     0.79   0.430    -.0010544    .0024783
+                       |
+        mc#c.m_slopesq |
+                    1  |  -.0015554   .0009421    -1.65   0.099    -.0034019    .0002911
+                       |
+  c.h_cafm#c.m_slopesq |    .000139   .0000777     1.79   0.074    -.0000133    .0002913
+                       |
+mresp_wife#c.m_slopesq |
+                    1  |  -.0005868   .0006523    -0.90   0.368    -.0018654    .0006918
+                       |
+ mhispanic#c.m_slopesq |
+                    1  |   .0000536   .0008758     0.06   0.951    -.0016629      .00177
+                       |
+    mblack#c.m_slopesq |
+                    1  |   .0007579   .0009126     0.83   0.406    -.0010308    .0025466
+                       |
+                mminor |  -.0389749   .0169286    -2.30   0.021    -.0721542   -.0057955
+              reg_mthr |   .0011426   .0000163    70.29   0.000     .0011107    .0011745
+----------------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------
+  Random-effects parameters  |   Estimate   Std. err.     [95% conf. interval]
+-----------------------------+------------------------------------------------
+caseid_1979: Identity        |
+     sd(f_slopesq m_slopesq) |   1.86e-08   2.53e-09      1.42e-08    2.43e-08
+-----------------------------+------------------------------------------------
+caseid_1979: Unstructured    |
+                   sd(f_int) |    1.45074   .0230385      1.406281    1.496605
+                   sd(m_int) |   1.599347   .0251311      1.550842     1.64937
+                 sd(f_slope) |    .134212   .0028837      .1286775    .1399846
+                 sd(m_slope) |   .1093503   .0029733      .1036752     .115336
+           corr(f_int,m_int) |   .2968308   .0211056      .2549292    .3376198
+         corr(f_int,f_slope) |  -.4595108   .0199751     -.4977576   -.4194804
+         corr(f_int,m_slope) |  -.1717195   .0302819     -.2303817   -.1118137
+         corr(m_int,f_slope) |  -.1570369   .0263012     -.2081148   -.1051049
+         corr(m_int,m_slope) |  -.3474329    .025325     -.3960636   -.2968586
+       corr(f_slope,m_slope) |   .2344154   .0331076      .1685693    .2981787
+-----------------------------+------------------------------------------------
+                sd(Residual) |   2.112145   .0051315      2.102111    2.122227
+------------------------------------------------------------------------------
+LR test vs. linear model: chi2(11) = 18463.21             Prob > chi2 = 0.0000
+
+Note: LR test is conservative and provided only for reference.
+
+. outreg2 using "table_Qian_2018_JMF", excel bdec(3) alpha(0.001, 0.01, 0.05, 0.1) symbol(***, **, *, +)
+table_Qian_2018_JMF.xml
+dir : seeout
+
+. 
+. 
+. log close
+      name:  <unnamed>
+       log:  /Users/yueqian/Desktop/table_Qian_2018_JMF.log
+  log type:  text
+ closed on:  15 Aug 2025, 15:08:17
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

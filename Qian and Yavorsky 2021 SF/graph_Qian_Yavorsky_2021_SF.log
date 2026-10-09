@@ -1,0 +1,4436 @@
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/yueqian/Desktop/graph_Qian_Yavorsky_2021_SF.log
+  log type:  text
+ opened on:  14 Aug 2025, 22:46:06
+
+. 
+. // #0
+. // program setup
+. version 14.2
+
+. clear all
+
+. set more off
+
+. matrix drop _all
+
+. set linesize 120
+
+. 
+. * we used Stata's default graphic scheme
+. set scheme s2color, perm
+(set scheme preference recorded)
+
+. 
+. **************************************************************************
+. ************************** Figure 1 **************************************
+. **************************************************************************
+. 
+. clear
+
+. use regsample, clear
+
+. 
+. * Figure 1, Panel A
+. menbreg v2reg_numlead i.female##c.agpa || caseid_1979:, pweight(weight)
+
+Fitting fixed-effects model:
+
+Iteration 0:  Log likelihood = -1.464e+08  
+Iteration 1:  Log likelihood = -1.104e+08  
+Iteration 2:  Log likelihood = -1.074e+08  
+Iteration 3:  Log likelihood = -1.071e+08  
+Iteration 4:  Log likelihood = -1.071e+08  
+Iteration 5:  Log likelihood = -1.071e+08  
+
+Refining starting values:
+
+Grid node 0:  Log likelihood = -1.063e+08
+
+Fitting full model:
+
+Iteration 0:  Log pseudolikelihood = -1.063e+08  
+Iteration 1:  Log pseudolikelihood = -1.042e+08  
+Iteration 2:  Log pseudolikelihood = -1.039e+08  
+Iteration 3:  Log pseudolikelihood = -1.037e+08  
+Iteration 4:  Log pseudolikelihood = -1.037e+08  
+Iteration 5:  Log pseudolikelihood = -1.037e+08  
+Iteration 6:  Log pseudolikelihood = -1.037e+08  
+Iteration 7:  Log pseudolikelihood = -1.037e+08  
+
+Mixed-effects nbinomial regression              Number of obs     =     15,141
+Overdispersion: mean
+Group variable: caseid_1979                     Number of groups  =      4,936
+
+                                                Obs per group:
+                                                              min =          1
+                                                              avg =        3.1
+                                                              max =          4
+
+Integration method: mvaghermite                 Integration pts.  =          7
+
+                                                Wald chi2(3)      =     135.62
+Log pseudolikelihood = -1.037e+08               Prob > chi2       =     0.0000
+                         (Std. err. adjusted for 4,936 clusters in caseid_1979)
+-------------------------------------------------------------------------------
+              |               Robust
+v2reg_numlead | Coefficient  std. err.      z    P>|z|     [95% conf. interval]
+--------------+----------------------------------------------------------------
+              |
+     1.female |  -.8205823   .0748351   -10.97   0.000    -.9672564   -.6739082
+         agpa |   .3000914   .0633442     4.74   0.000      .175939    .4242438
+              |
+female#c.agpa |
+           1  |  -.1087605   .0955891    -1.14   0.255    -.2961118    .0785907
+              |
+        _cons |   .5266945   .0566329     9.30   0.000     .4156959     .637693
+--------------+----------------------------------------------------------------
+     /lnalpha |   .8358782   .0410222                      .7554761    .9162802
+--------------+----------------------------------------------------------------
+caseid_1979   |
+    var(_cons)|    3.22273   .1546516                      2.933436    3.540554
+-------------------------------------------------------------------------------
+
+. margins female, at(agpa=(-2.5(0.5)1.5)) atmeans
+
+Adjusted predictions                                    Number of obs = 15,141
+Model VCE: Robust
+
+Expression: Marginal predicted mean, predict()
+1._at: 0.female = .5064707 (mean)
+       1.female = .4935293 (mean)
+       agpa     =     -2.5
+2._at: 0.female = .5064707 (mean)
+       1.female = .4935293 (mean)
+       agpa     =       -2
+3._at: 0.female = .5064707 (mean)
+       1.female = .4935293 (mean)
+       agpa     =     -1.5
+4._at: 0.female = .5064707 (mean)
+       1.female = .4935293 (mean)
+       agpa     =       -1
+5._at: 0.female = .5064707 (mean)
+       1.female = .4935293 (mean)
+       agpa     =      -.5
+6._at: 0.female = .5064707 (mean)
+       1.female = .4935293 (mean)
+       agpa     =        0
+7._at: 0.female = .5064707 (mean)
+       1.female = .4935293 (mean)
+       agpa     =       .5
+8._at: 0.female = .5064707 (mean)
+       1.female = .4935293 (mean)
+       agpa     =        1
+9._at: 0.female = .5064707 (mean)
+       1.female = .4935293 (mean)
+       agpa     =      1.5
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+  _at#female |
+        1 0  |   4.006152   .6520033     6.14   0.000     2.728249    5.284055
+        1 1  |   2.314399   .4539296     5.10   0.000     1.424713    3.204085
+        2 0  |   4.654697   .6263323     7.43   0.000     3.427108    5.882286
+        2 1  |   2.546744   .4148566     6.14   0.000      1.73364    3.359848
+        3 0  |   5.408233   .5857611     9.23   0.000     4.260162    6.556304
+        3 1  |   2.802413   .3672056     7.63   0.000     2.082704    3.522123
+        4 0  |   6.283758   .5391526    11.65   0.000     5.227038    7.340477
+        4 1  |    3.08375   .3140281     9.82   0.000     2.468266    3.699234
+        5 0  |   7.301018   .5162079    14.14   0.000     6.289269    8.312767
+        5 1  |    3.39333   .2658367    12.76   0.000       2.8723     3.91436
+        6 0  |    8.48296    .577989    14.68   0.000     7.350123    9.615798
+        6 1  |   3.733989   .2496827    14.95   0.000      3.24462    4.223358
+        7 0  |   9.856244    .781824    12.61   0.000     8.323897    11.38859
+        7 1  |   4.108848   .3011507    13.64   0.000     3.518603    4.699092
+        8 0  |   11.45185   1.142204    10.03   0.000     9.213167    13.69052
+        8 1  |   4.521338   .4250826    10.64   0.000     3.688192    5.354485
+        9 0  |   13.30575    1.66243     8.00   0.000     10.04745    16.56406
+        9 1  |   4.975239    .606758     8.20   0.000     3.786016    6.164463
+------------------------------------------------------------------------------
+
+. marginsplot, title("All") ytitle(Number of Supervisees) xtitle(High School GPA) ///     
+>         plot1opts(msymbol(circle) mcolor(gs8) msize(small) lpattern(solid) lcolor(gs8)) ///
+>         ci1opts(lpattern(solid) lcolor(gs8))  ///
+>         plot2opts(msymbol(triangle) mcolor(black) msize(small) lpattern(dash) lcolor(black)) ///
+>         ci2opts(lpattern(dash) lcolor(black)) ///
+>         graphregion(color(white)) ///
+>         ylabel(0(5)25, grid labsize(vsmall)) legend(order(1 "Men" 2 "Women")) ///
+>         xlabel(-2.5 "0.0" -2 "0.5" -1.5 "1.0" -1 "1.5" -0.5 "2.0" 0 "2.5" 0.5 "3.0" 1 "3.5" 1.5 "4.0")
+
+Variables that uniquely identify margins: agpa female
+
+. graph export "graph_Qian_Yavorsky_2021_SF_Figure1A.pdf"
+file /Users/yueqian/Desktop/graph_Qian_Yavorsky_2021_SF_Figure1A.pdf saved as PDF format
+
+. 
+. * Figure 1, Panel B, nonparents
+. preserve
+
+. keep if status==1
+(9,035 observations deleted)
+
+. menbreg v2reg_numlead i.female##c.agpa || caseid_1979:, pweight(weight)
+
+Fitting fixed-effects model:
+
+Iteration 0:  Log likelihood =  -63908707  
+Iteration 1:  Log likelihood =  -48156970  
+Iteration 2:  Log likelihood =  -46830969  
+Iteration 3:  Log likelihood =  -46707535  
+Iteration 4:  Log likelihood =  -46707271  
+Iteration 5:  Log likelihood =  -46707271  
+
+Refining starting values:
+
+Grid node 0:  Log likelihood =  -46416789
+
+Fitting full model:
+
+Iteration 0:  Log pseudolikelihood =  -46416789  
+Iteration 1:  Log pseudolikelihood =  -45249077  
+Iteration 2:  Log pseudolikelihood =  -45182364  
+Iteration 3:  Log pseudolikelihood =  -45174434  
+Iteration 4:  Log pseudolikelihood =  -45174429  
+Iteration 5:  Log pseudolikelihood =  -45174429  
+Iteration 6:  Log pseudolikelihood =  -45174429  
+
+Mixed-effects nbinomial regression              Number of obs     =      6,106
+Overdispersion: mean
+Group variable: caseid_1979                     Number of groups  =      2,527
+
+                                                Obs per group:
+                                                              min =          1
+                                                              avg =        2.4
+                                                              max =          4
+
+Integration method: mvaghermite                 Integration pts.  =          7
+
+                                                Wald chi2(3)      =      26.48
+Log pseudolikelihood = -45174429                Prob > chi2       =     0.0000
+                         (Std. err. adjusted for 2,527 clusters in caseid_1979)
+-------------------------------------------------------------------------------
+              |               Robust
+v2reg_numlead | Coefficient  std. err.      z    P>|z|     [95% conf. interval]
+--------------+----------------------------------------------------------------
+              |
+     1.female |  -.4391981   .1091956    -4.02   0.000    -.6532176   -.2251786
+         agpa |   .2622205   .0898808     2.92   0.004     .0860574    .4383837
+              |
+female#c.agpa |
+           1  |   .0054954   .1387141     0.04   0.968    -.2663792      .27737
+              |
+        _cons |   .2621556   .0844759     3.10   0.002     .0965858    .4277254
+--------------+----------------------------------------------------------------
+     /lnalpha |   .6924632    .065527                      .5640326    .8208938
+--------------+----------------------------------------------------------------
+caseid_1979   |
+    var(_cons)|   3.314579   .2235652                      2.904127    3.783042
+-------------------------------------------------------------------------------
+
+. margins female, at(agpa=(-2.5(0.5)1.5)) atmeans
+
+Adjusted predictions                                     Number of obs = 6,106
+Model VCE: Robust
+
+Expression: Marginal predicted mean, predict()
+1._at: 0.female = .5457015 (mean)
+       1.female = .4542985 (mean)
+       agpa     =     -2.5
+2._at: 0.female = .5457015 (mean)
+       1.female = .4542985 (mean)
+       agpa     =       -2
+3._at: 0.female = .5457015 (mean)
+       1.female = .4542985 (mean)
+       agpa     =     -1.5
+4._at: 0.female = .5457015 (mean)
+       1.female = .4542985 (mean)
+       agpa     =       -1
+5._at: 0.female = .5457015 (mean)
+       1.female = .4542985 (mean)
+       agpa     =      -.5
+6._at: 0.female = .5457015 (mean)
+       1.female = .4542985 (mean)
+       agpa     =        0
+7._at: 0.female = .5457015 (mean)
+       1.female = .4542985 (mean)
+       agpa     =       .5
+8._at: 0.female = .5457015 (mean)
+       1.female = .4542985 (mean)
+       agpa     =        1
+9._at: 0.female = .5457015 (mean)
+       1.female = .4542985 (mean)
+       agpa     =      1.5
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+  _at#female |
+        1 0  |   3.539176   .8285873     4.27   0.000     1.915174    5.163177
+        1 1  |   2.250061   .6799777     3.31   0.001     .9173291    3.582793
+        2 0  |   4.034991   .7821219     5.16   0.000      2.50206    5.567922
+        2 1  |   2.572338   .6505592     3.95   0.000     1.297265    3.847411
+        3 0  |   4.600267   .7181664     6.41   0.000     3.192687    6.007847
+        3 1  |   2.940775   .6039935     4.87   0.000      1.75697    4.124581
+        4 0  |   5.244735   .6468382     8.11   0.000     3.976955    6.512514
+        4 1  |   3.361984   .5420337     6.20   0.000     2.299617     4.42435
+        5 0  |   5.979488    .600596     9.96   0.000     4.802341    7.156634
+        5 1  |   3.843522   .4768328     8.06   0.000     2.908947    4.778097
+        6 0  |   6.817175   .6469577    10.54   0.000     5.549161    8.085189
+        6 1  |   4.394031   .4476126     9.82   0.000     3.516727    5.271336
+        7 0  |   7.772217   .8500899     9.14   0.000     6.106071    9.438363
+        7 1  |    5.02339   .5256841     9.56   0.000     3.993068    6.053712
+        8 0  |   8.861054   1.220095     7.26   0.000     6.469712     11.2524
+        8 1  |   5.742893   .7512645     7.64   0.000     4.270441    7.215344
+        9 0  |   10.10243   1.749628     5.77   0.000     6.673222    13.53164
+        9 1  |    6.56545   1.115407     5.89   0.000     4.379291    8.751608
+------------------------------------------------------------------------------
+
+. marginsplot, title("Non-parents") ytitle(Number of Supervisees) xtitle(High School GPA) ///     
+>         plot1opts(msymbol(circle) mcolor(gs8) msize(small) lpattern(solid) lcolor(gs8)) ///
+>         ci1opts(lpattern(solid) lcolor(gs8))  ///
+>         plot2opts(msymbol(triangle) mcolor(black) msize(small) lpattern(dash) lcolor(black)) ///
+>         ci2opts(lpattern(dash) lcolor(black)) ///
+>         graphregion(color(white)) ///
+>         ylabel(0(5)25, grid labsize(vsmall)) legend(order(1 "Men" 2 "Women")) ///
+>         xlabel(-2.5 "0.0" -2 "0.5" -1.5 "1.0" -1 "1.5" -0.5 "2.0" 0 "2.5" 0.5 "3.0" 1 "3.5" 1.5 "4.0")
+
+Variables that uniquely identify margins: agpa female
+
+. graph save Graph "s_raw1.gph"
+file s_raw1.gph saved
+
+. restore
+
+. 
+. * Figure 1, Panel B, parents
+. preserve
+
+. keep if status==2
+(6,106 observations deleted)
+
+. menbreg v2reg_numlead i.female##c.agpa || caseid_1979:, pweight(weight)
+
+Fitting fixed-effects model:
+
+Iteration 0:  Log likelihood =  -81889487  
+Iteration 1:  Log likelihood =  -62097143  
+Iteration 2:  Log likelihood =  -60423441  
+Iteration 3:  Log likelihood =  -60252847  
+Iteration 4:  Log likelihood =  -60252197  
+Iteration 5:  Log likelihood =  -60252197  
+
+Refining starting values:
+
+Grid node 0:  Log likelihood =  -59961138
+
+Fitting full model:
+
+Iteration 0:  Log pseudolikelihood =  -59961138  
+Iteration 1:  Log pseudolikelihood =  -58755056  
+Iteration 2:  Log pseudolikelihood =  -58679611  
+Iteration 3:  Log pseudolikelihood =  -58600760  
+Iteration 4:  Log pseudolikelihood =  -58599290  
+Iteration 5:  Log pseudolikelihood =  -58599290  
+Iteration 6:  Log pseudolikelihood =  -58599290  
+Iteration 7:  Log pseudolikelihood =  -58599290  
+Iteration 8:  Log pseudolikelihood =  -58599290  
+
+Mixed-effects nbinomial regression              Number of obs     =      9,035
+Overdispersion: mean
+Group variable: caseid_1979                     Number of groups  =      3,425
+
+                                                Obs per group:
+                                                              min =          1
+                                                              avg =        2.6
+                                                              max =          4
+
+Integration method: mvaghermite                 Integration pts.  =          7
+
+                                                Wald chi2(3)      =     150.51
+Log pseudolikelihood = -58599290                Prob > chi2       =     0.0000
+                         (Std. err. adjusted for 3,425 clusters in caseid_1979)
+-------------------------------------------------------------------------------
+              |               Robust
+v2reg_numlead | Coefficient  std. err.      z    P>|z|     [95% conf. interval]
+--------------+----------------------------------------------------------------
+              |
+     1.female |  -1.129631   .0962022   -11.74   0.000    -1.318184    -.941078
+         agpa |   .3858273   .0808973     4.77   0.000     .2272714    .5443832
+              |
+female#c.agpa |
+           1  |  -.2745823   .1214572    -2.26   0.024     -.512634   -.0365307
+              |
+        _cons |   .6314203   .0730248     8.65   0.000     .4882944    .7745462
+--------------+----------------------------------------------------------------
+     /lnalpha |   .8014246   .0604208                      .6830021    .9198472
+--------------+----------------------------------------------------------------
+caseid_1979   |
+    var(_cons)|   3.447489   .2211658                      3.040157    3.909397
+-------------------------------------------------------------------------------
+
+. margins female, at(agpa=(-2.5(0.5)1.5)) atmeans
+
+Adjusted predictions                                     Number of obs = 9,035
+Model VCE: Robust
+
+Expression: Marginal predicted mean, predict()
+1._at: 0.female = .4769959 (mean)
+       1.female = .5230041 (mean)
+       agpa     =     -2.5
+2._at: 0.female = .4769959 (mean)
+       1.female = .5230041 (mean)
+       agpa     =       -2
+3._at: 0.female = .4769959 (mean)
+       1.female = .5230041 (mean)
+       agpa     =     -1.5
+4._at: 0.female = .4769959 (mean)
+       1.female = .5230041 (mean)
+       agpa     =       -1
+5._at: 0.female = .4769959 (mean)
+       1.female = .5230041 (mean)
+       agpa     =      -.5
+6._at: 0.female = .4769959 (mean)
+       1.female = .5230041 (mean)
+       agpa     =        0
+7._at: 0.female = .4769959 (mean)
+       1.female = .5230041 (mean)
+       agpa     =       .5
+8._at: 0.female = .4769959 (mean)
+       1.female = .5230041 (mean)
+       agpa     =        1
+9._at: 0.female = .4769959 (mean)
+       1.female = .5230041 (mean)
+       agpa     =      1.5
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+  _at#female |
+        1 0  |   4.017245   .8383809     4.79   0.000     2.374049    5.660442
+        1 1  |   2.579051   .6293154     4.10   0.000     1.345616    3.812486
+        2 0  |   4.872027   .8443224     5.77   0.000     3.217185    6.526869
+        2 1  |   2.726569   .5512405     4.95   0.000     1.646157     3.80698
+        3 0  |   5.908687    .831094     7.11   0.000     4.279773    7.537602
+        3 1  |   2.882524   .4676096     6.16   0.000     1.966026    3.799022
+        4 0  |   7.165926   .8109748     8.84   0.000     5.576445    8.755408
+        4 1  |     3.0474   .3838595     7.94   0.000      2.29505    3.799751
+        5 0  |   8.690678   .8291899    10.48   0.000     7.065496    10.31586
+        5 1  |   3.221707   .3144424    10.25   0.000     2.605411    3.838003
+        6 0  |   10.53986   .9814644    10.74   0.000     8.616229     12.4635
+        6 1  |   3.405984    .290889    11.71   0.000     2.835852    3.976116
+        7 0  |   12.78252   1.371442     9.32   0.000     10.09454    15.47049
+        7 1  |   3.600801   .3448295    10.44   0.000     2.924948    4.276654
+        8 0  |   15.50235   2.057992     7.53   0.000     11.46876    19.53594
+        8 1  |   3.806761   .4686557     8.12   0.000     2.888213     4.72531
+        9 0  |   18.80091   3.089759     6.08   0.000      12.7451    24.85673
+        9 1  |   4.024502   .6395123     6.29   0.000     2.771081    5.277923
+------------------------------------------------------------------------------
+
+. marginsplot, title("Parents") ytitle(Number of Supervisees) xtitle(High School GPA) /// 
+>         plot1opts(msymbol(circle) mcolor(gs8) msize(small) lpattern(solid) lcolor(gs8)) ///
+>         ci1opts(lpattern(solid) lcolor(gs8))  ///
+>         plot2opts(msymbol(triangle) mcolor(black) msize(small) lpattern(dash) lcolor(black)) ///
+>         ci2opts(lpattern(dash) lcolor(black)) ///
+>         graphregion(color(white)) ///
+>         ylabel(0(5)25, grid labsize(vsmall)) legend(order(1 "Men" 2 "Women")) ///
+>         xlabel(-2.5 "0.0" -2 "0.5" -1.5 "1.0" -1 "1.5" -0.5 "2.0" 0 "2.5" 0.5 "3.0" 1 "3.5" 1.5 "4.0")
+
+Variables that uniquely identify margins: agpa female
+
+. graph save Graph "s_raw2.gph"
+file s_raw2.gph saved
+
+. restore
+
+. 
+. graph combine s_raw1.gph s_raw2.gph, graphregion(color(white))
+
+. graph export "graph_Qian_Yavorsky_2021_SF_Figure1B.pdf"
+file /Users/yueqian/Desktop/graph_Qian_Yavorsky_2021_SF_Figure1B.pdf saved as PDF format
+
+. 
+. 
+. **************************************************************************
+. ************************** Figure 2 **************************************
+. **************************************************************************
+. 
+. * Figure 2, Panel A
+. menbreg v2reg_numlead i.female##c.agpa ///      
+>         ib1.mar3 age ib1.pare5 afqt2 afqt3 afqt4 afqtm ib1.esteem5 ib1.eduexp5 health_limit health_limit_m r2 r3 r4 rm
+>  hisp black i.yr || caseid_1979:, pweight(weight)
+
+Fitting fixed-effects model:
+
+Iteration 0:  Log likelihood = -1.433e+08  
+Iteration 1:  Log likelihood = -1.098e+08  
+Iteration 2:  Log likelihood = -1.069e+08  
+Iteration 3:  Log likelihood = -1.066e+08  
+Iteration 4:  Log likelihood = -1.066e+08  
+Iteration 5:  Log likelihood = -1.066e+08  
+
+Refining starting values:
+
+Grid node 0:  Log likelihood = -1.059e+08
+
+Fitting full model:
+
+Iteration 0:  Log pseudolikelihood = -1.059e+08  
+Iteration 1:  Log pseudolikelihood = -1.042e+08  
+Iteration 2:  Log pseudolikelihood = -1.035e+08  
+Iteration 3:  Log pseudolikelihood = -1.033e+08  
+Iteration 4:  Log pseudolikelihood = -1.033e+08  
+Iteration 5:  Log pseudolikelihood = -1.033e+08  
+Iteration 6:  Log pseudolikelihood = -1.033e+08  
+Iteration 7:  Log pseudolikelihood = -1.033e+08  
+
+Mixed-effects nbinomial regression              Number of obs     =     15,141
+Overdispersion: mean
+Group variable: caseid_1979                     Number of groups  =      4,936
+
+                                                Obs per group:
+                                                              min =          1
+                                                              avg =        3.1
+                                                              max =          4
+
+Integration method: mvaghermite                 Integration pts.  =          7
+
+                                                Wald chi2(32)     =     314.33
+Log pseudolikelihood = -1.033e+08               Prob > chi2       =     0.0000
+                          (Std. err. adjusted for 4,936 clusters in caseid_1979)
+--------------------------------------------------------------------------------
+               |               Robust
+ v2reg_numlead | Coefficient  std. err.      z    P>|z|     [95% conf. interval]
+---------------+----------------------------------------------------------------
+               |
+      1.female |  -.6814271    .076104    -8.95   0.000    -.8305883    -.532266
+          agpa |  -.0011905   .0721219    -0.02   0.987    -.1425469    .1401659
+               |
+ female#c.agpa |
+            1  |  -.1235569   .0947928    -1.30   0.192    -.3093474    .0622335
+               |
+          mar3 |
+    never mar  |  -.0830999   .0754624    -1.10   0.271    -.2310034    .0648036
+      pre mar  |   .0969578   .0886796     1.09   0.274     -.076851    .2707665
+               |
+           age |   .0085202   .0170165     0.50   0.617    -.0248316     .041872
+               |
+         pare5 |
+            2  |   .1481554    .109942     1.35   0.178     -.067327    .3636378
+            3  |   .1555143   .1200925     1.29   0.195    -.0798626    .3908912
+            5  |  -.5220308   .3307214    -1.58   0.114    -1.170233    .1261712
+               |
+         afqt2 |   .3148383   .1159178     2.72   0.007     .0876436    .5420329
+         afqt3 |   .4396973   .1291918     3.40   0.001     .1864859    .6929086
+         afqt4 |    .477289   .1476113     3.23   0.001     .1879763    .7666018
+         afqtm |    .155449   .2172872     0.72   0.474     -.270426     .581324
+               |
+       esteem5 |
+            2  |   .2717982   .1037387     2.62   0.009      .068474    .4751224
+            3  |   .3626602   .1076065     3.37   0.001     .1517553    .5735651
+            4  |   .3953041   .1045985     3.78   0.000     .1902949    .6003133
+            5  |   .0834137   .2765196     0.30   0.763    -.4585546    .6253821
+               |
+       eduexp5 |
+            2  |   .2684646   .1122664     2.39   0.017     .0484264    .4885027
+            3  |   .5281766   .1001374     5.27   0.000      .331911    .7244422
+            4  |   .6018717   .1319656     4.56   0.000     .3432238    .8605196
+            5  |  -.6212667   .8444504    -0.74   0.462    -2.276359    1.033826
+               |
+  health_limit |  -.2698005   .1361217    -1.98   0.047    -.5365942   -.0030068
+health_limit_m |  -.1623682   .2221459    -0.73   0.465    -.5977661    .2730297
+            r2 |  -.0854542   .1085673    -0.79   0.431    -.2982423    .1273338
+            r3 |   .0098074   .1053183     0.09   0.926    -.1966127    .2162274
+            r4 |   .0514867   .1195894     0.43   0.667    -.1829042    .2858777
+            rm |  -.1004973    .324474    -0.31   0.757    -.7364547    .5354601
+          hisp |  -.0012654   .1118045    -0.01   0.991    -.2203981    .2178674
+         black |  -.2559756   .1072609    -2.39   0.017    -.4662032   -.0457481
+               |
+            yr |
+         1989  |  -.0904961   .0493534    -1.83   0.067    -.1872269    .0062347
+         1996  |  -.0519037   .1452893    -0.36   0.721    -.3366656    .2328582
+         1998  |  -.0350943   .1761338    -0.20   0.842    -.3803103    .3101217
+               |
+         _cons |  -.6825072   .4745352    -1.44   0.150    -1.612579    .2475646
+---------------+----------------------------------------------------------------
+      /lnalpha |   .8308886   .0412335                      .7500725    .9117047
+---------------+----------------------------------------------------------------
+caseid_1979    |
+     var(_cons)|   3.051996   .1473457                      2.776446    3.354893
+--------------------------------------------------------------------------------
+
+. margins female, at(agpa=(-2.5(0.5)1.5)) atmeans
+
+Adjusted predictions                                    Number of obs = 15,141
+Model VCE: Robust
+
+Expression: Marginal predicted mean, predict()
+1._at: 0.female       = .5064707 (mean)
+       1.female       = .4935293 (mean)
+       agpa           =     -2.5
+       0.mar3         = .2675928 (mean)
+       1.mar3         = .6082765 (mean)
+       2.mar3         = .1241307 (mean)
+       age            = 31.78071 (mean)
+       1.pare5        = .1620859 (mean)
+       2.pare5        = .4434084 (mean)
+       3.pare5        = .3841942 (mean)
+       5.pare5        = .0103115 (mean)
+       afqt2          = .2345544 (mean)
+       afqt3          = .2383069 (mean)
+       afqt4          = .2463416 (mean)
+       afqtm          = .0301785 (mean)
+       1.esteem5      = .3069638 (mean)
+       2.esteem5      =  .236849 (mean)
+       3.esteem5      = .2099753 (mean)
+       4.esteem5      = .2201273 (mean)
+       5.esteem5      = .0260845 (mean)
+       1.eduexp5      = .3403827 (mean)
+       2.eduexp5      = .1951071 (mean)
+       3.eduexp5      = .3225148 (mean)
+       4.eduexp5      = .1385753 (mean)
+       5.eduexp5      = .0034202 (mean)
+       health_limit   = .0375324 (mean)
+       health_limit_m = .0120016 (mean)
+       r2             = .3053414 (mean)
+       r3             =   .34044 (mean)
+       r4             = .1637631 (mean)
+       rm             = .0044751 (mean)
+       hisp           = .0437022 (mean)
+       black          = .1222089 (mean)
+       1988.yr        = .2504624 (mean)
+       1989.yr        = .2541481 (mean)
+       1996.yr        = .2500164 (mean)
+       1998.yr        = .2453731 (mean)
+2._at: 0.female       = .5064707 (mean)
+       1.female       = .4935293 (mean)
+       agpa           =       -2
+       0.mar3         = .2675928 (mean)
+       1.mar3         = .6082765 (mean)
+       2.mar3         = .1241307 (mean)
+       age            = 31.78071 (mean)
+       1.pare5        = .1620859 (mean)
+       2.pare5        = .4434084 (mean)
+       3.pare5        = .3841942 (mean)
+       5.pare5        = .0103115 (mean)
+       afqt2          = .2345544 (mean)
+       afqt3          = .2383069 (mean)
+       afqt4          = .2463416 (mean)
+       afqtm          = .0301785 (mean)
+       1.esteem5      = .3069638 (mean)
+       2.esteem5      =  .236849 (mean)
+       3.esteem5      = .2099753 (mean)
+       4.esteem5      = .2201273 (mean)
+       5.esteem5      = .0260845 (mean)
+       1.eduexp5      = .3403827 (mean)
+       2.eduexp5      = .1951071 (mean)
+       3.eduexp5      = .3225148 (mean)
+       4.eduexp5      = .1385753 (mean)
+       5.eduexp5      = .0034202 (mean)
+       health_limit   = .0375324 (mean)
+       health_limit_m = .0120016 (mean)
+       r2             = .3053414 (mean)
+       r3             =   .34044 (mean)
+       r4             = .1637631 (mean)
+       rm             = .0044751 (mean)
+       hisp           = .0437022 (mean)
+       black          = .1222089 (mean)
+       1988.yr        = .2504624 (mean)
+       1989.yr        = .2541481 (mean)
+       1996.yr        = .2500164 (mean)
+       1998.yr        = .2453731 (mean)
+3._at: 0.female       = .5064707 (mean)
+       1.female       = .4935293 (mean)
+       agpa           =     -1.5
+       0.mar3         = .2675928 (mean)
+       1.mar3         = .6082765 (mean)
+       2.mar3         = .1241307 (mean)
+       age            = 31.78071 (mean)
+       1.pare5        = .1620859 (mean)
+       2.pare5        = .4434084 (mean)
+       3.pare5        = .3841942 (mean)
+       5.pare5        = .0103115 (mean)
+       afqt2          = .2345544 (mean)
+       afqt3          = .2383069 (mean)
+       afqt4          = .2463416 (mean)
+       afqtm          = .0301785 (mean)
+       1.esteem5      = .3069638 (mean)
+       2.esteem5      =  .236849 (mean)
+       3.esteem5      = .2099753 (mean)
+       4.esteem5      = .2201273 (mean)
+       5.esteem5      = .0260845 (mean)
+       1.eduexp5      = .3403827 (mean)
+       2.eduexp5      = .1951071 (mean)
+       3.eduexp5      = .3225148 (mean)
+       4.eduexp5      = .1385753 (mean)
+       5.eduexp5      = .0034202 (mean)
+       health_limit   = .0375324 (mean)
+       health_limit_m = .0120016 (mean)
+       r2             = .3053414 (mean)
+       r3             =   .34044 (mean)
+       r4             = .1637631 (mean)
+       rm             = .0044751 (mean)
+       hisp           = .0437022 (mean)
+       black          = .1222089 (mean)
+       1988.yr        = .2504624 (mean)
+       1989.yr        = .2541481 (mean)
+       1996.yr        = .2500164 (mean)
+       1998.yr        = .2453731 (mean)
+4._at: 0.female       = .5064707 (mean)
+       1.female       = .4935293 (mean)
+       agpa           =       -1
+       0.mar3         = .2675928 (mean)
+       1.mar3         = .6082765 (mean)
+       2.mar3         = .1241307 (mean)
+       age            = 31.78071 (mean)
+       1.pare5        = .1620859 (mean)
+       2.pare5        = .4434084 (mean)
+       3.pare5        = .3841942 (mean)
+       5.pare5        = .0103115 (mean)
+       afqt2          = .2345544 (mean)
+       afqt3          = .2383069 (mean)
+       afqt4          = .2463416 (mean)
+       afqtm          = .0301785 (mean)
+       1.esteem5      = .3069638 (mean)
+       2.esteem5      =  .236849 (mean)
+       3.esteem5      = .2099753 (mean)
+       4.esteem5      = .2201273 (mean)
+       5.esteem5      = .0260845 (mean)
+       1.eduexp5      = .3403827 (mean)
+       2.eduexp5      = .1951071 (mean)
+       3.eduexp5      = .3225148 (mean)
+       4.eduexp5      = .1385753 (mean)
+       5.eduexp5      = .0034202 (mean)
+       health_limit   = .0375324 (mean)
+       health_limit_m = .0120016 (mean)
+       r2             = .3053414 (mean)
+       r3             =   .34044 (mean)
+       r4             = .1637631 (mean)
+       rm             = .0044751 (mean)
+       hisp           = .0437022 (mean)
+       black          = .1222089 (mean)
+       1988.yr        = .2504624 (mean)
+       1989.yr        = .2541481 (mean)
+       1996.yr        = .2500164 (mean)
+       1998.yr        = .2453731 (mean)
+5._at: 0.female       = .5064707 (mean)
+       1.female       = .4935293 (mean)
+       agpa           =      -.5
+       0.mar3         = .2675928 (mean)
+       1.mar3         = .6082765 (mean)
+       2.mar3         = .1241307 (mean)
+       age            = 31.78071 (mean)
+       1.pare5        = .1620859 (mean)
+       2.pare5        = .4434084 (mean)
+       3.pare5        = .3841942 (mean)
+       5.pare5        = .0103115 (mean)
+       afqt2          = .2345544 (mean)
+       afqt3          = .2383069 (mean)
+       afqt4          = .2463416 (mean)
+       afqtm          = .0301785 (mean)
+       1.esteem5      = .3069638 (mean)
+       2.esteem5      =  .236849 (mean)
+       3.esteem5      = .2099753 (mean)
+       4.esteem5      = .2201273 (mean)
+       5.esteem5      = .0260845 (mean)
+       1.eduexp5      = .3403827 (mean)
+       2.eduexp5      = .1951071 (mean)
+       3.eduexp5      = .3225148 (mean)
+       4.eduexp5      = .1385753 (mean)
+       5.eduexp5      = .0034202 (mean)
+       health_limit   = .0375324 (mean)
+       health_limit_m = .0120016 (mean)
+       r2             = .3053414 (mean)
+       r3             =   .34044 (mean)
+       r4             = .1637631 (mean)
+       rm             = .0044751 (mean)
+       hisp           = .0437022 (mean)
+       black          = .1222089 (mean)
+       1988.yr        = .2504624 (mean)
+       1989.yr        = .2541481 (mean)
+       1996.yr        = .2500164 (mean)
+       1998.yr        = .2453731 (mean)
+6._at: 0.female       = .5064707 (mean)
+       1.female       = .4935293 (mean)
+       agpa           =        0
+       0.mar3         = .2675928 (mean)
+       1.mar3         = .6082765 (mean)
+       2.mar3         = .1241307 (mean)
+       age            = 31.78071 (mean)
+       1.pare5        = .1620859 (mean)
+       2.pare5        = .4434084 (mean)
+       3.pare5        = .3841942 (mean)
+       5.pare5        = .0103115 (mean)
+       afqt2          = .2345544 (mean)
+       afqt3          = .2383069 (mean)
+       afqt4          = .2463416 (mean)
+       afqtm          = .0301785 (mean)
+       1.esteem5      = .3069638 (mean)
+       2.esteem5      =  .236849 (mean)
+       3.esteem5      = .2099753 (mean)
+       4.esteem5      = .2201273 (mean)
+       5.esteem5      = .0260845 (mean)
+       1.eduexp5      = .3403827 (mean)
+       2.eduexp5      = .1951071 (mean)
+       3.eduexp5      = .3225148 (mean)
+       4.eduexp5      = .1385753 (mean)
+       5.eduexp5      = .0034202 (mean)
+       health_limit   = .0375324 (mean)
+       health_limit_m = .0120016 (mean)
+       r2             = .3053414 (mean)
+       r3             =   .34044 (mean)
+       r4             = .1637631 (mean)
+       rm             = .0044751 (mean)
+       hisp           = .0437022 (mean)
+       black          = .1222089 (mean)
+       1988.yr        = .2504624 (mean)
+       1989.yr        = .2541481 (mean)
+       1996.yr        = .2500164 (mean)
+       1998.yr        = .2453731 (mean)
+7._at: 0.female       = .5064707 (mean)
+       1.female       = .4935293 (mean)
+       agpa           =       .5
+       0.mar3         = .2675928 (mean)
+       1.mar3         = .6082765 (mean)
+       2.mar3         = .1241307 (mean)
+       age            = 31.78071 (mean)
+       1.pare5        = .1620859 (mean)
+       2.pare5        = .4434084 (mean)
+       3.pare5        = .3841942 (mean)
+       5.pare5        = .0103115 (mean)
+       afqt2          = .2345544 (mean)
+       afqt3          = .2383069 (mean)
+       afqt4          = .2463416 (mean)
+       afqtm          = .0301785 (mean)
+       1.esteem5      = .3069638 (mean)
+       2.esteem5      =  .236849 (mean)
+       3.esteem5      = .2099753 (mean)
+       4.esteem5      = .2201273 (mean)
+       5.esteem5      = .0260845 (mean)
+       1.eduexp5      = .3403827 (mean)
+       2.eduexp5      = .1951071 (mean)
+       3.eduexp5      = .3225148 (mean)
+       4.eduexp5      = .1385753 (mean)
+       5.eduexp5      = .0034202 (mean)
+       health_limit   = .0375324 (mean)
+       health_limit_m = .0120016 (mean)
+       r2             = .3053414 (mean)
+       r3             =   .34044 (mean)
+       r4             = .1637631 (mean)
+       rm             = .0044751 (mean)
+       hisp           = .0437022 (mean)
+       black          = .1222089 (mean)
+       1988.yr        = .2504624 (mean)
+       1989.yr        = .2541481 (mean)
+       1996.yr        = .2500164 (mean)
+       1998.yr        = .2453731 (mean)
+8._at: 0.female       = .5064707 (mean)
+       1.female       = .4935293 (mean)
+       agpa           =        1
+       0.mar3         = .2675928 (mean)
+       1.mar3         = .6082765 (mean)
+       2.mar3         = .1241307 (mean)
+       age            = 31.78071 (mean)
+       1.pare5        = .1620859 (mean)
+       2.pare5        = .4434084 (mean)
+       3.pare5        = .3841942 (mean)
+       5.pare5        = .0103115 (mean)
+       afqt2          = .2345544 (mean)
+       afqt3          = .2383069 (mean)
+       afqt4          = .2463416 (mean)
+       afqtm          = .0301785 (mean)
+       1.esteem5      = .3069638 (mean)
+       2.esteem5      =  .236849 (mean)
+       3.esteem5      = .2099753 (mean)
+       4.esteem5      = .2201273 (mean)
+       5.esteem5      = .0260845 (mean)
+       1.eduexp5      = .3403827 (mean)
+       2.eduexp5      = .1951071 (mean)
+       3.eduexp5      = .3225148 (mean)
+       4.eduexp5      = .1385753 (mean)
+       5.eduexp5      = .0034202 (mean)
+       health_limit   = .0375324 (mean)
+       health_limit_m = .0120016 (mean)
+       r2             = .3053414 (mean)
+       r3             =   .34044 (mean)
+       r4             = .1637631 (mean)
+       rm             = .0044751 (mean)
+       hisp           = .0437022 (mean)
+       black          = .1222089 (mean)
+       1988.yr        = .2504624 (mean)
+       1989.yr        = .2541481 (mean)
+       1996.yr        = .2500164 (mean)
+       1998.yr        = .2453731 (mean)
+9._at: 0.female       = .5064707 (mean)
+       1.female       = .4935293 (mean)
+       agpa           =      1.5
+       0.mar3         = .2675928 (mean)
+       1.mar3         = .6082765 (mean)
+       2.mar3         = .1241307 (mean)
+       age            = 31.78071 (mean)
+       1.pare5        = .1620859 (mean)
+       2.pare5        = .4434084 (mean)
+       3.pare5        = .3841942 (mean)
+       5.pare5        = .0103115 (mean)
+       afqt2          = .2345544 (mean)
+       afqt3          = .2383069 (mean)
+       afqt4          = .2463416 (mean)
+       afqtm          = .0301785 (mean)
+       1.esteem5      = .3069638 (mean)
+       2.esteem5      =  .236849 (mean)
+       3.esteem5      = .2099753 (mean)
+       4.esteem5      = .2201273 (mean)
+       5.esteem5      = .0260845 (mean)
+       1.eduexp5      = .3403827 (mean)
+       2.eduexp5      = .1951071 (mean)
+       3.eduexp5      = .3225148 (mean)
+       4.eduexp5      = .1385753 (mean)
+       5.eduexp5      = .0034202 (mean)
+       health_limit   = .0375324 (mean)
+       health_limit_m = .0120016 (mean)
+       r2             = .3053414 (mean)
+       r3             =   .34044 (mean)
+       r4             = .1637631 (mean)
+       rm             = .0044751 (mean)
+       hisp           = .0437022 (mean)
+       black          = .1222089 (mean)
+       1988.yr        = .2504624 (mean)
+       1989.yr        = .2541481 (mean)
+       1996.yr        = .2500164 (mean)
+       1998.yr        = .2453731 (mean)
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+  _at#female |
+        1 0  |   7.091864   1.257037     5.64   0.000     4.628118    9.555611
+        1 1  |   4.886193   1.068069     4.57   0.000     2.792817    6.979569
+        2 0  |   7.087644   1.021986     6.94   0.000     5.084588    9.090701
+        2 1  |   4.590733   .8289882     5.54   0.000     2.965946     6.21552
+        3 0  |   7.083427   .8003359     8.85   0.000     5.514797    8.652056
+        3 1  |   4.313139    .620102     6.96   0.000     3.097762    5.528517
+        4 0  |   7.079212   .6065623    11.67   0.000     5.890371    8.268052
+        4 1  |   4.052331    .443265     9.14   0.000     3.183548    4.921115
+        5 0  |   7.074999   .4755311    14.88   0.000     6.142975    8.007023
+        5 1  |   3.807294   .3068162    12.41   0.000     3.205945    4.408642
+        6 0  |   7.070789   .4633657    15.26   0.000     6.162609    7.978969
+        6 1  |   3.577073   .2333913    15.33   0.000     3.119635    4.034512
+        7 0  |   7.066582   .5772234    12.24   0.000     5.935244    8.197919
+        7 1  |   3.360774   .2436016    13.80   0.000     2.883323    3.838224
+        8 0  |   7.062377   .7623015     9.26   0.000     5.568293     8.55646
+        8 1  |   3.157554   .3075103    10.27   0.000     2.554844    3.760263
+        9 0  |   7.058174   .9787725     7.21   0.000     5.139815    8.976533
+        9 1  |   2.966622   .3862209     7.68   0.000     2.209643    3.723601
+------------------------------------------------------------------------------
+
+. marginsplot, title("All") ytitle(Number of Supervisees) xtitle(High School GPA) ///     
+>         plot1opts(msymbol(circle) mcolor(gs8) msize(small) lpattern(solid) lcolor(gs8)) ///
+>         ci1opts(lpattern(solid) lcolor(gs8))  ///
+>         plot2opts(msymbol(triangle) mcolor(black) msize(small) lpattern(dash) lcolor(black)) ///
+>         ci2opts(lpattern(dash) lcolor(black)) ///
+>         graphregion(color(white)) ///
+>         ylabel(0(2)14, grid labsize(vsmall)) legend(order(1 "Men" 2 "Women")) ///
+>         xlabel(-2.5 "0.0" -2 "0.5" -1.5 "1.0" -1 "1.5" -0.5 "2.0" 0 "2.5" 0.5 "3.0" 1 "3.5" 1.5 "4.0")
+
+Variables that uniquely identify margins: agpa female
+
+. graph export "graph_Qian_Yavorsky_2021_SF_Figure2A.pdf"
+file /Users/yueqian/Desktop/graph_Qian_Yavorsky_2021_SF_Figure2A.pdf saved as PDF format
+
+. 
+. * Figure 2, Panel B, nonparents
+. preserve
+
+. keep if status==1
+(9,035 observations deleted)
+
+. menbreg v2reg_numlead i.female##c.agpa ///      
+>         ib1.mar3 age ib1.pare5 afqt2 afqt3 afqt4 afqtm ib1.esteem5 ib1.eduexp5 health_limit health_limit_m r2 r3 r4 rm
+>  hisp black i.yr || caseid_1979:, pweight(weight)
+
+Fitting fixed-effects model:
+
+Iteration 0:  Log likelihood =  -61720115  
+Iteration 1:  Log likelihood =  -47727258  
+Iteration 2:  Log likelihood =  -46403165  
+Iteration 3:  Log likelihood =  -46278233  
+Iteration 4:  Log likelihood =  -46277602  
+Iteration 5:  Log likelihood =  -46277602  
+
+Refining starting values:
+
+Grid node 0:  Log likelihood =  -46078321
+
+Fitting full model:
+
+Iteration 0:  Log pseudolikelihood =  -46078321  
+Iteration 1:  Log pseudolikelihood =  -45601743  
+Iteration 2:  Log pseudolikelihood =  -45198741  
+Iteration 3:  Log pseudolikelihood =  -44954543  
+Iteration 4:  Log pseudolikelihood =  -44952990  
+Iteration 5:  Log pseudolikelihood =  -44952991  
+Iteration 6:  Log pseudolikelihood =  -44952991  
+Iteration 7:  Log pseudolikelihood =  -44952991  
+
+Mixed-effects nbinomial regression              Number of obs     =      6,106
+Overdispersion: mean
+Group variable: caseid_1979                     Number of groups  =      2,527
+
+                                                Obs per group:
+                                                              min =          1
+                                                              avg =        2.4
+                                                              max =          4
+
+Integration method: mvaghermite                 Integration pts.  =          7
+
+                                                Wald chi2(32)     =     132.42
+Log pseudolikelihood = -44952991                Prob > chi2       =     0.0000
+                          (Std. err. adjusted for 2,527 clusters in caseid_1979)
+--------------------------------------------------------------------------------
+               |               Robust
+ v2reg_numlead | Coefficient  std. err.      z    P>|z|     [95% conf. interval]
+---------------+----------------------------------------------------------------
+               |
+      1.female |  -.3252506   .1089302    -2.99   0.003    -.5387497   -.1117514
+          agpa |  -.0760186   .1020963    -0.74   0.457    -.2761236    .1240864
+               |
+ female#c.agpa |
+            1  |   .0386806   .1373542     0.28   0.778    -.2305287    .3078899
+               |
+          mar3 |
+    never mar  |   .0164426   .0965921     0.17   0.865    -.1728744    .2057596
+      pre mar  |   .0293881   .1531974     0.19   0.848    -.2708734    .3296495
+               |
+           age |   .0138615   .0254821     0.54   0.586    -.0360825    .0638056
+               |
+         pare5 |
+            2  |   .4073619   .1705815     2.39   0.017     .0730282    .7416955
+            3  |   .2440017   .1797683     1.36   0.175    -.1083377    .5963412
+            5  |   .1266897   .4993854     0.25   0.800    -.8520877    1.105467
+               |
+         afqt2 |   .2242397   .1755093     1.28   0.201    -.1197521    .5682316
+         afqt3 |   .5225283   .1884992     2.77   0.006     .1530767    .8919799
+         afqt4 |   .4568872   .2074423     2.20   0.028     .0503078    .8634666
+         afqtm |   .1825258    .336524     0.54   0.588    -.4770492    .8421008
+               |
+       esteem5 |
+            2  |   .0532447   .1501267     0.35   0.723    -.2409983    .3474876
+            3  |   .2720042   .1475153     1.84   0.065    -.0171205    .5611288
+            4  |   .2032251   .1441914     1.41   0.159    -.0793848     .485835
+            5  |  -.0998466   .4164533    -0.24   0.811      -.91608    .7163868
+               |
+       eduexp5 |
+            2  |   .4624805   .1732413     2.67   0.008     .1229338    .8020272
+            3  |   .6126423   .1511399     4.05   0.000     .3164136     .908871
+            4  |   .9023863   .1833256     4.92   0.000     .5430747    1.261698
+            5  |  -1.359534   .9406237    -1.45   0.148    -3.203122     .484055
+               |
+  health_limit |  -.6030195   .2067793    -2.92   0.004    -1.008299   -.1977396
+health_limit_m |   -1.22229   .4380384    -2.79   0.005    -2.080829   -.3637503
+            r2 |   .2056705   .1476898     1.39   0.164    -.0837961    .4951371
+            r3 |   .0717208   .1439154     0.50   0.618    -.2103483    .3537899
+            r4 |   .2321047   .1623704     1.43   0.153    -.0861354    .5503447
+            rm |  -.2860479   .4112327    -0.70   0.487    -1.092049    .5199533
+          hisp |   .0284501   .1608363     0.18   0.860    -.2867832    .3436834
+         black |  -.0283481   .1590257    -0.18   0.859    -.3400327    .2833365
+               |
+            yr |
+         1989  |  -.0639091   .0635611    -1.01   0.315    -.1884866    .0606684
+         1996  |  -.0240443   .2216043    -0.11   0.914    -.4583807    .4102921
+         1998  |  -.0889569   .2685957    -0.33   0.740    -.6153949     .437481
+               |
+         _cons |  -1.429315   .6983832    -2.05   0.041    -2.798121   -.0605091
+---------------+----------------------------------------------------------------
+      /lnalpha |   .6868191   .0662513                       .556969    .8166692
+---------------+----------------------------------------------------------------
+caseid_1979    |
+     var(_cons)|   3.087957   .2129223                      2.697607     3.53479
+--------------------------------------------------------------------------------
+
+. margins female, at(agpa=(-2.5(0.5)1.5) ///
+>                0.mar3          =    .2675928 ///
+>                1.mar3          =    .6082765 ///
+>                2.mar3          =    .1241307 ///
+>                age             =    31.78071 ///
+>                1.pare5         =    .1620859 ///
+>                2.pare5         =    .4434084 ///
+>                3.pare5         =    .3841942 ///
+>                5.pare5         =    .0103115 ///
+>                afqt2           =    .2345544 ///
+>                afqt3           =    .2383069 ///
+>                afqt4           =    .2463416 ///
+>                afqtm           =    .0301785 ///
+>                1.esteem5       =    .3069638 ///
+>                2.esteem5       =     .236849 ///
+>                3.esteem5       =    .2099753 ///
+>                4.esteem5       =    .2201273 ///
+>                5.esteem5       =    .0260845 ///
+>                1.eduexp5       =    .3403827 ///
+>                2.eduexp5       =    .1951071 ///
+>                3.eduexp5       =    .3225148 ///
+>                4.eduexp5       =    .1385753 ///
+>                5.eduexp5       =    .0034202 ///
+>                health_limit    =    .0375324 ///
+>                health_limit_m  =    .0120016 ///
+>                r2              =    .3053414 ///
+>                r3              =      .34044 ///
+>                r4              =    .1637631 ///
+>                rm              =    .0044751 ///
+>                hisp            =    .0437022 ///
+>                black           =    .1222089 ///
+>                1988.yr         =    .2504624 ///
+>                1989.yr         =    .2541481 ///
+>                1996.yr         =    .2500164 ///
+>                1998.yr         =    .2453731)
+
+Adjusted predictions                                     Number of obs = 6,106
+Model VCE: Robust
+
+Expression: Marginal predicted mean, predict()
+1._at: agpa           =     -2.5
+       0.mar3         = .2675928
+       1.mar3         = .6082765
+       2.mar3         = .1241307
+       age            = 31.78071
+       1.pare5        = .1620859
+       2.pare5        = .4434084
+       3.pare5        = .3841942
+       5.pare5        = .0103115
+       afqt2          = .2345544
+       afqt3          = .2383069
+       afqt4          = .2463416
+       afqtm          = .0301785
+       1.esteem5      = .3069638
+       2.esteem5      =  .236849
+       3.esteem5      = .2099753
+       4.esteem5      = .2201273
+       5.esteem5      = .0260845
+       1.eduexp5      = .3403827
+       2.eduexp5      = .1951071
+       3.eduexp5      = .3225148
+       4.eduexp5      = .1385753
+       5.eduexp5      = .0034202
+       health_limit   = .0375324
+       health_limit_m = .0120016
+       r2             = .3053414
+       r3             =   .34044
+       r4             = .1637631
+       rm             = .0044751
+       hisp           = .0437022
+       black          = .1222089
+       1988.yr        = .2504624
+       1989.yr        = .2541481
+       1996.yr        = .2500164
+       1998.yr        = .2453731
+2._at: agpa           =       -2
+       0.mar3         = .2675928
+       1.mar3         = .6082765
+       2.mar3         = .1241307
+       age            = 31.78071
+       1.pare5        = .1620859
+       2.pare5        = .4434084
+       3.pare5        = .3841942
+       5.pare5        = .0103115
+       afqt2          = .2345544
+       afqt3          = .2383069
+       afqt4          = .2463416
+       afqtm          = .0301785
+       1.esteem5      = .3069638
+       2.esteem5      =  .236849
+       3.esteem5      = .2099753
+       4.esteem5      = .2201273
+       5.esteem5      = .0260845
+       1.eduexp5      = .3403827
+       2.eduexp5      = .1951071
+       3.eduexp5      = .3225148
+       4.eduexp5      = .1385753
+       5.eduexp5      = .0034202
+       health_limit   = .0375324
+       health_limit_m = .0120016
+       r2             = .3053414
+       r3             =   .34044
+       r4             = .1637631
+       rm             = .0044751
+       hisp           = .0437022
+       black          = .1222089
+       1988.yr        = .2504624
+       1989.yr        = .2541481
+       1996.yr        = .2500164
+       1998.yr        = .2453731
+3._at: agpa           =     -1.5
+       0.mar3         = .2675928
+       1.mar3         = .6082765
+       2.mar3         = .1241307
+       age            = 31.78071
+       1.pare5        = .1620859
+       2.pare5        = .4434084
+       3.pare5        = .3841942
+       5.pare5        = .0103115
+       afqt2          = .2345544
+       afqt3          = .2383069
+       afqt4          = .2463416
+       afqtm          = .0301785
+       1.esteem5      = .3069638
+       2.esteem5      =  .236849
+       3.esteem5      = .2099753
+       4.esteem5      = .2201273
+       5.esteem5      = .0260845
+       1.eduexp5      = .3403827
+       2.eduexp5      = .1951071
+       3.eduexp5      = .3225148
+       4.eduexp5      = .1385753
+       5.eduexp5      = .0034202
+       health_limit   = .0375324
+       health_limit_m = .0120016
+       r2             = .3053414
+       r3             =   .34044
+       r4             = .1637631
+       rm             = .0044751
+       hisp           = .0437022
+       black          = .1222089
+       1988.yr        = .2504624
+       1989.yr        = .2541481
+       1996.yr        = .2500164
+       1998.yr        = .2453731
+4._at: agpa           =       -1
+       0.mar3         = .2675928
+       1.mar3         = .6082765
+       2.mar3         = .1241307
+       age            = 31.78071
+       1.pare5        = .1620859
+       2.pare5        = .4434084
+       3.pare5        = .3841942
+       5.pare5        = .0103115
+       afqt2          = .2345544
+       afqt3          = .2383069
+       afqt4          = .2463416
+       afqtm          = .0301785
+       1.esteem5      = .3069638
+       2.esteem5      =  .236849
+       3.esteem5      = .2099753
+       4.esteem5      = .2201273
+       5.esteem5      = .0260845
+       1.eduexp5      = .3403827
+       2.eduexp5      = .1951071
+       3.eduexp5      = .3225148
+       4.eduexp5      = .1385753
+       5.eduexp5      = .0034202
+       health_limit   = .0375324
+       health_limit_m = .0120016
+       r2             = .3053414
+       r3             =   .34044
+       r4             = .1637631
+       rm             = .0044751
+       hisp           = .0437022
+       black          = .1222089
+       1988.yr        = .2504624
+       1989.yr        = .2541481
+       1996.yr        = .2500164
+       1998.yr        = .2453731
+5._at: agpa           =      -.5
+       0.mar3         = .2675928
+       1.mar3         = .6082765
+       2.mar3         = .1241307
+       age            = 31.78071
+       1.pare5        = .1620859
+       2.pare5        = .4434084
+       3.pare5        = .3841942
+       5.pare5        = .0103115
+       afqt2          = .2345544
+       afqt3          = .2383069
+       afqt4          = .2463416
+       afqtm          = .0301785
+       1.esteem5      = .3069638
+       2.esteem5      =  .236849
+       3.esteem5      = .2099753
+       4.esteem5      = .2201273
+       5.esteem5      = .0260845
+       1.eduexp5      = .3403827
+       2.eduexp5      = .1951071
+       3.eduexp5      = .3225148
+       4.eduexp5      = .1385753
+       5.eduexp5      = .0034202
+       health_limit   = .0375324
+       health_limit_m = .0120016
+       r2             = .3053414
+       r3             =   .34044
+       r4             = .1637631
+       rm             = .0044751
+       hisp           = .0437022
+       black          = .1222089
+       1988.yr        = .2504624
+       1989.yr        = .2541481
+       1996.yr        = .2500164
+       1998.yr        = .2453731
+6._at: agpa           =        0
+       0.mar3         = .2675928
+       1.mar3         = .6082765
+       2.mar3         = .1241307
+       age            = 31.78071
+       1.pare5        = .1620859
+       2.pare5        = .4434084
+       3.pare5        = .3841942
+       5.pare5        = .0103115
+       afqt2          = .2345544
+       afqt3          = .2383069
+       afqt4          = .2463416
+       afqtm          = .0301785
+       1.esteem5      = .3069638
+       2.esteem5      =  .236849
+       3.esteem5      = .2099753
+       4.esteem5      = .2201273
+       5.esteem5      = .0260845
+       1.eduexp5      = .3403827
+       2.eduexp5      = .1951071
+       3.eduexp5      = .3225148
+       4.eduexp5      = .1385753
+       5.eduexp5      = .0034202
+       health_limit   = .0375324
+       health_limit_m = .0120016
+       r2             = .3053414
+       r3             =   .34044
+       r4             = .1637631
+       rm             = .0044751
+       hisp           = .0437022
+       black          = .1222089
+       1988.yr        = .2504624
+       1989.yr        = .2541481
+       1996.yr        = .2500164
+       1998.yr        = .2453731
+7._at: agpa           =       .5
+       0.mar3         = .2675928
+       1.mar3         = .6082765
+       2.mar3         = .1241307
+       age            = 31.78071
+       1.pare5        = .1620859
+       2.pare5        = .4434084
+       3.pare5        = .3841942
+       5.pare5        = .0103115
+       afqt2          = .2345544
+       afqt3          = .2383069
+       afqt4          = .2463416
+       afqtm          = .0301785
+       1.esteem5      = .3069638
+       2.esteem5      =  .236849
+       3.esteem5      = .2099753
+       4.esteem5      = .2201273
+       5.esteem5      = .0260845
+       1.eduexp5      = .3403827
+       2.eduexp5      = .1951071
+       3.eduexp5      = .3225148
+       4.eduexp5      = .1385753
+       5.eduexp5      = .0034202
+       health_limit   = .0375324
+       health_limit_m = .0120016
+       r2             = .3053414
+       r3             =   .34044
+       r4             = .1637631
+       rm             = .0044751
+       hisp           = .0437022
+       black          = .1222089
+       1988.yr        = .2504624
+       1989.yr        = .2541481
+       1996.yr        = .2500164
+       1998.yr        = .2453731
+8._at: agpa           =        1
+       0.mar3         = .2675928
+       1.mar3         = .6082765
+       2.mar3         = .1241307
+       age            = 31.78071
+       1.pare5        = .1620859
+       2.pare5        = .4434084
+       3.pare5        = .3841942
+       5.pare5        = .0103115
+       afqt2          = .2345544
+       afqt3          = .2383069
+       afqt4          = .2463416
+       afqtm          = .0301785
+       1.esteem5      = .3069638
+       2.esteem5      =  .236849
+       3.esteem5      = .2099753
+       4.esteem5      = .2201273
+       5.esteem5      = .0260845
+       1.eduexp5      = .3403827
+       2.eduexp5      = .1951071
+       3.eduexp5      = .3225148
+       4.eduexp5      = .1385753
+       5.eduexp5      = .0034202
+       health_limit   = .0375324
+       health_limit_m = .0120016
+       r2             = .3053414
+       r3             =   .34044
+       r4             = .1637631
+       rm             = .0044751
+       hisp           = .0437022
+       black          = .1222089
+       1988.yr        = .2504624
+       1989.yr        = .2541481
+       1996.yr        = .2500164
+       1998.yr        = .2453731
+9._at: agpa           =      1.5
+       0.mar3         = .2675928
+       1.mar3         = .6082765
+       2.mar3         = .1241307
+       age            = 31.78071
+       1.pare5        = .1620859
+       2.pare5        = .4434084
+       3.pare5        = .3841942
+       5.pare5        = .0103115
+       afqt2          = .2345544
+       afqt3          = .2383069
+       afqt4          = .2463416
+       afqtm          = .0301785
+       1.esteem5      = .3069638
+       2.esteem5      =  .236849
+       3.esteem5      = .2099753
+       4.esteem5      = .2201273
+       5.esteem5      = .0260845
+       1.eduexp5      = .3403827
+       2.eduexp5      = .1951071
+       3.eduexp5      = .3225148
+       4.eduexp5      = .1385753
+       5.eduexp5      = .0034202
+       health_limit   = .0375324
+       health_limit_m = .0120016
+       r2             = .3053414
+       r3             =   .34044
+       r4             = .1637631
+       rm             = .0044751
+       hisp           = .0437022
+       black          = .1222089
+       1988.yr        = .2504624
+       1989.yr        = .2541481
+       1996.yr        = .2500164
+       1998.yr        = .2453731
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+  _at#female |
+        1 0  |   6.583441   1.676644     3.93   0.000     3.297279    9.869603
+        1 1  |   4.317193   1.424498     3.03   0.002     1.525228    7.109158
+        2 0  |   6.337905   1.319403     4.80   0.000     3.751922    8.923887
+        2 1  |   4.237343   1.162296     3.65   0.000     1.959285    6.515401
+        3 0  |   6.101526   1.003082     6.08   0.000     4.135521    8.067532
+        3 1  |    4.15897   .9166367     4.54   0.000     2.362395    5.955545
+        4 0  |   5.873964   .7413344     7.92   0.000     4.420975    7.326952
+        4 1  |   4.082046   .6937427     5.88   0.000     2.722336    5.441757
+        5 0  |   5.654888   .5666542     9.98   0.000     4.544266     6.76551
+        5 1  |   4.006546   .5093183     7.87   0.000       3.0083    5.004791
+        6 0  |   5.443983   .5268633    10.33   0.000      4.41135    6.476616
+        6 1  |   3.932442   .4011683     9.80   0.000     3.146166    4.718717
+        7 0  |   5.240945   .6179631     8.48   0.000     4.029759     6.45213
+        7 1  |   3.859708   .4161414     9.27   0.000     3.044086     4.67533
+        8 0  |   5.045478   .7759461     6.50   0.000     3.524652    6.566305
+        8 1  |   3.788319   .5332261     7.10   0.000     2.743216    4.833423
+        9 0  |   4.857302   .9544552     5.09   0.000     2.986604       6.728
+        9 1  |   3.718251   .6953215     5.35   0.000     2.355446    5.081057
+------------------------------------------------------------------------------
+
+. marginsplot, title("Non-parents") ytitle(Number of Supervisees) xtitle(High School GPA) ///     
+>         plot1opts(msymbol(circle) mcolor(gs8) msize(small) lpattern(solid) lcolor(gs8)) ///
+>         ci1opts(lpattern(solid) lcolor(gs8))  ///
+>         plot2opts(msymbol(triangle) mcolor(black) msize(small) lpattern(dash) lcolor(black)) ///
+>         ci2opts(lpattern(dash) lcolor(black)) ///
+>         graphregion(color(white)) ///
+>         ylabel(0(2)14, grid labsize(vsmall)) legend(order(1 "Men" 2 "Women")) ///
+>         xlabel(-2.5 "0.0" -2 "0.5" -1.5 "1.0" -1 "1.5" -0.5 "2.0" 0 "2.5" 0.5 "3.0" 1 "3.5" 1.5 "4.0")
+
+Variables that uniquely identify margins: agpa female
+
+. graph save Graph "s_ad1.gph"
+file s_ad1.gph saved
+
+. restore
+
+. 
+. * Figure 2, Panel B, parents
+. preserve
+
+. keep if status==2
+(6,106 observations deleted)
+
+. menbreg v2reg_numlead i.female##c.agpa ///      
+>         ib1.mar3 age ib1.pare5 afqt2 afqt3 afqt4 afqtm ib1.esteem5 ib1.eduexp5 health_limit health_limit_m r2 r3 r4 rm
+>  hisp black i.yr || caseid_1979:, pweight(weight)
+
+Fitting fixed-effects model:
+
+Iteration 0:  Log likelihood =  -80442069  
+Iteration 1:  Log likelihood =  -61822381  
+Iteration 2:  Log likelihood =  -60196195  
+Iteration 3:  Log likelihood =  -60033693  
+Iteration 4:  Log likelihood =  -60032916  
+Iteration 5:  Log likelihood =  -60032916  
+
+Refining starting values:
+
+Grid node 0:  Log likelihood =  -59751917
+
+Fitting full model:
+
+Iteration 0:  Log pseudolikelihood =  -59751917  
+Iteration 1:  Log pseudolikelihood =  -58774976  
+Iteration 2:  Log pseudolikelihood =  -58453602  
+Iteration 3:  Log pseudolikelihood =  -58377415  
+Iteration 4:  Log pseudolikelihood =  -58376800  
+Iteration 5:  Log pseudolikelihood =  -58376794  
+Iteration 6:  Log pseudolikelihood =  -58376793  
+Iteration 7:  Log pseudolikelihood =  -58376793  
+Iteration 8:  Log pseudolikelihood =  -58376793  
+
+Mixed-effects nbinomial regression              Number of obs     =      9,035
+Overdispersion: mean
+Group variable: caseid_1979                     Number of groups  =      3,425
+
+                                                Obs per group:
+                                                              min =          1
+                                                              avg =        2.6
+                                                              max =          4
+
+Integration method: mvaghermite                 Integration pts.  =          7
+
+                                                Wald chi2(32)     =     272.20
+Log pseudolikelihood = -58376793                Prob > chi2       =     0.0000
+                          (Std. err. adjusted for 3,425 clusters in caseid_1979)
+--------------------------------------------------------------------------------
+               |               Robust
+ v2reg_numlead | Coefficient  std. err.      z    P>|z|     [95% conf. interval]
+---------------+----------------------------------------------------------------
+               |
+      1.female |  -.9765822   .0996723    -9.80   0.000    -1.171936   -.7812281
+          agpa |   .0968458   .0949789     1.02   0.308    -.0893094     .283001
+               |
+ female#c.agpa |
+            1  |  -.2944099    .120761    -2.44   0.015    -.5310971   -.0577226
+               |
+          mar3 |
+    never mar  |  -.3211697   .1691176    -1.90   0.058    -.6526342    .0102948
+      pre mar  |   .1295321   .1101561     1.18   0.240    -.0863699    .3454341
+               |
+           age |   .0129712   .0221306     0.59   0.558    -.0304038    .0563463
+               |
+         pare5 |
+            2  |   .0566363   .1347088     0.42   0.674    -.2073881    .3206607
+            3  |   .1099511   .1510299     0.73   0.467    -.1860621    .4059642
+            5  |  -.8818995   .4251173    -2.07   0.038    -1.715114    -.048685
+               |
+         afqt2 |   .3080375   .1454531     2.12   0.034     .0229547    .5931203
+         afqt3 |   .3060452   .1654352     1.85   0.064    -.0182019    .6302922
+         afqt4 |   .5409529   .1948173     2.78   0.005      .159118    .9227878
+         afqtm |   .2303252    .275375     0.84   0.403    -.3093998    .7700502
+               |
+       esteem5 |
+            2  |   .3255131   .1321238     2.46   0.014     .0665553     .584471
+            3  |   .4009852    .142341     2.82   0.005      .122002    .6799684
+            4  |   .4503416   .1370813     3.29   0.001     .1816673     .719016
+            5  |   .1377938   .3365018     0.41   0.682    -.5217377    .7973252
+               |
+       eduexp5 |
+            2  |   .1840337   .1392498     1.32   0.186     -.088891    .4569583
+            3  |   .4875118   .1258226     3.87   0.000      .240904    .7341195
+            4  |   .3481385   .1713705     2.03   0.042     .0122586    .6840185
+            5  |  -.6122385   1.071099    -0.57   0.568    -2.711553    1.487076
+               |
+  health_limit |   .0561728   .1869488     0.30   0.764    -.3102401    .4225857
+health_limit_m |   .2874787   .2722945     1.06   0.291    -.2462088    .8211661
+            r2 |  -.3065339   .1434355    -2.14   0.033    -.5876623   -.0254056
+            r3 |  -.1395156    .140231    -0.99   0.320    -.4143633    .1353321
+            r4 |  -.1850045   .1647667    -1.12   0.262    -.5079413    .1379323
+            rm |  -.2150929   .4604573    -0.47   0.640    -1.117573    .6873869
+          hisp |  -.0011289    .146775    -0.01   0.994    -.2888026    .2865447
+         black |  -.2731577   .1397943    -1.95   0.051    -.5471495    .0008341
+               |
+            yr |
+         1989  |  -.1060302   .0767926    -1.38   0.167    -.2565411    .0444806
+         1996  |  -.1435078   .1869942    -0.77   0.443    -.5100096     .222994
+         1998  |  -.1306329   .2259044    -0.58   0.563    -.5733975    .3121316
+               |
+         _cons |   -.412115   .6245907    -0.66   0.509     -1.63629    .8120602
+---------------+----------------------------------------------------------------
+      /lnalpha |    .799555   .0605431                      .6808926    .9182173
+---------------+----------------------------------------------------------------
+caseid_1979    |
+     var(_cons)|   3.258759   .2118389                      2.868924    3.701565
+--------------------------------------------------------------------------------
+
+. margins female, at(agpa=(-2.5(0.5)1.5) ///
+>                0.mar3          =    .2675928 ///
+>                1.mar3          =    .6082765 ///
+>                2.mar3          =    .1241307 ///
+>                age             =    31.78071 ///
+>                1.pare5         =    .1620859 ///
+>                2.pare5         =    .4434084 ///
+>                3.pare5         =    .3841942 ///
+>                5.pare5         =    .0103115 ///
+>                afqt2           =    .2345544 ///
+>                afqt3           =    .2383069 ///
+>                afqt4           =    .2463416 ///
+>                afqtm           =    .0301785 ///
+>                1.esteem5       =    .3069638 ///
+>                2.esteem5       =     .236849 ///
+>                3.esteem5       =    .2099753 ///
+>                4.esteem5       =    .2201273 ///
+>                5.esteem5       =    .0260845 ///
+>                1.eduexp5       =    .3403827 ///
+>                2.eduexp5       =    .1951071 ///
+>                3.eduexp5       =    .3225148 ///
+>                4.eduexp5       =    .1385753 ///
+>                5.eduexp5       =    .0034202 ///
+>                health_limit    =    .0375324 ///
+>                health_limit_m  =    .0120016 ///
+>                r2              =    .3053414 ///
+>                r3              =      .34044 ///
+>                r4              =    .1637631 ///
+>                rm              =    .0044751 ///
+>                hisp            =    .0437022 ///
+>                black           =    .1222089 ///
+>                1988.yr         =    .2504624 ///
+>                1989.yr         =    .2541481 ///
+>                1996.yr         =    .2500164 ///
+>                1998.yr         =    .2453731)
+
+Adjusted predictions                                     Number of obs = 9,035
+Model VCE: Robust
+
+Expression: Marginal predicted mean, predict()
+1._at: agpa           =     -2.5
+       0.mar3         = .2675928
+       1.mar3         = .6082765
+       2.mar3         = .1241307
+       age            = 31.78071
+       1.pare5        = .1620859
+       2.pare5        = .4434084
+       3.pare5        = .3841942
+       5.pare5        = .0103115
+       afqt2          = .2345544
+       afqt3          = .2383069
+       afqt4          = .2463416
+       afqtm          = .0301785
+       1.esteem5      = .3069638
+       2.esteem5      =  .236849
+       3.esteem5      = .2099753
+       4.esteem5      = .2201273
+       5.esteem5      = .0260845
+       1.eduexp5      = .3403827
+       2.eduexp5      = .1951071
+       3.eduexp5      = .3225148
+       4.eduexp5      = .1385753
+       5.eduexp5      = .0034202
+       health_limit   = .0375324
+       health_limit_m = .0120016
+       r2             = .3053414
+       r3             =   .34044
+       r4             = .1637631
+       rm             = .0044751
+       hisp           = .0437022
+       black          = .1222089
+       1988.yr        = .2504624
+       1989.yr        = .2541481
+       1996.yr        = .2500164
+       1998.yr        = .2453731
+2._at: agpa           =       -2
+       0.mar3         = .2675928
+       1.mar3         = .6082765
+       2.mar3         = .1241307
+       age            = 31.78071
+       1.pare5        = .1620859
+       2.pare5        = .4434084
+       3.pare5        = .3841942
+       5.pare5        = .0103115
+       afqt2          = .2345544
+       afqt3          = .2383069
+       afqt4          = .2463416
+       afqtm          = .0301785
+       1.esteem5      = .3069638
+       2.esteem5      =  .236849
+       3.esteem5      = .2099753
+       4.esteem5      = .2201273
+       5.esteem5      = .0260845
+       1.eduexp5      = .3403827
+       2.eduexp5      = .1951071
+       3.eduexp5      = .3225148
+       4.eduexp5      = .1385753
+       5.eduexp5      = .0034202
+       health_limit   = .0375324
+       health_limit_m = .0120016
+       r2             = .3053414
+       r3             =   .34044
+       r4             = .1637631
+       rm             = .0044751
+       hisp           = .0437022
+       black          = .1222089
+       1988.yr        = .2504624
+       1989.yr        = .2541481
+       1996.yr        = .2500164
+       1998.yr        = .2453731
+3._at: agpa           =     -1.5
+       0.mar3         = .2675928
+       1.mar3         = .6082765
+       2.mar3         = .1241307
+       age            = 31.78071
+       1.pare5        = .1620859
+       2.pare5        = .4434084
+       3.pare5        = .3841942
+       5.pare5        = .0103115
+       afqt2          = .2345544
+       afqt3          = .2383069
+       afqt4          = .2463416
+       afqtm          = .0301785
+       1.esteem5      = .3069638
+       2.esteem5      =  .236849
+       3.esteem5      = .2099753
+       4.esteem5      = .2201273
+       5.esteem5      = .0260845
+       1.eduexp5      = .3403827
+       2.eduexp5      = .1951071
+       3.eduexp5      = .3225148
+       4.eduexp5      = .1385753
+       5.eduexp5      = .0034202
+       health_limit   = .0375324
+       health_limit_m = .0120016
+       r2             = .3053414
+       r3             =   .34044
+       r4             = .1637631
+       rm             = .0044751
+       hisp           = .0437022
+       black          = .1222089
+       1988.yr        = .2504624
+       1989.yr        = .2541481
+       1996.yr        = .2500164
+       1998.yr        = .2453731
+4._at: agpa           =       -1
+       0.mar3         = .2675928
+       1.mar3         = .6082765
+       2.mar3         = .1241307
+       age            = 31.78071
+       1.pare5        = .1620859
+       2.pare5        = .4434084
+       3.pare5        = .3841942
+       5.pare5        = .0103115
+       afqt2          = .2345544
+       afqt3          = .2383069
+       afqt4          = .2463416
+       afqtm          = .0301785
+       1.esteem5      = .3069638
+       2.esteem5      =  .236849
+       3.esteem5      = .2099753
+       4.esteem5      = .2201273
+       5.esteem5      = .0260845
+       1.eduexp5      = .3403827
+       2.eduexp5      = .1951071
+       3.eduexp5      = .3225148
+       4.eduexp5      = .1385753
+       5.eduexp5      = .0034202
+       health_limit   = .0375324
+       health_limit_m = .0120016
+       r2             = .3053414
+       r3             =   .34044
+       r4             = .1637631
+       rm             = .0044751
+       hisp           = .0437022
+       black          = .1222089
+       1988.yr        = .2504624
+       1989.yr        = .2541481
+       1996.yr        = .2500164
+       1998.yr        = .2453731
+5._at: agpa           =      -.5
+       0.mar3         = .2675928
+       1.mar3         = .6082765
+       2.mar3         = .1241307
+       age            = 31.78071
+       1.pare5        = .1620859
+       2.pare5        = .4434084
+       3.pare5        = .3841942
+       5.pare5        = .0103115
+       afqt2          = .2345544
+       afqt3          = .2383069
+       afqt4          = .2463416
+       afqtm          = .0301785
+       1.esteem5      = .3069638
+       2.esteem5      =  .236849
+       3.esteem5      = .2099753
+       4.esteem5      = .2201273
+       5.esteem5      = .0260845
+       1.eduexp5      = .3403827
+       2.eduexp5      = .1951071
+       3.eduexp5      = .3225148
+       4.eduexp5      = .1385753
+       5.eduexp5      = .0034202
+       health_limit   = .0375324
+       health_limit_m = .0120016
+       r2             = .3053414
+       r3             =   .34044
+       r4             = .1637631
+       rm             = .0044751
+       hisp           = .0437022
+       black          = .1222089
+       1988.yr        = .2504624
+       1989.yr        = .2541481
+       1996.yr        = .2500164
+       1998.yr        = .2453731
+6._at: agpa           =        0
+       0.mar3         = .2675928
+       1.mar3         = .6082765
+       2.mar3         = .1241307
+       age            = 31.78071
+       1.pare5        = .1620859
+       2.pare5        = .4434084
+       3.pare5        = .3841942
+       5.pare5        = .0103115
+       afqt2          = .2345544
+       afqt3          = .2383069
+       afqt4          = .2463416
+       afqtm          = .0301785
+       1.esteem5      = .3069638
+       2.esteem5      =  .236849
+       3.esteem5      = .2099753
+       4.esteem5      = .2201273
+       5.esteem5      = .0260845
+       1.eduexp5      = .3403827
+       2.eduexp5      = .1951071
+       3.eduexp5      = .3225148
+       4.eduexp5      = .1385753
+       5.eduexp5      = .0034202
+       health_limit   = .0375324
+       health_limit_m = .0120016
+       r2             = .3053414
+       r3             =   .34044
+       r4             = .1637631
+       rm             = .0044751
+       hisp           = .0437022
+       black          = .1222089
+       1988.yr        = .2504624
+       1989.yr        = .2541481
+       1996.yr        = .2500164
+       1998.yr        = .2453731
+7._at: agpa           =       .5
+       0.mar3         = .2675928
+       1.mar3         = .6082765
+       2.mar3         = .1241307
+       age            = 31.78071
+       1.pare5        = .1620859
+       2.pare5        = .4434084
+       3.pare5        = .3841942
+       5.pare5        = .0103115
+       afqt2          = .2345544
+       afqt3          = .2383069
+       afqt4          = .2463416
+       afqtm          = .0301785
+       1.esteem5      = .3069638
+       2.esteem5      =  .236849
+       3.esteem5      = .2099753
+       4.esteem5      = .2201273
+       5.esteem5      = .0260845
+       1.eduexp5      = .3403827
+       2.eduexp5      = .1951071
+       3.eduexp5      = .3225148
+       4.eduexp5      = .1385753
+       5.eduexp5      = .0034202
+       health_limit   = .0375324
+       health_limit_m = .0120016
+       r2             = .3053414
+       r3             =   .34044
+       r4             = .1637631
+       rm             = .0044751
+       hisp           = .0437022
+       black          = .1222089
+       1988.yr        = .2504624
+       1989.yr        = .2541481
+       1996.yr        = .2500164
+       1998.yr        = .2453731
+8._at: agpa           =        1
+       0.mar3         = .2675928
+       1.mar3         = .6082765
+       2.mar3         = .1241307
+       age            = 31.78071
+       1.pare5        = .1620859
+       2.pare5        = .4434084
+       3.pare5        = .3841942
+       5.pare5        = .0103115
+       afqt2          = .2345544
+       afqt3          = .2383069
+       afqt4          = .2463416
+       afqtm          = .0301785
+       1.esteem5      = .3069638
+       2.esteem5      =  .236849
+       3.esteem5      = .2099753
+       4.esteem5      = .2201273
+       5.esteem5      = .0260845
+       1.eduexp5      = .3403827
+       2.eduexp5      = .1951071
+       3.eduexp5      = .3225148
+       4.eduexp5      = .1385753
+       5.eduexp5      = .0034202
+       health_limit   = .0375324
+       health_limit_m = .0120016
+       r2             = .3053414
+       r3             =   .34044
+       r4             = .1637631
+       rm             = .0044751
+       hisp           = .0437022
+       black          = .1222089
+       1988.yr        = .2504624
+       1989.yr        = .2541481
+       1996.yr        = .2500164
+       1998.yr        = .2453731
+9._at: agpa           =      1.5
+       0.mar3         = .2675928
+       1.mar3         = .6082765
+       2.mar3         = .1241307
+       age            = 31.78071
+       1.pare5        = .1620859
+       2.pare5        = .4434084
+       3.pare5        = .3841942
+       5.pare5        = .0103115
+       afqt2          = .2345544
+       afqt3          = .2383069
+       afqt4          = .2463416
+       afqtm          = .0301785
+       1.esteem5      = .3069638
+       2.esteem5      =  .236849
+       3.esteem5      = .2099753
+       4.esteem5      = .2201273
+       5.esteem5      = .0260845
+       1.eduexp5      = .3403827
+       2.eduexp5      = .1951071
+       3.eduexp5      = .3225148
+       4.eduexp5      = .1385753
+       5.eduexp5      = .0034202
+       health_limit   = .0375324
+       health_limit_m = .0120016
+       r2             = .3053414
+       r3             =   .34044
+       r4             = .1637631
+       rm             = .0044751
+       hisp           = .0437022
+       black          = .1222089
+       1988.yr        = .2504624
+       1989.yr        = .2541481
+       1996.yr        = .2500164
+       1998.yr        = .2453731
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+  _at#female |
+        1 0  |   6.484255   1.505132     4.31   0.000     3.534251    9.434259
+        1 1  |   5.097852   1.399638     3.64   0.000     2.354612    7.841092
+        2 0  |   6.805967   1.292012     5.27   0.000      4.27367    9.338265
+        2 1  |   4.618349   1.049712     4.40   0.000     2.560951    6.675747
+        3 0  |   7.143642   1.076421     6.64   0.000     5.033896    9.253388
+        3 1  |   4.183948   .7612986     5.50   0.000      2.69183    5.676066
+        4 0  |    7.49807   .8834821     8.49   0.000     5.766477    9.229663
+        4 1  |   3.790406   .5322875     7.12   0.000     2.747142    4.833671
+        5 0  |   7.870082   .7699888    10.22   0.000     6.360932    9.379233
+        5 1  |   3.433881    .368217     9.33   0.000     2.712189    4.155573
+        6 0  |   8.260552   .8165592    10.12   0.000     6.660125    9.860979
+        6 1  |   3.110891    .285823    10.88   0.000     2.550688    3.671094
+        7 0  |   8.670395   1.043375     8.31   0.000     6.625418    10.71537
+        7 1  |   2.818281   .2894782     9.74   0.000     2.250914    3.385648
+        8 0  |   9.100572   1.401056     6.50   0.000     6.354552    11.84659
+        8 1  |   2.553194   .3408718     7.49   0.000     1.885098    3.221291
+        9 0  |   9.552092   1.848079     5.17   0.000     5.929923    13.17426
+        9 1  |   2.313041   .4023891     5.75   0.000     1.524373    3.101709
+------------------------------------------------------------------------------
+
+. marginsplot, title("Parents") ytitle(Number of Supervisees) xtitle(High School GPA) /// 
+>         plot1opts(msymbol(circle) mcolor(gs8) msize(small) lpattern(solid) lcolor(gs8)) ///
+>         ci1opts(lpattern(solid) lcolor(gs8))  ///
+>         plot2opts(msymbol(triangle) mcolor(black) msize(small) lpattern(dash) lcolor(black)) ///
+>         ci2opts(lpattern(dash) lcolor(black)) ///
+>         graphregion(color(white)) ///
+>         ylabel(0(2)14, grid labsize(vsmall)) legend(order(1 "Men" 2 "Women")) ///
+>         xlabel(-2.5 "0.0" -2 "0.5" -1.5 "1.0" -1 "1.5" -0.5 "2.0" 0 "2.5" 0.5 "3.0" 1 "3.5" 1.5 "4.0")
+
+Variables that uniquely identify margins: agpa female
+
+. graph save Graph "s_ad2.gph"
+file s_ad2.gph saved
+
+. restore
+
+. 
+. graph combine s_ad1.gph s_ad2.gph, graphregion(color(white))
+
+. graph export "graph_Qian_Yavorsky_2021_SF_Figure2B.pdf"
+file /Users/yueqian/Desktop/graph_Qian_Yavorsky_2021_SF_Figure2B.pdf saved as PDF format
+
+. 
+. 
+. **************************************************************************
+. ************************** Figure 3 **************************************
+. **************************************************************************
+. 
+. * Figure 3, M1
+. preserve
+
+. keep if status==2
+(6,106 observations deleted)
+
+. menbreg v2reg_numlead i.female##c.agpa ///      
+>         ib1.mar3 age ib1.pare5 afqt2 afqt3 afqt4 afqtm ib1.esteem5 ib1.eduexp5 health_limit health_limit_m r2 r3 r4 rm
+>  hisp black i.yr ///
+>         || caseid_1979:, pweight(weight)
+
+Fitting fixed-effects model:
+
+Iteration 0:  Log likelihood =  -80442069  
+Iteration 1:  Log likelihood =  -61822381  
+Iteration 2:  Log likelihood =  -60196195  
+Iteration 3:  Log likelihood =  -60033693  
+Iteration 4:  Log likelihood =  -60032916  
+Iteration 5:  Log likelihood =  -60032916  
+
+Refining starting values:
+
+Grid node 0:  Log likelihood =  -59751917
+
+Fitting full model:
+
+Iteration 0:  Log pseudolikelihood =  -59751917  
+Iteration 1:  Log pseudolikelihood =  -58774976  
+Iteration 2:  Log pseudolikelihood =  -58453602  
+Iteration 3:  Log pseudolikelihood =  -58377415  
+Iteration 4:  Log pseudolikelihood =  -58376800  
+Iteration 5:  Log pseudolikelihood =  -58376794  
+Iteration 6:  Log pseudolikelihood =  -58376793  
+Iteration 7:  Log pseudolikelihood =  -58376793  
+Iteration 8:  Log pseudolikelihood =  -58376793  
+
+Mixed-effects nbinomial regression              Number of obs     =      9,035
+Overdispersion: mean
+Group variable: caseid_1979                     Number of groups  =      3,425
+
+                                                Obs per group:
+                                                              min =          1
+                                                              avg =        2.6
+                                                              max =          4
+
+Integration method: mvaghermite                 Integration pts.  =          7
+
+                                                Wald chi2(32)     =     272.20
+Log pseudolikelihood = -58376793                Prob > chi2       =     0.0000
+                          (Std. err. adjusted for 3,425 clusters in caseid_1979)
+--------------------------------------------------------------------------------
+               |               Robust
+ v2reg_numlead | Coefficient  std. err.      z    P>|z|     [95% conf. interval]
+---------------+----------------------------------------------------------------
+               |
+      1.female |  -.9765822   .0996723    -9.80   0.000    -1.171936   -.7812281
+          agpa |   .0968458   .0949789     1.02   0.308    -.0893094     .283001
+               |
+ female#c.agpa |
+            1  |  -.2944099    .120761    -2.44   0.015    -.5310971   -.0577226
+               |
+          mar3 |
+    never mar  |  -.3211697   .1691176    -1.90   0.058    -.6526342    .0102948
+      pre mar  |   .1295321   .1101561     1.18   0.240    -.0863699    .3454341
+               |
+           age |   .0129712   .0221306     0.59   0.558    -.0304038    .0563463
+               |
+         pare5 |
+            2  |   .0566363   .1347088     0.42   0.674    -.2073881    .3206607
+            3  |   .1099511   .1510299     0.73   0.467    -.1860621    .4059642
+            5  |  -.8818995   .4251173    -2.07   0.038    -1.715114    -.048685
+               |
+         afqt2 |   .3080375   .1454531     2.12   0.034     .0229547    .5931203
+         afqt3 |   .3060452   .1654352     1.85   0.064    -.0182019    .6302922
+         afqt4 |   .5409529   .1948173     2.78   0.005      .159118    .9227878
+         afqtm |   .2303252    .275375     0.84   0.403    -.3093998    .7700502
+               |
+       esteem5 |
+            2  |   .3255131   .1321238     2.46   0.014     .0665553     .584471
+            3  |   .4009852    .142341     2.82   0.005      .122002    .6799684
+            4  |   .4503416   .1370813     3.29   0.001     .1816673     .719016
+            5  |   .1377938   .3365018     0.41   0.682    -.5217377    .7973252
+               |
+       eduexp5 |
+            2  |   .1840337   .1392498     1.32   0.186     -.088891    .4569583
+            3  |   .4875118   .1258226     3.87   0.000      .240904    .7341195
+            4  |   .3481385   .1713705     2.03   0.042     .0122586    .6840185
+            5  |  -.6122385   1.071099    -0.57   0.568    -2.711553    1.487076
+               |
+  health_limit |   .0561728   .1869488     0.30   0.764    -.3102401    .4225857
+health_limit_m |   .2874787   .2722945     1.06   0.291    -.2462088    .8211661
+            r2 |  -.3065339   .1434355    -2.14   0.033    -.5876623   -.0254056
+            r3 |  -.1395156    .140231    -0.99   0.320    -.4143633    .1353321
+            r4 |  -.1850045   .1647667    -1.12   0.262    -.5079413    .1379323
+            rm |  -.2150929   .4604573    -0.47   0.640    -1.117573    .6873869
+          hisp |  -.0011289    .146775    -0.01   0.994    -.2888026    .2865447
+         black |  -.2731577   .1397943    -1.95   0.051    -.5471495    .0008341
+               |
+            yr |
+         1989  |  -.1060302   .0767926    -1.38   0.167    -.2565411    .0444806
+         1996  |  -.1435078   .1869942    -0.77   0.443    -.5100096     .222994
+         1998  |  -.1306329   .2259044    -0.58   0.563    -.5733975    .3121316
+               |
+         _cons |   -.412115   .6245907    -0.66   0.509     -1.63629    .8120602
+---------------+----------------------------------------------------------------
+      /lnalpha |    .799555   .0605431                      .6808926    .9182173
+---------------+----------------------------------------------------------------
+caseid_1979    |
+     var(_cons)|   3.258759   .2118389                      2.868924    3.701565
+--------------------------------------------------------------------------------
+
+. margins female, at(agpa=(-2.5(0.5)1.5) ///
+>                0.mar3          =    .2675928 ///
+>                1.mar3          =    .6082765 ///
+>                2.mar3          =    .1241307 ///
+>                age             =    31.78071 ///
+>                1.pare5         =    .1620859 ///
+>                2.pare5         =    .4434084 ///
+>                3.pare5         =    .3841942 ///
+>                5.pare5         =    .0103115 ///
+>                afqt2           =    .2345544 ///
+>                afqt3           =    .2383069 ///
+>                afqt4           =    .2463416 ///
+>                afqtm           =    .0301785 ///
+>                1.esteem5       =    .3069638 ///
+>                2.esteem5       =     .236849 ///
+>                3.esteem5       =    .2099753 ///
+>                4.esteem5       =    .2201273 ///
+>                5.esteem5       =    .0260845 ///
+>                1.eduexp5       =    .3403827 ///
+>                2.eduexp5       =    .1951071 ///
+>                3.eduexp5       =    .3225148 ///
+>                4.eduexp5       =    .1385753 ///
+>                5.eduexp5       =    .0034202 ///
+>                health_limit    =    .0375324 ///
+>                health_limit_m  =    .0120016 ///
+>                r2              =    .3053414 ///
+>                r3              =      .34044 ///
+>                r4              =    .1637631 ///
+>                rm              =    .0044751 ///
+>                hisp            =    .0437022 ///
+>                black           =    .1222089 ///
+>                1988.yr         =    .2504624 ///
+>                1989.yr         =    .2541481 ///
+>                1996.yr         =    .2500164 ///
+>                1998.yr         =    .2453731)
+
+Adjusted predictions                                     Number of obs = 9,035
+Model VCE: Robust
+
+Expression: Marginal predicted mean, predict()
+1._at: agpa           =     -2.5
+       0.mar3         = .2675928
+       1.mar3         = .6082765
+       2.mar3         = .1241307
+       age            = 31.78071
+       1.pare5        = .1620859
+       2.pare5        = .4434084
+       3.pare5        = .3841942
+       5.pare5        = .0103115
+       afqt2          = .2345544
+       afqt3          = .2383069
+       afqt4          = .2463416
+       afqtm          = .0301785
+       1.esteem5      = .3069638
+       2.esteem5      =  .236849
+       3.esteem5      = .2099753
+       4.esteem5      = .2201273
+       5.esteem5      = .0260845
+       1.eduexp5      = .3403827
+       2.eduexp5      = .1951071
+       3.eduexp5      = .3225148
+       4.eduexp5      = .1385753
+       5.eduexp5      = .0034202
+       health_limit   = .0375324
+       health_limit_m = .0120016
+       r2             = .3053414
+       r3             =   .34044
+       r4             = .1637631
+       rm             = .0044751
+       hisp           = .0437022
+       black          = .1222089
+       1988.yr        = .2504624
+       1989.yr        = .2541481
+       1996.yr        = .2500164
+       1998.yr        = .2453731
+2._at: agpa           =       -2
+       0.mar3         = .2675928
+       1.mar3         = .6082765
+       2.mar3         = .1241307
+       age            = 31.78071
+       1.pare5        = .1620859
+       2.pare5        = .4434084
+       3.pare5        = .3841942
+       5.pare5        = .0103115
+       afqt2          = .2345544
+       afqt3          = .2383069
+       afqt4          = .2463416
+       afqtm          = .0301785
+       1.esteem5      = .3069638
+       2.esteem5      =  .236849
+       3.esteem5      = .2099753
+       4.esteem5      = .2201273
+       5.esteem5      = .0260845
+       1.eduexp5      = .3403827
+       2.eduexp5      = .1951071
+       3.eduexp5      = .3225148
+       4.eduexp5      = .1385753
+       5.eduexp5      = .0034202
+       health_limit   = .0375324
+       health_limit_m = .0120016
+       r2             = .3053414
+       r3             =   .34044
+       r4             = .1637631
+       rm             = .0044751
+       hisp           = .0437022
+       black          = .1222089
+       1988.yr        = .2504624
+       1989.yr        = .2541481
+       1996.yr        = .2500164
+       1998.yr        = .2453731
+3._at: agpa           =     -1.5
+       0.mar3         = .2675928
+       1.mar3         = .6082765
+       2.mar3         = .1241307
+       age            = 31.78071
+       1.pare5        = .1620859
+       2.pare5        = .4434084
+       3.pare5        = .3841942
+       5.pare5        = .0103115
+       afqt2          = .2345544
+       afqt3          = .2383069
+       afqt4          = .2463416
+       afqtm          = .0301785
+       1.esteem5      = .3069638
+       2.esteem5      =  .236849
+       3.esteem5      = .2099753
+       4.esteem5      = .2201273
+       5.esteem5      = .0260845
+       1.eduexp5      = .3403827
+       2.eduexp5      = .1951071
+       3.eduexp5      = .3225148
+       4.eduexp5      = .1385753
+       5.eduexp5      = .0034202
+       health_limit   = .0375324
+       health_limit_m = .0120016
+       r2             = .3053414
+       r3             =   .34044
+       r4             = .1637631
+       rm             = .0044751
+       hisp           = .0437022
+       black          = .1222089
+       1988.yr        = .2504624
+       1989.yr        = .2541481
+       1996.yr        = .2500164
+       1998.yr        = .2453731
+4._at: agpa           =       -1
+       0.mar3         = .2675928
+       1.mar3         = .6082765
+       2.mar3         = .1241307
+       age            = 31.78071
+       1.pare5        = .1620859
+       2.pare5        = .4434084
+       3.pare5        = .3841942
+       5.pare5        = .0103115
+       afqt2          = .2345544
+       afqt3          = .2383069
+       afqt4          = .2463416
+       afqtm          = .0301785
+       1.esteem5      = .3069638
+       2.esteem5      =  .236849
+       3.esteem5      = .2099753
+       4.esteem5      = .2201273
+       5.esteem5      = .0260845
+       1.eduexp5      = .3403827
+       2.eduexp5      = .1951071
+       3.eduexp5      = .3225148
+       4.eduexp5      = .1385753
+       5.eduexp5      = .0034202
+       health_limit   = .0375324
+       health_limit_m = .0120016
+       r2             = .3053414
+       r3             =   .34044
+       r4             = .1637631
+       rm             = .0044751
+       hisp           = .0437022
+       black          = .1222089
+       1988.yr        = .2504624
+       1989.yr        = .2541481
+       1996.yr        = .2500164
+       1998.yr        = .2453731
+5._at: agpa           =      -.5
+       0.mar3         = .2675928
+       1.mar3         = .6082765
+       2.mar3         = .1241307
+       age            = 31.78071
+       1.pare5        = .1620859
+       2.pare5        = .4434084
+       3.pare5        = .3841942
+       5.pare5        = .0103115
+       afqt2          = .2345544
+       afqt3          = .2383069
+       afqt4          = .2463416
+       afqtm          = .0301785
+       1.esteem5      = .3069638
+       2.esteem5      =  .236849
+       3.esteem5      = .2099753
+       4.esteem5      = .2201273
+       5.esteem5      = .0260845
+       1.eduexp5      = .3403827
+       2.eduexp5      = .1951071
+       3.eduexp5      = .3225148
+       4.eduexp5      = .1385753
+       5.eduexp5      = .0034202
+       health_limit   = .0375324
+       health_limit_m = .0120016
+       r2             = .3053414
+       r3             =   .34044
+       r4             = .1637631
+       rm             = .0044751
+       hisp           = .0437022
+       black          = .1222089
+       1988.yr        = .2504624
+       1989.yr        = .2541481
+       1996.yr        = .2500164
+       1998.yr        = .2453731
+6._at: agpa           =        0
+       0.mar3         = .2675928
+       1.mar3         = .6082765
+       2.mar3         = .1241307
+       age            = 31.78071
+       1.pare5        = .1620859
+       2.pare5        = .4434084
+       3.pare5        = .3841942
+       5.pare5        = .0103115
+       afqt2          = .2345544
+       afqt3          = .2383069
+       afqt4          = .2463416
+       afqtm          = .0301785
+       1.esteem5      = .3069638
+       2.esteem5      =  .236849
+       3.esteem5      = .2099753
+       4.esteem5      = .2201273
+       5.esteem5      = .0260845
+       1.eduexp5      = .3403827
+       2.eduexp5      = .1951071
+       3.eduexp5      = .3225148
+       4.eduexp5      = .1385753
+       5.eduexp5      = .0034202
+       health_limit   = .0375324
+       health_limit_m = .0120016
+       r2             = .3053414
+       r3             =   .34044
+       r4             = .1637631
+       rm             = .0044751
+       hisp           = .0437022
+       black          = .1222089
+       1988.yr        = .2504624
+       1989.yr        = .2541481
+       1996.yr        = .2500164
+       1998.yr        = .2453731
+7._at: agpa           =       .5
+       0.mar3         = .2675928
+       1.mar3         = .6082765
+       2.mar3         = .1241307
+       age            = 31.78071
+       1.pare5        = .1620859
+       2.pare5        = .4434084
+       3.pare5        = .3841942
+       5.pare5        = .0103115
+       afqt2          = .2345544
+       afqt3          = .2383069
+       afqt4          = .2463416
+       afqtm          = .0301785
+       1.esteem5      = .3069638
+       2.esteem5      =  .236849
+       3.esteem5      = .2099753
+       4.esteem5      = .2201273
+       5.esteem5      = .0260845
+       1.eduexp5      = .3403827
+       2.eduexp5      = .1951071
+       3.eduexp5      = .3225148
+       4.eduexp5      = .1385753
+       5.eduexp5      = .0034202
+       health_limit   = .0375324
+       health_limit_m = .0120016
+       r2             = .3053414
+       r3             =   .34044
+       r4             = .1637631
+       rm             = .0044751
+       hisp           = .0437022
+       black          = .1222089
+       1988.yr        = .2504624
+       1989.yr        = .2541481
+       1996.yr        = .2500164
+       1998.yr        = .2453731
+8._at: agpa           =        1
+       0.mar3         = .2675928
+       1.mar3         = .6082765
+       2.mar3         = .1241307
+       age            = 31.78071
+       1.pare5        = .1620859
+       2.pare5        = .4434084
+       3.pare5        = .3841942
+       5.pare5        = .0103115
+       afqt2          = .2345544
+       afqt3          = .2383069
+       afqt4          = .2463416
+       afqtm          = .0301785
+       1.esteem5      = .3069638
+       2.esteem5      =  .236849
+       3.esteem5      = .2099753
+       4.esteem5      = .2201273
+       5.esteem5      = .0260845
+       1.eduexp5      = .3403827
+       2.eduexp5      = .1951071
+       3.eduexp5      = .3225148
+       4.eduexp5      = .1385753
+       5.eduexp5      = .0034202
+       health_limit   = .0375324
+       health_limit_m = .0120016
+       r2             = .3053414
+       r3             =   .34044
+       r4             = .1637631
+       rm             = .0044751
+       hisp           = .0437022
+       black          = .1222089
+       1988.yr        = .2504624
+       1989.yr        = .2541481
+       1996.yr        = .2500164
+       1998.yr        = .2453731
+9._at: agpa           =      1.5
+       0.mar3         = .2675928
+       1.mar3         = .6082765
+       2.mar3         = .1241307
+       age            = 31.78071
+       1.pare5        = .1620859
+       2.pare5        = .4434084
+       3.pare5        = .3841942
+       5.pare5        = .0103115
+       afqt2          = .2345544
+       afqt3          = .2383069
+       afqt4          = .2463416
+       afqtm          = .0301785
+       1.esteem5      = .3069638
+       2.esteem5      =  .236849
+       3.esteem5      = .2099753
+       4.esteem5      = .2201273
+       5.esteem5      = .0260845
+       1.eduexp5      = .3403827
+       2.eduexp5      = .1951071
+       3.eduexp5      = .3225148
+       4.eduexp5      = .1385753
+       5.eduexp5      = .0034202
+       health_limit   = .0375324
+       health_limit_m = .0120016
+       r2             = .3053414
+       r3             =   .34044
+       r4             = .1637631
+       rm             = .0044751
+       hisp           = .0437022
+       black          = .1222089
+       1988.yr        = .2504624
+       1989.yr        = .2541481
+       1996.yr        = .2500164
+       1998.yr        = .2453731
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+  _at#female |
+        1 0  |   6.484255   1.505132     4.31   0.000     3.534251    9.434259
+        1 1  |   5.097852   1.399638     3.64   0.000     2.354612    7.841092
+        2 0  |   6.805967   1.292012     5.27   0.000      4.27367    9.338265
+        2 1  |   4.618349   1.049712     4.40   0.000     2.560951    6.675747
+        3 0  |   7.143642   1.076421     6.64   0.000     5.033896    9.253388
+        3 1  |   4.183948   .7612986     5.50   0.000      2.69183    5.676066
+        4 0  |    7.49807   .8834821     8.49   0.000     5.766477    9.229663
+        4 1  |   3.790406   .5322875     7.12   0.000     2.747142    4.833671
+        5 0  |   7.870082   .7699888    10.22   0.000     6.360932    9.379233
+        5 1  |   3.433881    .368217     9.33   0.000     2.712189    4.155573
+        6 0  |   8.260552   .8165592    10.12   0.000     6.660125    9.860979
+        6 1  |   3.110891    .285823    10.88   0.000     2.550688    3.671094
+        7 0  |   8.670395   1.043375     8.31   0.000     6.625418    10.71537
+        7 1  |   2.818281   .2894782     9.74   0.000     2.250914    3.385648
+        8 0  |   9.100572   1.401056     6.50   0.000     6.354552    11.84659
+        8 1  |   2.553194   .3408718     7.49   0.000     1.885098    3.221291
+        9 0  |   9.552092   1.848079     5.17   0.000     5.929923    13.17426
+        9 1  |   2.313041   .4023891     5.75   0.000     1.524373    3.101709
+------------------------------------------------------------------------------
+
+. marginsplot, title("Baseline Model (M1)") ytitle(Number of Supervisees) xtitle(High School GPA) ///     
+>         plot1opts(msymbol(circle) mcolor(gs8) msize(small) lpattern(solid) lcolor(gs8)) ///
+>         ci1opts(lpattern(solid) lcolor(gs8))  ///
+>         plot2opts(msymbol(triangle) mcolor(black) msize(small) lpattern(dash) lcolor(black)) ///
+>         ci2opts(lpattern(dash) lcolor(black)) ///
+>         graphregion(color(white)) ///
+>         ylabel(0(2)14, grid labsize(vsmall)) legend(order(1 "Men" 2 "Women")) ///
+>         xlabel(-2.5 "0.0" -2 "0.5" -1.5 "1.0" -1 "1.5" -0.5 "2.0" 0 "2.5" 0.5 "3.0" 1 "3.5" 1.5 "4.0")
+
+Variables that uniquely identify margins: agpa female
+
+. graph save Graph "s2_m1.gph"
+file s2_m1.gph saved
+
+. restore
+
+. 
+. * Figure 3, M2
+. preserve
+
+. keep if status==2
+(6,106 observations deleted)
+
+. menbreg v2reg_numlead i.female##c.agpa ///      
+>         ib1.mar3 age ib1.pare5 afqt2 afqt3 afqt4 afqtm ib1.esteem5 ib1.eduexp5 health_limit health_limit_m r2 r3 r4 rm
+>  hisp black i.yr ///
+>         stugov stugov_m ///
+>         || caseid_1979:, pweight(weight)
+
+Fitting fixed-effects model:
+
+Iteration 0:  Log likelihood =  -80425588  
+Iteration 1:  Log likelihood =  -61816454  
+Iteration 2:  Log likelihood =  -60190080  
+Iteration 3:  Log likelihood =  -60027967  
+Iteration 4:  Log likelihood =  -60027190  
+Iteration 5:  Log likelihood =  -60027190  
+
+Refining starting values:
+
+Grid node 0:  Log likelihood =  -59743161
+
+Fitting full model:
+
+Iteration 0:  Log pseudolikelihood =  -59743161  
+Iteration 1:  Log pseudolikelihood =  -58753734  
+Iteration 2:  Log pseudolikelihood =  -58440226  
+Iteration 3:  Log pseudolikelihood =  -58367145  
+Iteration 4:  Log pseudolikelihood =  -58366525  
+Iteration 5:  Log pseudolikelihood =  -58366519  
+Iteration 6:  Log pseudolikelihood =  -58366518  
+Iteration 7:  Log pseudolikelihood =  -58366518  
+Iteration 8:  Log pseudolikelihood =  -58366518  
+
+Mixed-effects nbinomial regression              Number of obs     =      9,035
+Overdispersion: mean
+Group variable: caseid_1979                     Number of groups  =      3,425
+
+                                                Obs per group:
+                                                              min =          1
+                                                              avg =        2.6
+                                                              max =          4
+
+Integration method: mvaghermite                 Integration pts.  =          7
+
+                                                Wald chi2(34)     =     277.74
+Log pseudolikelihood = -58366518                Prob > chi2       =     0.0000
+                          (Std. err. adjusted for 3,425 clusters in caseid_1979)
+--------------------------------------------------------------------------------
+               |               Robust
+ v2reg_numlead | Coefficient  std. err.      z    P>|z|     [95% conf. interval]
+---------------+----------------------------------------------------------------
+               |
+      1.female |  -.9869719    .099713    -9.90   0.000    -1.182406   -.7915381
+          agpa |   .0793826   .0954632     0.83   0.406    -.1077219    .2664871
+               |
+ female#c.agpa |
+            1  |  -.2921032   .1206269    -2.42   0.015    -.5285276   -.0556788
+               |
+          mar3 |
+    never mar  |  -.3103236   .1699929    -1.83   0.068    -.6435036    .0228565
+      pre mar  |   .1334525   .1100982     1.21   0.225    -.0823361    .3492411
+               |
+           age |    .015411   .0221306     0.70   0.486    -.0279642    .0587863
+               |
+         pare5 |
+            2  |   .0522056   .1345267     0.39   0.698    -.2114619    .3158732
+            3  |    .107242   .1510235     0.71   0.478    -.1887587    .4032426
+            5  |  -.9001875   .4228754    -2.13   0.033    -1.729008    -.071367
+               |
+         afqt2 |   .3018196   .1454333     2.08   0.038     .0167755    .5868637
+         afqt3 |   .2965782   .1654825     1.79   0.073    -.0277615     .620918
+         afqt4 |   .5230795   .1947383     2.69   0.007     .1413995    .9047595
+         afqtm |   .2499388   .2762259     0.90   0.366    -.2914539    .7913316
+               |
+       esteem5 |
+            2  |   .3314824   .1319842     2.51   0.012     .0727982    .5901666
+            3  |   .3970135    .142224     2.79   0.005     .1182596    .6757674
+            4  |   .4480862   .1368049     3.28   0.001     .1799535    .7162189
+            5  |   .1489112   .3329311     0.45   0.655    -.5036217    .8014441
+               |
+       eduexp5 |
+            2  |   .1711945   .1393401     1.23   0.219    -.1019071    .4442962
+            3  |   .4690099   .1261431     3.72   0.000     .2217739    .7162459
+            4  |    .306834   .1726702     1.78   0.076    -.0315932    .6452613
+            5  |  -.5807308    1.07159    -0.54   0.588    -2.681009    1.519548
+               |
+  health_limit |   .0563664   .1862792     0.30   0.762    -.3087341    .4214669
+health_limit_m |    .286034   .2730309     1.05   0.295    -.2490967    .8211647
+            r2 |  -.3120728   .1434678    -2.18   0.030    -.5932646    -.030881
+            r3 |  -.1444298   .1402762    -1.03   0.303    -.4193661    .1305064
+            r4 |  -.1854476   .1649799    -1.12   0.261    -.5088022     .137907
+            rm |  -.2232993   .4602348    -0.49   0.628    -1.125343    .6787444
+          hisp |  -.0116854   .1468775    -0.08   0.937      -.29956    .2761893
+         black |  -.2929969   .1397799    -2.10   0.036    -.5669605   -.0190333
+               |
+            yr |
+         1989  |  -.1088448   .0767881    -1.42   0.156    -.2593468    .0416572
+         1996  |  -.1637568   .1871812    -0.87   0.382    -.5306253    .2031116
+         1998  |  -.1542678   .2262678    -0.68   0.495    -.5977446     .289209
+               |
+        stugov |   .2704895   .1238656     2.18   0.029     .0277173    .5132617
+      stugov_m |  -.0521385   .3395673    -0.15   0.878    -.7176782    .6134012
+         _cons |  -.4882124   .6245729    -0.78   0.434    -1.712353     .735928
+---------------+----------------------------------------------------------------
+      /lnalpha |   .7994987   .0605856                      .6807531    .9182443
+---------------+----------------------------------------------------------------
+caseid_1979    |
+     var(_cons)|   3.248381    .211961                      2.858413    3.691551
+--------------------------------------------------------------------------------
+
+. margins female, at(agpa=(-2.5(0.5)1.5) ///
+>                0.mar3          =    .2675928 ///
+>                1.mar3          =    .6082765 ///
+>                2.mar3          =    .1241307 ///
+>                age             =    31.78071 ///
+>                1.pare5         =    .1620859 ///
+>                2.pare5         =    .4434084 ///
+>                3.pare5         =    .3841942 ///
+>                5.pare5         =    .0103115 ///
+>                afqt2           =    .2345544 ///
+>                afqt3           =    .2383069 ///
+>                afqt4           =    .2463416 ///
+>                afqtm           =    .0301785 ///
+>                1.esteem5       =    .3069638 ///
+>                2.esteem5       =     .236849 ///
+>                3.esteem5       =    .2099753 ///
+>                4.esteem5       =    .2201273 ///
+>                5.esteem5       =    .0260845 ///
+>                1.eduexp5       =    .3403827 ///
+>                2.eduexp5       =    .1951071 ///
+>                3.eduexp5       =    .3225148 ///
+>                4.eduexp5       =    .1385753 ///
+>                5.eduexp5       =    .0034202 ///
+>                health_limit    =    .0375324 ///
+>                health_limit_m  =    .0120016 ///
+>                r2              =    .3053414 ///
+>                r3              =      .34044 ///
+>                r4              =    .1637631 ///
+>                rm              =    .0044751 ///
+>                hisp            =    .0437022 ///
+>                black           =    .1222089 ///
+>                1988.yr         =    .2504624 ///
+>                1989.yr         =    .2541481 ///
+>                1996.yr         =    .2500164 ///
+>                1998.yr         =    .2453731) atmeans
+
+Adjusted predictions                                     Number of obs = 9,035
+Model VCE: Robust
+
+Expression: Marginal predicted mean, predict()
+1._at: 0.female       = .4769959 (mean)
+       1.female       = .5230041 (mean)
+       agpa           =     -2.5
+       0.mar3         = .2675928
+       1.mar3         = .6082765
+       2.mar3         = .1241307
+       age            = 31.78071
+       1.pare5        = .1620859
+       2.pare5        = .4434084
+       3.pare5        = .3841942
+       5.pare5        = .0103115
+       afqt2          = .2345544
+       afqt3          = .2383069
+       afqt4          = .2463416
+       afqtm          = .0301785
+       1.esteem5      = .3069638
+       2.esteem5      =  .236849
+       3.esteem5      = .2099753
+       4.esteem5      = .2201273
+       5.esteem5      = .0260845
+       1.eduexp5      = .3403827
+       2.eduexp5      = .1951071
+       3.eduexp5      = .3225148
+       4.eduexp5      = .1385753
+       5.eduexp5      = .0034202
+       health_limit   = .0375324
+       health_limit_m = .0120016
+       r2             = .3053414
+       r3             =   .34044
+       r4             = .1637631
+       rm             = .0044751
+       hisp           = .0437022
+       black          = .1222089
+       1988.yr        = .2504624
+       1989.yr        = .2541481
+       1996.yr        = .2500164
+       1998.yr        = .2453731
+       stugov         = .1608032 (mean)
+       stugov_m       =  .022211 (mean)
+2._at: 0.female       = .4769959 (mean)
+       1.female       = .5230041 (mean)
+       agpa           =       -2
+       0.mar3         = .2675928
+       1.mar3         = .6082765
+       2.mar3         = .1241307
+       age            = 31.78071
+       1.pare5        = .1620859
+       2.pare5        = .4434084
+       3.pare5        = .3841942
+       5.pare5        = .0103115
+       afqt2          = .2345544
+       afqt3          = .2383069
+       afqt4          = .2463416
+       afqtm          = .0301785
+       1.esteem5      = .3069638
+       2.esteem5      =  .236849
+       3.esteem5      = .2099753
+       4.esteem5      = .2201273
+       5.esteem5      = .0260845
+       1.eduexp5      = .3403827
+       2.eduexp5      = .1951071
+       3.eduexp5      = .3225148
+       4.eduexp5      = .1385753
+       5.eduexp5      = .0034202
+       health_limit   = .0375324
+       health_limit_m = .0120016
+       r2             = .3053414
+       r3             =   .34044
+       r4             = .1637631
+       rm             = .0044751
+       hisp           = .0437022
+       black          = .1222089
+       1988.yr        = .2504624
+       1989.yr        = .2541481
+       1996.yr        = .2500164
+       1998.yr        = .2453731
+       stugov         = .1608032 (mean)
+       stugov_m       =  .022211 (mean)
+3._at: 0.female       = .4769959 (mean)
+       1.female       = .5230041 (mean)
+       agpa           =     -1.5
+       0.mar3         = .2675928
+       1.mar3         = .6082765
+       2.mar3         = .1241307
+       age            = 31.78071
+       1.pare5        = .1620859
+       2.pare5        = .4434084
+       3.pare5        = .3841942
+       5.pare5        = .0103115
+       afqt2          = .2345544
+       afqt3          = .2383069
+       afqt4          = .2463416
+       afqtm          = .0301785
+       1.esteem5      = .3069638
+       2.esteem5      =  .236849
+       3.esteem5      = .2099753
+       4.esteem5      = .2201273
+       5.esteem5      = .0260845
+       1.eduexp5      = .3403827
+       2.eduexp5      = .1951071
+       3.eduexp5      = .3225148
+       4.eduexp5      = .1385753
+       5.eduexp5      = .0034202
+       health_limit   = .0375324
+       health_limit_m = .0120016
+       r2             = .3053414
+       r3             =   .34044
+       r4             = .1637631
+       rm             = .0044751
+       hisp           = .0437022
+       black          = .1222089
+       1988.yr        = .2504624
+       1989.yr        = .2541481
+       1996.yr        = .2500164
+       1998.yr        = .2453731
+       stugov         = .1608032 (mean)
+       stugov_m       =  .022211 (mean)
+4._at: 0.female       = .4769959 (mean)
+       1.female       = .5230041 (mean)
+       agpa           =       -1
+       0.mar3         = .2675928
+       1.mar3         = .6082765
+       2.mar3         = .1241307
+       age            = 31.78071
+       1.pare5        = .1620859
+       2.pare5        = .4434084
+       3.pare5        = .3841942
+       5.pare5        = .0103115
+       afqt2          = .2345544
+       afqt3          = .2383069
+       afqt4          = .2463416
+       afqtm          = .0301785
+       1.esteem5      = .3069638
+       2.esteem5      =  .236849
+       3.esteem5      = .2099753
+       4.esteem5      = .2201273
+       5.esteem5      = .0260845
+       1.eduexp5      = .3403827
+       2.eduexp5      = .1951071
+       3.eduexp5      = .3225148
+       4.eduexp5      = .1385753
+       5.eduexp5      = .0034202
+       health_limit   = .0375324
+       health_limit_m = .0120016
+       r2             = .3053414
+       r3             =   .34044
+       r4             = .1637631
+       rm             = .0044751
+       hisp           = .0437022
+       black          = .1222089
+       1988.yr        = .2504624
+       1989.yr        = .2541481
+       1996.yr        = .2500164
+       1998.yr        = .2453731
+       stugov         = .1608032 (mean)
+       stugov_m       =  .022211 (mean)
+5._at: 0.female       = .4769959 (mean)
+       1.female       = .5230041 (mean)
+       agpa           =      -.5
+       0.mar3         = .2675928
+       1.mar3         = .6082765
+       2.mar3         = .1241307
+       age            = 31.78071
+       1.pare5        = .1620859
+       2.pare5        = .4434084
+       3.pare5        = .3841942
+       5.pare5        = .0103115
+       afqt2          = .2345544
+       afqt3          = .2383069
+       afqt4          = .2463416
+       afqtm          = .0301785
+       1.esteem5      = .3069638
+       2.esteem5      =  .236849
+       3.esteem5      = .2099753
+       4.esteem5      = .2201273
+       5.esteem5      = .0260845
+       1.eduexp5      = .3403827
+       2.eduexp5      = .1951071
+       3.eduexp5      = .3225148
+       4.eduexp5      = .1385753
+       5.eduexp5      = .0034202
+       health_limit   = .0375324
+       health_limit_m = .0120016
+       r2             = .3053414
+       r3             =   .34044
+       r4             = .1637631
+       rm             = .0044751
+       hisp           = .0437022
+       black          = .1222089
+       1988.yr        = .2504624
+       1989.yr        = .2541481
+       1996.yr        = .2500164
+       1998.yr        = .2453731
+       stugov         = .1608032 (mean)
+       stugov_m       =  .022211 (mean)
+6._at: 0.female       = .4769959 (mean)
+       1.female       = .5230041 (mean)
+       agpa           =        0
+       0.mar3         = .2675928
+       1.mar3         = .6082765
+       2.mar3         = .1241307
+       age            = 31.78071
+       1.pare5        = .1620859
+       2.pare5        = .4434084
+       3.pare5        = .3841942
+       5.pare5        = .0103115
+       afqt2          = .2345544
+       afqt3          = .2383069
+       afqt4          = .2463416
+       afqtm          = .0301785
+       1.esteem5      = .3069638
+       2.esteem5      =  .236849
+       3.esteem5      = .2099753
+       4.esteem5      = .2201273
+       5.esteem5      = .0260845
+       1.eduexp5      = .3403827
+       2.eduexp5      = .1951071
+       3.eduexp5      = .3225148
+       4.eduexp5      = .1385753
+       5.eduexp5      = .0034202
+       health_limit   = .0375324
+       health_limit_m = .0120016
+       r2             = .3053414
+       r3             =   .34044
+       r4             = .1637631
+       rm             = .0044751
+       hisp           = .0437022
+       black          = .1222089
+       1988.yr        = .2504624
+       1989.yr        = .2541481
+       1996.yr        = .2500164
+       1998.yr        = .2453731
+       stugov         = .1608032 (mean)
+       stugov_m       =  .022211 (mean)
+7._at: 0.female       = .4769959 (mean)
+       1.female       = .5230041 (mean)
+       agpa           =       .5
+       0.mar3         = .2675928
+       1.mar3         = .6082765
+       2.mar3         = .1241307
+       age            = 31.78071
+       1.pare5        = .1620859
+       2.pare5        = .4434084
+       3.pare5        = .3841942
+       5.pare5        = .0103115
+       afqt2          = .2345544
+       afqt3          = .2383069
+       afqt4          = .2463416
+       afqtm          = .0301785
+       1.esteem5      = .3069638
+       2.esteem5      =  .236849
+       3.esteem5      = .2099753
+       4.esteem5      = .2201273
+       5.esteem5      = .0260845
+       1.eduexp5      = .3403827
+       2.eduexp5      = .1951071
+       3.eduexp5      = .3225148
+       4.eduexp5      = .1385753
+       5.eduexp5      = .0034202
+       health_limit   = .0375324
+       health_limit_m = .0120016
+       r2             = .3053414
+       r3             =   .34044
+       r4             = .1637631
+       rm             = .0044751
+       hisp           = .0437022
+       black          = .1222089
+       1988.yr        = .2504624
+       1989.yr        = .2541481
+       1996.yr        = .2500164
+       1998.yr        = .2453731
+       stugov         = .1608032 (mean)
+       stugov_m       =  .022211 (mean)
+8._at: 0.female       = .4769959 (mean)
+       1.female       = .5230041 (mean)
+       agpa           =        1
+       0.mar3         = .2675928
+       1.mar3         = .6082765
+       2.mar3         = .1241307
+       age            = 31.78071
+       1.pare5        = .1620859
+       2.pare5        = .4434084
+       3.pare5        = .3841942
+       5.pare5        = .0103115
+       afqt2          = .2345544
+       afqt3          = .2383069
+       afqt4          = .2463416
+       afqtm          = .0301785
+       1.esteem5      = .3069638
+       2.esteem5      =  .236849
+       3.esteem5      = .2099753
+       4.esteem5      = .2201273
+       5.esteem5      = .0260845
+       1.eduexp5      = .3403827
+       2.eduexp5      = .1951071
+       3.eduexp5      = .3225148
+       4.eduexp5      = .1385753
+       5.eduexp5      = .0034202
+       health_limit   = .0375324
+       health_limit_m = .0120016
+       r2             = .3053414
+       r3             =   .34044
+       r4             = .1637631
+       rm             = .0044751
+       hisp           = .0437022
+       black          = .1222089
+       1988.yr        = .2504624
+       1989.yr        = .2541481
+       1996.yr        = .2500164
+       1998.yr        = .2453731
+       stugov         = .1608032 (mean)
+       stugov_m       =  .022211 (mean)
+9._at: 0.female       = .4769959 (mean)
+       1.female       = .5230041 (mean)
+       agpa           =      1.5
+       0.mar3         = .2675928
+       1.mar3         = .6082765
+       2.mar3         = .1241307
+       age            = 31.78071
+       1.pare5        = .1620859
+       2.pare5        = .4434084
+       3.pare5        = .3841942
+       5.pare5        = .0103115
+       afqt2          = .2345544
+       afqt3          = .2383069
+       afqt4          = .2463416
+       afqtm          = .0301785
+       1.esteem5      = .3069638
+       2.esteem5      =  .236849
+       3.esteem5      = .2099753
+       4.esteem5      = .2201273
+       5.esteem5      = .0260845
+       1.eduexp5      = .3403827
+       2.eduexp5      = .1951071
+       3.eduexp5      = .3225148
+       4.eduexp5      = .1385753
+       5.eduexp5      = .0034202
+       health_limit   = .0375324
+       health_limit_m = .0120016
+       r2             = .3053414
+       r3             =   .34044
+       r4             = .1637631
+       rm             = .0044751
+       hisp           = .0437022
+       black          = .1222089
+       1988.yr        = .2504624
+       1989.yr        = .2541481
+       1996.yr        = .2500164
+       1998.yr        = .2453731
+       stugov         = .1608032 (mean)
+       stugov_m       =  .022211 (mean)
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+  _at#female |
+        1 0  |    6.77089   1.578972     4.29   0.000     3.676162    9.865619
+        1 1  |    5.23789   1.436533     3.65   0.000     2.422337    8.053443
+        2 0  |    7.04504    1.34325     5.24   0.000     4.412319    9.677762
+        2 1  |    4.70939    1.06888     4.41   0.000     2.614423    6.804357
+        3 0  |   7.330291   1.108824     6.61   0.000     5.157036    9.503546
+        3 1  |   4.234216   .7690423     5.51   0.000      2.72692    5.741511
+        4 0  |   7.627091   .9013498     8.46   0.000     5.860477    9.393704
+        4 1  |   3.806986   .5334914     7.14   0.000     2.761362     4.85261
+        5 0  |   7.935908   .7778407    10.20   0.000     6.411368    9.460447
+        5 1  |   3.422863   .3664877     9.34   0.000     2.704561    4.141166
+        6 0  |   8.257229   .8176211    10.10   0.000     6.654721    9.859737
+        6 1  |   3.077499   .2831773    10.87   0.000     2.522481    3.632516
+        7 0  |    8.59156   1.036666     8.29   0.000     6.559732    10.62339
+        7 1  |   2.766981   .2854958     9.69   0.000      2.20742    3.326542
+        8 0  |   8.939428   1.381135     6.47   0.000     6.232453     11.6464
+        8 1  |   2.487794   .3337877     7.45   0.000     1.833583    3.142006
+        9 0  |   9.301381   1.806901     5.15   0.000     5.759919    12.84284
+        9 1  |   2.236777   .3908519     5.72   0.000     1.470722    3.002833
+------------------------------------------------------------------------------
+
+. marginsplot, title("M2 (M1 + Leadership in high school)") ytitle(Number of Supervisees) xtitle(High School GPA) ///   
+>   
+>         plot1opts(msymbol(circle) mcolor(gs8) msize(small) lpattern(solid) lcolor(gs8)) ///
+>         ci1opts(lpattern(solid) lcolor(gs8))  ///
+>         plot2opts(msymbol(triangle) mcolor(black) msize(small) lpattern(dash) lcolor(black)) ///
+>         ci2opts(lpattern(dash) lcolor(black)) ///
+>         graphregion(color(white)) ///
+>         ylabel(0(2)14, grid labsize(vsmall)) legend(order(1 "Men" 2 "Women")) ///
+>         xlabel(-2.5 "0.0" -2 "0.5" -1.5 "1.0" -1 "1.5" -0.5 "2.0" 0 "2.5" 0.5 "3.0" 1 "3.5" 1.5 "4.0")
+
+Variables that uniquely identify margins: agpa female
+
+. graph save Graph "s2_m2.gph"
+file s2_m2.gph saved
+
+. restore
+
+. 
+. * Figure 3, M3
+. preserve
+
+. keep if status==2
+(6,106 observations deleted)
+
+. menbreg v2reg_numlead i.female##c.agpa ///      
+>         ib1.mar3 age ib1.pare5 afqt2 afqt3 afqt4 afqtm ib1.esteem5 ib1.eduexp5 health_limit health_limit_m r2 r3 r4 rm
+>  hisp black i.yr ///
+>         stugov stugov_m ///
+>         i.female##i.e3 ///
+>         || caseid_1979:, pweight(weight)
+
+Fitting fixed-effects model:
+
+Iteration 0:  Log likelihood =  -80385852  
+Iteration 1:  Log likelihood =  -61799216  
+Iteration 2:  Log likelihood =  -60177407  
+Iteration 3:  Log likelihood =  -60016907  
+Iteration 4:  Log likelihood =  -60016199  
+Iteration 5:  Log likelihood =  -60016199  
+
+Refining starting values:
+
+Grid node 0:  Log likelihood =  -59737065
+
+Fitting full model:
+
+Iteration 0:  Log pseudolikelihood =  -59737065  
+Iteration 1:  Log pseudolikelihood =  -58855763  
+Iteration 2:  Log pseudolikelihood =  -58458230  
+Iteration 3:  Log pseudolikelihood =  -58344939  
+Iteration 4:  Log pseudolikelihood =  -58343960  
+Iteration 5:  Log pseudolikelihood =  -58343960  
+Iteration 6:  Log pseudolikelihood =  -58343960  
+Iteration 7:  Log pseudolikelihood =  -58343960  
+
+Mixed-effects nbinomial regression              Number of obs     =      9,035
+Overdispersion: mean
+Group variable: caseid_1979                     Number of groups  =      3,425
+
+                                                Obs per group:
+                                                              min =          1
+                                                              avg =        2.6
+                                                              max =          4
+
+Integration method: mvaghermite                 Integration pts.  =          7
+
+                                                Wald chi2(38)     =     302.75
+Log pseudolikelihood = -58343960                Prob > chi2       =     0.0000
+                          (Std. err. adjusted for 3,425 clusters in caseid_1979)
+--------------------------------------------------------------------------------
+               |               Robust
+ v2reg_numlead | Coefficient  std. err.      z    P>|z|     [95% conf. interval]
+---------------+----------------------------------------------------------------
+               |
+      1.female |   -.722159   .1574069    -4.59   0.000    -1.030671   -.4136472
+          agpa |  -.0455694   .1030412    -0.44   0.658    -.2475264    .1563877
+               |
+ female#c.agpa |
+            1  |  -.1050135   .1380985    -0.76   0.447    -.3756817    .1656546
+               |
+          mar3 |
+    never mar  |  -.2915303   .1706002    -1.71   0.087    -.6259005    .0428399
+      pre mar  |   .1292414   .1100946     1.17   0.240    -.0865401    .3450229
+               |
+           age |    .016488   .0220453     0.75   0.455      -.02672    .0596959
+               |
+         pare5 |
+            2  |   .0559775   .1344896     0.42   0.677    -.2076172    .3195722
+            3  |   .0864208   .1523787     0.57   0.571     -.212236    .3850775
+            5  |  -.8636159   .4319262    -2.00   0.046    -1.710176   -.0170561
+               |
+         afqt2 |   .2908821   .1451909     2.00   0.045     .0063132     .575451
+         afqt3 |   .2798037   .1661606     1.68   0.092    -.0458651    .6054725
+         afqt4 |   .4819952   .1970464     2.45   0.014     .0957915     .868199
+         afqtm |   .2492772   .2787139     0.89   0.371    -.2969921    .7955464
+               |
+       esteem5 |
+            2  |   .3361876   .1320519     2.55   0.011     .0773707    .5950045
+            3  |   .3845693   .1422481     2.70   0.007     .1057681    .6633706
+            4  |   .4422654   .1366872     3.24   0.001     .1743633    .7101675
+            5  |   .1405221   .3358752     0.42   0.676    -.5177813    .7988255
+               |
+       eduexp5 |
+            2  |   .1023965   .1448793     0.71   0.480    -.1815617    .3863547
+            3  |   .3647379   .1403281     2.60   0.009        .0897    .6397758
+            4  |   .1736086   .1859055     0.93   0.350    -.1907595    .5379767
+            5  |   -.579185    1.07743    -0.54   0.591     -2.69091     1.53254
+               |
+  health_limit |   .0534405   .1851854     0.29   0.773    -.3095162    .4163971
+health_limit_m |   .2910296   .2710123     1.07   0.283    -.2401448     .822204
+            r2 |  -.3045312   .1427585    -2.13   0.033    -.5843328   -.0247296
+            r3 |  -.1460064   .1397318    -1.04   0.296    -.4198758    .1278629
+            r4 |  -.1804489   .1645392    -1.10   0.273    -.5029398     .142042
+            rm |  -.2320057   .4615447    -0.50   0.615    -1.136617    .6726053
+          hisp |  -.0062192   .1469743    -0.04   0.966    -.2942835    .2818451
+         black |  -.3064065   .1406632    -2.18   0.029    -.5821012   -.0307118
+               |
+            yr |
+         1989  |  -.1094534   .0767759    -1.43   0.154    -.2599315    .0410247
+         1996  |  -.1809748   .1870468    -0.97   0.333    -.5475798    .1856302
+         1998  |  -.1722835    .225575    -0.76   0.445    -.6144024    .2698354
+               |
+        stugov |   .2570615   .1238619     2.08   0.038     .0142967    .4998264
+      stugov_m |  -.0276919   .3421035    -0.08   0.935    -.6982025    .6428187
+               |
+            e3 |
+            2  |   .2803843   .1848067     1.52   0.129    -.0818302    .6425987
+            3  |   .5771427   .2031164     2.84   0.004     .1790419    .9752436
+               |
+     female#e3 |
+          1 2  |  -.2207235    .232614    -0.95   0.343    -.6766386    .2351916
+          1 3  |  -.6931185   .2567658    -2.70   0.007     -1.19637   -.1898667
+               |
+         _cons |   -.678747   .6257944    -1.08   0.278    -1.905281    .5477874
+---------------+----------------------------------------------------------------
+      /lnalpha |   .7991635   .0604582                      .6806676    .9176593
+---------------+----------------------------------------------------------------
+caseid_1979    |
+     var(_cons)|   3.229431   .2106855                      2.841806     3.66993
+--------------------------------------------------------------------------------
+
+. margins female, at(agpa=(-2.5(0.5)1.5) ///
+>                0.mar3          =    .2675928 ///
+>                1.mar3          =    .6082765 ///
+>                2.mar3          =    .1241307 ///
+>                age             =    31.78071 ///
+>                1.pare5         =    .1620859 ///
+>                2.pare5         =    .4434084 ///
+>                3.pare5         =    .3841942 ///
+>                5.pare5         =    .0103115 ///
+>                afqt2           =    .2345544 ///
+>                afqt3           =    .2383069 ///
+>                afqt4           =    .2463416 ///
+>                afqtm           =    .0301785 ///
+>                1.esteem5       =    .3069638 ///
+>                2.esteem5       =     .236849 ///
+>                3.esteem5       =    .2099753 ///
+>                4.esteem5       =    .2201273 ///
+>                5.esteem5       =    .0260845 ///
+>                1.eduexp5       =    .3403827 ///
+>                2.eduexp5       =    .1951071 ///
+>                3.eduexp5       =    .3225148 ///
+>                4.eduexp5       =    .1385753 ///
+>                5.eduexp5       =    .0034202 ///
+>                health_limit    =    .0375324 ///
+>                health_limit_m  =    .0120016 ///
+>                r2              =    .3053414 ///
+>                r3              =      .34044 ///
+>                r4              =    .1637631 ///
+>                rm              =    .0044751 ///
+>                hisp            =    .0437022 ///
+>                black           =    .1222089 ///
+>                1988.yr         =    .2504624 ///
+>                1989.yr         =    .2541481 ///
+>                1996.yr         =    .2500164 ///
+>                1998.yr         =    .2453731) atmeans post
+
+Adjusted predictions                                     Number of obs = 9,035
+Model VCE: Robust
+
+Expression: Marginal predicted mean, predict()
+1._at: 0.female       = .4769959 (mean)
+       1.female       = .5230041 (mean)
+       agpa           =     -2.5
+       0.mar3         = .2675928
+       1.mar3         = .6082765
+       2.mar3         = .1241307
+       age            = 31.78071
+       1.pare5        = .1620859
+       2.pare5        = .4434084
+       3.pare5        = .3841942
+       5.pare5        = .0103115
+       afqt2          = .2345544
+       afqt3          = .2383069
+       afqt4          = .2463416
+       afqtm          = .0301785
+       1.esteem5      = .3069638
+       2.esteem5      =  .236849
+       3.esteem5      = .2099753
+       4.esteem5      = .2201273
+       5.esteem5      = .0260845
+       1.eduexp5      = .3403827
+       2.eduexp5      = .1951071
+       3.eduexp5      = .3225148
+       4.eduexp5      = .1385753
+       5.eduexp5      = .0034202
+       health_limit   = .0375324
+       health_limit_m = .0120016
+       r2             = .3053414
+       r3             =   .34044
+       r4             = .1637631
+       rm             = .0044751
+       hisp           = .0437022
+       black          = .1222089
+       1988.yr        = .2504624
+       1989.yr        = .2541481
+       1996.yr        = .2500164
+       1998.yr        = .2453731
+       stugov         = .1608032 (mean)
+       stugov_m       =  .022211 (mean)
+       1.e3           = .5115348 (mean)
+       2.e3           = .2481918 (mean)
+       3.e3           = .2402733 (mean)
+2._at: 0.female       = .4769959 (mean)
+       1.female       = .5230041 (mean)
+       agpa           =       -2
+       0.mar3         = .2675928
+       1.mar3         = .6082765
+       2.mar3         = .1241307
+       age            = 31.78071
+       1.pare5        = .1620859
+       2.pare5        = .4434084
+       3.pare5        = .3841942
+       5.pare5        = .0103115
+       afqt2          = .2345544
+       afqt3          = .2383069
+       afqt4          = .2463416
+       afqtm          = .0301785
+       1.esteem5      = .3069638
+       2.esteem5      =  .236849
+       3.esteem5      = .2099753
+       4.esteem5      = .2201273
+       5.esteem5      = .0260845
+       1.eduexp5      = .3403827
+       2.eduexp5      = .1951071
+       3.eduexp5      = .3225148
+       4.eduexp5      = .1385753
+       5.eduexp5      = .0034202
+       health_limit   = .0375324
+       health_limit_m = .0120016
+       r2             = .3053414
+       r3             =   .34044
+       r4             = .1637631
+       rm             = .0044751
+       hisp           = .0437022
+       black          = .1222089
+       1988.yr        = .2504624
+       1989.yr        = .2541481
+       1996.yr        = .2500164
+       1998.yr        = .2453731
+       stugov         = .1608032 (mean)
+       stugov_m       =  .022211 (mean)
+       1.e3           = .5115348 (mean)
+       2.e3           = .2481918 (mean)
+       3.e3           = .2402733 (mean)
+3._at: 0.female       = .4769959 (mean)
+       1.female       = .5230041 (mean)
+       agpa           =     -1.5
+       0.mar3         = .2675928
+       1.mar3         = .6082765
+       2.mar3         = .1241307
+       age            = 31.78071
+       1.pare5        = .1620859
+       2.pare5        = .4434084
+       3.pare5        = .3841942
+       5.pare5        = .0103115
+       afqt2          = .2345544
+       afqt3          = .2383069
+       afqt4          = .2463416
+       afqtm          = .0301785
+       1.esteem5      = .3069638
+       2.esteem5      =  .236849
+       3.esteem5      = .2099753
+       4.esteem5      = .2201273
+       5.esteem5      = .0260845
+       1.eduexp5      = .3403827
+       2.eduexp5      = .1951071
+       3.eduexp5      = .3225148
+       4.eduexp5      = .1385753
+       5.eduexp5      = .0034202
+       health_limit   = .0375324
+       health_limit_m = .0120016
+       r2             = .3053414
+       r3             =   .34044
+       r4             = .1637631
+       rm             = .0044751
+       hisp           = .0437022
+       black          = .1222089
+       1988.yr        = .2504624
+       1989.yr        = .2541481
+       1996.yr        = .2500164
+       1998.yr        = .2453731
+       stugov         = .1608032 (mean)
+       stugov_m       =  .022211 (mean)
+       1.e3           = .5115348 (mean)
+       2.e3           = .2481918 (mean)
+       3.e3           = .2402733 (mean)
+4._at: 0.female       = .4769959 (mean)
+       1.female       = .5230041 (mean)
+       agpa           =       -1
+       0.mar3         = .2675928
+       1.mar3         = .6082765
+       2.mar3         = .1241307
+       age            = 31.78071
+       1.pare5        = .1620859
+       2.pare5        = .4434084
+       3.pare5        = .3841942
+       5.pare5        = .0103115
+       afqt2          = .2345544
+       afqt3          = .2383069
+       afqt4          = .2463416
+       afqtm          = .0301785
+       1.esteem5      = .3069638
+       2.esteem5      =  .236849
+       3.esteem5      = .2099753
+       4.esteem5      = .2201273
+       5.esteem5      = .0260845
+       1.eduexp5      = .3403827
+       2.eduexp5      = .1951071
+       3.eduexp5      = .3225148
+       4.eduexp5      = .1385753
+       5.eduexp5      = .0034202
+       health_limit   = .0375324
+       health_limit_m = .0120016
+       r2             = .3053414
+       r3             =   .34044
+       r4             = .1637631
+       rm             = .0044751
+       hisp           = .0437022
+       black          = .1222089
+       1988.yr        = .2504624
+       1989.yr        = .2541481
+       1996.yr        = .2500164
+       1998.yr        = .2453731
+       stugov         = .1608032 (mean)
+       stugov_m       =  .022211 (mean)
+       1.e3           = .5115348 (mean)
+       2.e3           = .2481918 (mean)
+       3.e3           = .2402733 (mean)
+5._at: 0.female       = .4769959 (mean)
+       1.female       = .5230041 (mean)
+       agpa           =      -.5
+       0.mar3         = .2675928
+       1.mar3         = .6082765
+       2.mar3         = .1241307
+       age            = 31.78071
+       1.pare5        = .1620859
+       2.pare5        = .4434084
+       3.pare5        = .3841942
+       5.pare5        = .0103115
+       afqt2          = .2345544
+       afqt3          = .2383069
+       afqt4          = .2463416
+       afqtm          = .0301785
+       1.esteem5      = .3069638
+       2.esteem5      =  .236849
+       3.esteem5      = .2099753
+       4.esteem5      = .2201273
+       5.esteem5      = .0260845
+       1.eduexp5      = .3403827
+       2.eduexp5      = .1951071
+       3.eduexp5      = .3225148
+       4.eduexp5      = .1385753
+       5.eduexp5      = .0034202
+       health_limit   = .0375324
+       health_limit_m = .0120016
+       r2             = .3053414
+       r3             =   .34044
+       r4             = .1637631
+       rm             = .0044751
+       hisp           = .0437022
+       black          = .1222089
+       1988.yr        = .2504624
+       1989.yr        = .2541481
+       1996.yr        = .2500164
+       1998.yr        = .2453731
+       stugov         = .1608032 (mean)
+       stugov_m       =  .022211 (mean)
+       1.e3           = .5115348 (mean)
+       2.e3           = .2481918 (mean)
+       3.e3           = .2402733 (mean)
+6._at: 0.female       = .4769959 (mean)
+       1.female       = .5230041 (mean)
+       agpa           =        0
+       0.mar3         = .2675928
+       1.mar3         = .6082765
+       2.mar3         = .1241307
+       age            = 31.78071
+       1.pare5        = .1620859
+       2.pare5        = .4434084
+       3.pare5        = .3841942
+       5.pare5        = .0103115
+       afqt2          = .2345544
+       afqt3          = .2383069
+       afqt4          = .2463416
+       afqtm          = .0301785
+       1.esteem5      = .3069638
+       2.esteem5      =  .236849
+       3.esteem5      = .2099753
+       4.esteem5      = .2201273
+       5.esteem5      = .0260845
+       1.eduexp5      = .3403827
+       2.eduexp5      = .1951071
+       3.eduexp5      = .3225148
+       4.eduexp5      = .1385753
+       5.eduexp5      = .0034202
+       health_limit   = .0375324
+       health_limit_m = .0120016
+       r2             = .3053414
+       r3             =   .34044
+       r4             = .1637631
+       rm             = .0044751
+       hisp           = .0437022
+       black          = .1222089
+       1988.yr        = .2504624
+       1989.yr        = .2541481
+       1996.yr        = .2500164
+       1998.yr        = .2453731
+       stugov         = .1608032 (mean)
+       stugov_m       =  .022211 (mean)
+       1.e3           = .5115348 (mean)
+       2.e3           = .2481918 (mean)
+       3.e3           = .2402733 (mean)
+7._at: 0.female       = .4769959 (mean)
+       1.female       = .5230041 (mean)
+       agpa           =       .5
+       0.mar3         = .2675928
+       1.mar3         = .6082765
+       2.mar3         = .1241307
+       age            = 31.78071
+       1.pare5        = .1620859
+       2.pare5        = .4434084
+       3.pare5        = .3841942
+       5.pare5        = .0103115
+       afqt2          = .2345544
+       afqt3          = .2383069
+       afqt4          = .2463416
+       afqtm          = .0301785
+       1.esteem5      = .3069638
+       2.esteem5      =  .236849
+       3.esteem5      = .2099753
+       4.esteem5      = .2201273
+       5.esteem5      = .0260845
+       1.eduexp5      = .3403827
+       2.eduexp5      = .1951071
+       3.eduexp5      = .3225148
+       4.eduexp5      = .1385753
+       5.eduexp5      = .0034202
+       health_limit   = .0375324
+       health_limit_m = .0120016
+       r2             = .3053414
+       r3             =   .34044
+       r4             = .1637631
+       rm             = .0044751
+       hisp           = .0437022
+       black          = .1222089
+       1988.yr        = .2504624
+       1989.yr        = .2541481
+       1996.yr        = .2500164
+       1998.yr        = .2453731
+       stugov         = .1608032 (mean)
+       stugov_m       =  .022211 (mean)
+       1.e3           = .5115348 (mean)
+       2.e3           = .2481918 (mean)
+       3.e3           = .2402733 (mean)
+8._at: 0.female       = .4769959 (mean)
+       1.female       = .5230041 (mean)
+       agpa           =        1
+       0.mar3         = .2675928
+       1.mar3         = .6082765
+       2.mar3         = .1241307
+       age            = 31.78071
+       1.pare5        = .1620859
+       2.pare5        = .4434084
+       3.pare5        = .3841942
+       5.pare5        = .0103115
+       afqt2          = .2345544
+       afqt3          = .2383069
+       afqt4          = .2463416
+       afqtm          = .0301785
+       1.esteem5      = .3069638
+       2.esteem5      =  .236849
+       3.esteem5      = .2099753
+       4.esteem5      = .2201273
+       5.esteem5      = .0260845
+       1.eduexp5      = .3403827
+       2.eduexp5      = .1951071
+       3.eduexp5      = .3225148
+       4.eduexp5      = .1385753
+       5.eduexp5      = .0034202
+       health_limit   = .0375324
+       health_limit_m = .0120016
+       r2             = .3053414
+       r3             =   .34044
+       r4             = .1637631
+       rm             = .0044751
+       hisp           = .0437022
+       black          = .1222089
+       1988.yr        = .2504624
+       1989.yr        = .2541481
+       1996.yr        = .2500164
+       1998.yr        = .2453731
+       stugov         = .1608032 (mean)
+       stugov_m       =  .022211 (mean)
+       1.e3           = .5115348 (mean)
+       2.e3           = .2481918 (mean)
+       3.e3           = .2402733 (mean)
+9._at: 0.female       = .4769959 (mean)
+       1.female       = .5230041 (mean)
+       agpa           =      1.5
+       0.mar3         = .2675928
+       1.mar3         = .6082765
+       2.mar3         = .1241307
+       age            = 31.78071
+       1.pare5        = .1620859
+       2.pare5        = .4434084
+       3.pare5        = .3841942
+       5.pare5        = .0103115
+       afqt2          = .2345544
+       afqt3          = .2383069
+       afqt4          = .2463416
+       afqtm          = .0301785
+       1.esteem5      = .3069638
+       2.esteem5      =  .236849
+       3.esteem5      = .2099753
+       4.esteem5      = .2201273
+       5.esteem5      = .0260845
+       1.eduexp5      = .3403827
+       2.eduexp5      = .1951071
+       3.eduexp5      = .3225148
+       4.eduexp5      = .1385753
+       5.eduexp5      = .0034202
+       health_limit   = .0375324
+       health_limit_m = .0120016
+       r2             = .3053414
+       r3             =   .34044
+       r4             = .1637631
+       rm             = .0044751
+       hisp           = .0437022
+       black          = .1222089
+       1988.yr        = .2504624
+       1989.yr        = .2541481
+       1996.yr        = .2500164
+       1998.yr        = .2453731
+       stugov         = .1608032 (mean)
+       stugov_m       =  .022211 (mean)
+       1.e3           = .5115348 (mean)
+       2.e3           = .2481918 (mean)
+       3.e3           = .2402733 (mean)
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+  _at#female |
+        1 0  |   8.770857   2.155995     4.07   0.000     4.545184    12.99653
+        1 1  |   4.439269   1.274149     3.48   0.000     1.941984    6.936554
+        2 0  |   8.573276   1.708984     5.02   0.000     5.223729    11.92282
+        2 1  |   4.117303   .9745439     4.22   0.000     2.207232    6.027374
+        3 0  |   8.380145   1.307844     6.41   0.000     5.816819    10.94347
+        3 1  |   3.818688   .7190794     5.31   0.000     2.409318    5.228057
+        4 0  |   8.191365   .9790372     8.37   0.000     6.272487    10.11024
+        4 1  |    3.54173    .509353     6.95   0.000     2.543417    4.540044
+        5 0  |   8.006837   .7813528    10.25   0.000     6.475414    9.538261
+        5 1  |    3.28486   .3552467     9.25   0.000     2.588589     3.98113
+        6 0  |   7.826467   .7853616     9.97   0.000     6.287186    9.365747
+        6 1  |   3.046619    .280851    10.85   0.000     2.496161    3.597077
+        7 0  |   7.650159   .9653995     7.92   0.000     5.758011    9.542308
+        7 1  |   2.825657   .2975607     9.50   0.000     2.242449    3.408866
+        8 0  |   7.477824    1.23075     6.08   0.000     5.065597     9.89005
+        8 1  |   2.620721   .3656849     7.17   0.000     1.903992    3.337451
+        9 0  |    7.30937   1.525568     4.79   0.000     4.319312    10.29943
+        9 1  |   2.430649   .4458125     5.45   0.000     1.556872    3.304425
+------------------------------------------------------------------------------
+
+. marginsplot, title("M3 (M2 + Educational attainment)") ytitle(Number of Supervisees) xtitle(High School GPA) ///      
+>   
+>         plot1opts(msymbol(circle) mcolor(gs8) msize(small) lpattern(solid) lcolor(gs8)) ///
+>         ci1opts(lpattern(solid) lcolor(gs8))  ///
+>         plot2opts(msymbol(triangle) mcolor(black) msize(small) lpattern(dash) lcolor(black)) ///
+>         ci2opts(lpattern(dash) lcolor(black)) ///
+>         graphregion(color(white)) ///
+>         ylabel(0(2)14, grid labsize(vsmall)) legend(order(1 "Men" 2 "Women")) ///
+>         xlabel(-2.5 "0.0" -2 "0.5" -1.5 "1.0" -1 "1.5" -0.5 "2.0" 0 "2.5" 0.5 "3.0" 1 "3.5" 1.5 "4.0")
+
+Variables that uniquely identify margins: agpa female
+
+. graph save Graph "s2_m3.gph"
+file s2_m3.gph saved
+
+. restore
+
+. 
+. * Figure 3, M4
+. preserve
+
+. keep if status==2
+(6,106 observations deleted)
+
+. menbreg v2reg_numlead i.female##c.agpa ///      
+>         ib1.mar3 age ib1.pare5 afqt2 afqt3 afqt4 afqtm ib1.esteem5 ib1.eduexp5 health_limit health_limit_m r2 r3 r4 rm
+>  hisp black i.yr ///
+>         stugov stugov_m ///
+>         i.female##i.e3 ///
+>         lnfirmsize firm_m government ib12.ind14 ///
+>         reg_hrwkv3 reg_hrwk_m reg_totalwk reg_tenure_yr reg_tenure_wk_m ///
+>         || caseid_1979:, pweight(weight)
+
+Fitting fixed-effects model:
+
+Iteration 0:  Log likelihood =  -73997041  
+Iteration 1:  Log likelihood =  -60344284  
+Iteration 2:  Log likelihood =  -58972089  
+Iteration 3:  Log likelihood =  -58859850  
+Iteration 4:  Log likelihood =  -58859193  
+Iteration 5:  Log likelihood =  -58859193  
+
+Refining starting values:
+
+Grid node 0:  Log likelihood =  -58644226
+
+Fitting full model:
+
+Iteration 0:  Log pseudolikelihood =  -58644226  
+Iteration 1:  Log pseudolikelihood =  -57628912  
+Iteration 2:  Log pseudolikelihood =  -57482257  
+Iteration 3:  Log pseudolikelihood =  -57393599  
+Iteration 4:  Log pseudolikelihood =  -57391494  
+Iteration 5:  Log pseudolikelihood =  -57391496  
+Iteration 6:  Log pseudolikelihood =  -57391496  
+Iteration 7:  Log pseudolikelihood =  -57391496  
+
+Mixed-effects nbinomial regression              Number of obs     =      9,035
+Overdispersion: mean
+Group variable: caseid_1979                     Number of groups  =      3,425
+
+                                                Obs per group:
+                                                              min =          1
+                                                              avg =        2.6
+                                                              max =          4
+
+Integration method: mvaghermite                 Integration pts.  =          7
+
+                                                Wald chi2(59)     =     665.52
+Log pseudolikelihood = -57391496                Prob > chi2       =     0.0000
+                                   (Std. err. adjusted for 3,425 clusters in caseid_1979)
+-----------------------------------------------------------------------------------------
+                        |               Robust
+          v2reg_numlead | Coefficient  std. err.      z    P>|z|     [95% conf. interval]
+------------------------+----------------------------------------------------------------
+                        |
+               1.female |  -.2908032   .1564356    -1.86   0.063    -.5974114     .015805
+                   agpa |  -.1499734   .0982922    -1.53   0.127    -.3426226    .0426759
+                        |
+          female#c.agpa |
+                     1  |  -.0159831    .132218    -0.12   0.904    -.2751257    .2431595
+                        |
+                   mar3 |
+             never mar  |  -.1929751   .1610719    -1.20   0.231    -.5086702    .1227199
+               pre mar  |   .0923209   .1055052     0.88   0.382    -.1144656    .2991073
+                        |
+                    age |  -.0104669   .0220219    -0.48   0.635    -.0536291    .0326953
+                        |
+                  pare5 |
+                     2  |   .0655687   .1290145     0.51   0.611     -.187295    .3184324
+                     3  |    .059362   .1467813     0.40   0.686    -.2283239     .347048
+                     5  |  -.7404816   .4042135    -1.83   0.067    -1.532726    .0517624
+                        |
+                  afqt2 |   .2226039   .1390807     1.60   0.109    -.0499893     .495197
+                  afqt3 |    .202895    .158188     1.28   0.200    -.1071477    .5129377
+                  afqt4 |   .4689262   .1872362     2.50   0.012       .10195    .8359024
+                  afqtm |   .1668335    .247138     0.68   0.500    -.3175481     .651215
+                        |
+                esteem5 |
+                     2  |   .3091253   .1246561     2.48   0.013     .0648038    .5534467
+                     3  |   .3025938   .1361775     2.22   0.026     .0356908    .5694969
+                     4  |   .3523312   .1288655     2.73   0.006     .0997594     .604903
+                     5  |   .1618386   .2971348     0.54   0.586    -.4205349     .744212
+                        |
+                eduexp5 |
+                     2  |    .090649   .1384779     0.65   0.513    -.1807626    .3620606
+                     3  |   .4000783   .1329859     3.01   0.003     .1394308    .6607259
+                     4  |   .2656067   .1781623     1.49   0.136     -.083585    .6147983
+                     5  |  -.3479421   .9218801    -0.38   0.706    -2.154794     1.45891
+                        |
+           health_limit |   .2432088   .1807603     1.35   0.178     -.111075    .5974925
+         health_limit_m |   .5323665   .2929045     1.82   0.069    -.0417157    1.106449
+                     r2 |  -.1837498   .1362761    -1.35   0.178     -.450846    .0833464
+                     r3 |  -.0462522   .1347601    -0.34   0.731    -.3103772    .2178728
+                     r4 |  -.0456948   .1550191    -0.29   0.768    -.3495266    .2581371
+                     rm |   .1088722   .4397995     0.25   0.804    -.7531189    .9708634
+                   hisp |   .0473433   .1419284     0.33   0.739    -.2308314    .3255179
+                  black |  -.2120656   .1376013    -1.54   0.123    -.4817591    .0576279
+                        |
+                     yr |
+                  1989  |  -.1584563   .0770435    -2.06   0.040    -.3094587   -.0074538
+                  1996  |  -.4589519   .1871343    -2.45   0.014    -.8257283   -.0921755
+                  1998  |  -.5224243   .2272073    -2.30   0.021    -.9677424   -.0771063
+                        |
+                 stugov |   .2464926   .1174205     2.10   0.036     .0163527    .4766325
+               stugov_m |  -.0156734   .3121929    -0.05   0.960    -.6275602    .5962134
+                        |
+                     e3 |
+                     2  |   .3485488   .1667481     2.09   0.037     .0217285     .675369
+                     3  |   .6325452   .1962081     3.22   0.001     .2479843    1.017106
+                        |
+              female#e3 |
+                   1 2  |  -.1825004   .2194695    -0.83   0.406    -.6126527    .2476519
+                   1 3  |    -.63166   .2438917    -2.59   0.010    -1.109679   -.1536412
+                        |
+             lnfirmsize |   .0293949   .0194318     1.51   0.130    -.0086907    .0674804
+                 firm_m |  -.2299283   .2221049    -1.04   0.301    -.6652459    .2053893
+             government |  -.4563625   .1399967    -3.26   0.001     -.730751   -.1819741
+                        |
+                  ind14 |
+           Agriculture  |  -.0533597   .2741746    -0.19   0.846    -.5907322    .4840127
+                Mining  |  -1.225765   .7321305    -1.67   0.094    -2.660714    .2091844
+          Construction  |    .087774   .2044862     0.43   0.668    -.3130115    .4885596
+         Manufacturing  |  -.2121776   .1394445    -1.52   0.128    -.4854838    .0611286
+      Public Utilities  |  -.2709437   .1852829    -1.46   0.144    -.6340916    .0922041
+             Wholesale  |  -.1983508   .2391692    -0.83   0.407    -.6671138    .2704121
+                Retail  |   .9784577    .141968     6.89   0.000     .7002055     1.25671
+               Finance  |  -.0688926   .1751581    -0.39   0.694    -.4121962    .2744111
+              Business  |   .1850481   .1708932     1.08   0.279    -.1498963    .5199926
+     Personal Services  |  -.1726109   .3301369    -0.52   0.601    -.8196672    .4744455
+   Recreation Services  |  -.0578903   .3906118    -0.15   0.882    -.8234754    .7076948
+ Public Administration  |  -.0182305   .1894806    -0.10   0.923    -.3896057    .3531447
+               missing  |   -.115836   .6449546    -0.18   0.857    -1.379924    1.148252
+                        |
+             reg_hrwkv3 |   .0553841   .0052563    10.54   0.000     .0450821    .0656862
+             reg_hrwk_m |   .3505844   .2892077     1.21   0.225    -.2162522    .9174211
+            reg_totalwk |   .0424635   .0167025     2.54   0.011     .0097272    .0751998
+          reg_tenure_yr |   .0556911   .0092217     6.04   0.000     .0376169    .0737654
+        reg_tenure_wk_m |   .6575751   .2981868     2.21   0.027     .0731398     1.24201
+                  _cons |  -1.989277   .6224018    -3.20   0.001    -3.209162   -.7693924
+------------------------+----------------------------------------------------------------
+               /lnalpha |   .7166562   .0618323                      .5954671    .8378454
+------------------------+----------------------------------------------------------------
+caseid_1979             |
+              var(_cons)|   2.731889    .187532                      2.387986    3.125318
+-----------------------------------------------------------------------------------------
+
+. margins female, at(agpa=(-2.5(0.5)1.5) ///
+>                0.mar3          =    .2675928 ///
+>                1.mar3          =    .6082765 ///
+>                2.mar3          =    .1241307 ///
+>                age             =    31.78071 ///
+>                1.pare5         =    .1620859 ///
+>                2.pare5         =    .4434084 ///
+>                3.pare5         =    .3841942 ///
+>                5.pare5         =    .0103115 ///
+>                afqt2           =    .2345544 ///
+>                afqt3           =    .2383069 ///
+>                afqt4           =    .2463416 ///
+>                afqtm           =    .0301785 ///
+>                1.esteem5       =    .3069638 ///
+>                2.esteem5       =     .236849 ///
+>                3.esteem5       =    .2099753 ///
+>                4.esteem5       =    .2201273 ///
+>                5.esteem5       =    .0260845 ///
+>                1.eduexp5       =    .3403827 ///
+>                2.eduexp5       =    .1951071 ///
+>                3.eduexp5       =    .3225148 ///
+>                4.eduexp5       =    .1385753 ///
+>                5.eduexp5       =    .0034202 ///
+>                health_limit    =    .0375324 ///
+>                health_limit_m  =    .0120016 ///
+>                r2              =    .3053414 ///
+>                r3              =      .34044 ///
+>                r4              =    .1637631 ///
+>                rm              =    .0044751 ///
+>                hisp            =    .0437022 ///
+>                black           =    .1222089 ///
+>                1988.yr         =    .2504624 ///
+>                1989.yr         =    .2541481 ///
+>                1996.yr         =    .2500164 ///
+>                1998.yr         =    .2453731) atmeans
+
+Adjusted predictions                                     Number of obs = 9,035
+Model VCE: Robust
+
+Expression: Marginal predicted mean, predict()
+1._at: 0.female        = .4769959 (mean)
+       1.female        = .5230041 (mean)
+       agpa            =     -2.5
+       0.mar3          = .2675928
+       1.mar3          = .6082765
+       2.mar3          = .1241307
+       age             = 31.78071
+       1.pare5         = .1620859
+       2.pare5         = .4434084
+       3.pare5         = .3841942
+       5.pare5         = .0103115
+       afqt2           = .2345544
+       afqt3           = .2383069
+       afqt4           = .2463416
+       afqtm           = .0301785
+       1.esteem5       = .3069638
+       2.esteem5       =  .236849
+       3.esteem5       = .2099753
+       4.esteem5       = .2201273
+       5.esteem5       = .0260845
+       1.eduexp5       = .3403827
+       2.eduexp5       = .1951071
+       3.eduexp5       = .3225148
+       4.eduexp5       = .1385753
+       5.eduexp5       = .0034202
+       health_limit    = .0375324
+       health_limit_m  = .0120016
+       r2              = .3053414
+       r3              =   .34044
+       r4              = .1637631
+       rm              = .0044751
+       hisp            = .0437022
+       black           = .1222089
+       1988.yr         = .2504624
+       1989.yr         = .2541481
+       1996.yr         = .2500164
+       1998.yr         = .2453731
+       stugov          = .1608032 (mean)
+       stugov_m        =  .022211 (mean)
+       1.e3            = .5115348 (mean)
+       2.e3            = .2481918 (mean)
+       3.e3            = .2402733 (mean)
+       lnfirmsize      = 3.966828 (mean)
+       firm_m          = .0330447 (mean)
+       government      = .1445701 (mean)
+       1.ind14         = .0131722 (mean)
+       2.ind14         = .0075606 (mean)
+       3.ind14         = .0533668 (mean)
+       4.ind14         = .2111736 (mean)
+       5.ind14         = .0757231 (mean)
+       6.ind14         = .0319339 (mean)
+       7.ind14         = .1478731 (mean)
+       8.ind14         = .0682444 (mean)
+       9.ind14         = .0562784 (mean)
+       10.ind14        = .0244386 (mean)
+       11.ind14        = .0113849 (mean)
+       12.ind14        = .2308929 (mean)
+       13.ind14        = .0640081 (mean)
+       14.ind14        = .0039494 (mean)
+       reg_hrwkv3      =  19.3318 (mean)
+       reg_hrwk_m      = .0195771 (mean)
+       reg_totalwk     = 12.97113 (mean)
+       reg_tenure_yr   =  5.18101 (mean)
+       reg_tenure_wk_m = .0158237 (mean)
+2._at: 0.female        = .4769959 (mean)
+       1.female        = .5230041 (mean)
+       agpa            =       -2
+       0.mar3          = .2675928
+       1.mar3          = .6082765
+       2.mar3          = .1241307
+       age             = 31.78071
+       1.pare5         = .1620859
+       2.pare5         = .4434084
+       3.pare5         = .3841942
+       5.pare5         = .0103115
+       afqt2           = .2345544
+       afqt3           = .2383069
+       afqt4           = .2463416
+       afqtm           = .0301785
+       1.esteem5       = .3069638
+       2.esteem5       =  .236849
+       3.esteem5       = .2099753
+       4.esteem5       = .2201273
+       5.esteem5       = .0260845
+       1.eduexp5       = .3403827
+       2.eduexp5       = .1951071
+       3.eduexp5       = .3225148
+       4.eduexp5       = .1385753
+       5.eduexp5       = .0034202
+       health_limit    = .0375324
+       health_limit_m  = .0120016
+       r2              = .3053414
+       r3              =   .34044
+       r4              = .1637631
+       rm              = .0044751
+       hisp            = .0437022
+       black           = .1222089
+       1988.yr         = .2504624
+       1989.yr         = .2541481
+       1996.yr         = .2500164
+       1998.yr         = .2453731
+       stugov          = .1608032 (mean)
+       stugov_m        =  .022211 (mean)
+       1.e3            = .5115348 (mean)
+       2.e3            = .2481918 (mean)
+       3.e3            = .2402733 (mean)
+       lnfirmsize      = 3.966828 (mean)
+       firm_m          = .0330447 (mean)
+       government      = .1445701 (mean)
+       1.ind14         = .0131722 (mean)
+       2.ind14         = .0075606 (mean)
+       3.ind14         = .0533668 (mean)
+       4.ind14         = .2111736 (mean)
+       5.ind14         = .0757231 (mean)
+       6.ind14         = .0319339 (mean)
+       7.ind14         = .1478731 (mean)
+       8.ind14         = .0682444 (mean)
+       9.ind14         = .0562784 (mean)
+       10.ind14        = .0244386 (mean)
+       11.ind14        = .0113849 (mean)
+       12.ind14        = .2308929 (mean)
+       13.ind14        = .0640081 (mean)
+       14.ind14        = .0039494 (mean)
+       reg_hrwkv3      =  19.3318 (mean)
+       reg_hrwk_m      = .0195771 (mean)
+       reg_totalwk     = 12.97113 (mean)
+       reg_tenure_yr   =  5.18101 (mean)
+       reg_tenure_wk_m = .0158237 (mean)
+3._at: 0.female        = .4769959 (mean)
+       1.female        = .5230041 (mean)
+       agpa            =     -1.5
+       0.mar3          = .2675928
+       1.mar3          = .6082765
+       2.mar3          = .1241307
+       age             = 31.78071
+       1.pare5         = .1620859
+       2.pare5         = .4434084
+       3.pare5         = .3841942
+       5.pare5         = .0103115
+       afqt2           = .2345544
+       afqt3           = .2383069
+       afqt4           = .2463416
+       afqtm           = .0301785
+       1.esteem5       = .3069638
+       2.esteem5       =  .236849
+       3.esteem5       = .2099753
+       4.esteem5       = .2201273
+       5.esteem5       = .0260845
+       1.eduexp5       = .3403827
+       2.eduexp5       = .1951071
+       3.eduexp5       = .3225148
+       4.eduexp5       = .1385753
+       5.eduexp5       = .0034202
+       health_limit    = .0375324
+       health_limit_m  = .0120016
+       r2              = .3053414
+       r3              =   .34044
+       r4              = .1637631
+       rm              = .0044751
+       hisp            = .0437022
+       black           = .1222089
+       1988.yr         = .2504624
+       1989.yr         = .2541481
+       1996.yr         = .2500164
+       1998.yr         = .2453731
+       stugov          = .1608032 (mean)
+       stugov_m        =  .022211 (mean)
+       1.e3            = .5115348 (mean)
+       2.e3            = .2481918 (mean)
+       3.e3            = .2402733 (mean)
+       lnfirmsize      = 3.966828 (mean)
+       firm_m          = .0330447 (mean)
+       government      = .1445701 (mean)
+       1.ind14         = .0131722 (mean)
+       2.ind14         = .0075606 (mean)
+       3.ind14         = .0533668 (mean)
+       4.ind14         = .2111736 (mean)
+       5.ind14         = .0757231 (mean)
+       6.ind14         = .0319339 (mean)
+       7.ind14         = .1478731 (mean)
+       8.ind14         = .0682444 (mean)
+       9.ind14         = .0562784 (mean)
+       10.ind14        = .0244386 (mean)
+       11.ind14        = .0113849 (mean)
+       12.ind14        = .2308929 (mean)
+       13.ind14        = .0640081 (mean)
+       14.ind14        = .0039494 (mean)
+       reg_hrwkv3      =  19.3318 (mean)
+       reg_hrwk_m      = .0195771 (mean)
+       reg_totalwk     = 12.97113 (mean)
+       reg_tenure_yr   =  5.18101 (mean)
+       reg_tenure_wk_m = .0158237 (mean)
+4._at: 0.female        = .4769959 (mean)
+       1.female        = .5230041 (mean)
+       agpa            =       -1
+       0.mar3          = .2675928
+       1.mar3          = .6082765
+       2.mar3          = .1241307
+       age             = 31.78071
+       1.pare5         = .1620859
+       2.pare5         = .4434084
+       3.pare5         = .3841942
+       5.pare5         = .0103115
+       afqt2           = .2345544
+       afqt3           = .2383069
+       afqt4           = .2463416
+       afqtm           = .0301785
+       1.esteem5       = .3069638
+       2.esteem5       =  .236849
+       3.esteem5       = .2099753
+       4.esteem5       = .2201273
+       5.esteem5       = .0260845
+       1.eduexp5       = .3403827
+       2.eduexp5       = .1951071
+       3.eduexp5       = .3225148
+       4.eduexp5       = .1385753
+       5.eduexp5       = .0034202
+       health_limit    = .0375324
+       health_limit_m  = .0120016
+       r2              = .3053414
+       r3              =   .34044
+       r4              = .1637631
+       rm              = .0044751
+       hisp            = .0437022
+       black           = .1222089
+       1988.yr         = .2504624
+       1989.yr         = .2541481
+       1996.yr         = .2500164
+       1998.yr         = .2453731
+       stugov          = .1608032 (mean)
+       stugov_m        =  .022211 (mean)
+       1.e3            = .5115348 (mean)
+       2.e3            = .2481918 (mean)
+       3.e3            = .2402733 (mean)
+       lnfirmsize      = 3.966828 (mean)
+       firm_m          = .0330447 (mean)
+       government      = .1445701 (mean)
+       1.ind14         = .0131722 (mean)
+       2.ind14         = .0075606 (mean)
+       3.ind14         = .0533668 (mean)
+       4.ind14         = .2111736 (mean)
+       5.ind14         = .0757231 (mean)
+       6.ind14         = .0319339 (mean)
+       7.ind14         = .1478731 (mean)
+       8.ind14         = .0682444 (mean)
+       9.ind14         = .0562784 (mean)
+       10.ind14        = .0244386 (mean)
+       11.ind14        = .0113849 (mean)
+       12.ind14        = .2308929 (mean)
+       13.ind14        = .0640081 (mean)
+       14.ind14        = .0039494 (mean)
+       reg_hrwkv3      =  19.3318 (mean)
+       reg_hrwk_m      = .0195771 (mean)
+       reg_totalwk     = 12.97113 (mean)
+       reg_tenure_yr   =  5.18101 (mean)
+       reg_tenure_wk_m = .0158237 (mean)
+5._at: 0.female        = .4769959 (mean)
+       1.female        = .5230041 (mean)
+       agpa            =      -.5
+       0.mar3          = .2675928
+       1.mar3          = .6082765
+       2.mar3          = .1241307
+       age             = 31.78071
+       1.pare5         = .1620859
+       2.pare5         = .4434084
+       3.pare5         = .3841942
+       5.pare5         = .0103115
+       afqt2           = .2345544
+       afqt3           = .2383069
+       afqt4           = .2463416
+       afqtm           = .0301785
+       1.esteem5       = .3069638
+       2.esteem5       =  .236849
+       3.esteem5       = .2099753
+       4.esteem5       = .2201273
+       5.esteem5       = .0260845
+       1.eduexp5       = .3403827
+       2.eduexp5       = .1951071
+       3.eduexp5       = .3225148
+       4.eduexp5       = .1385753
+       5.eduexp5       = .0034202
+       health_limit    = .0375324
+       health_limit_m  = .0120016
+       r2              = .3053414
+       r3              =   .34044
+       r4              = .1637631
+       rm              = .0044751
+       hisp            = .0437022
+       black           = .1222089
+       1988.yr         = .2504624
+       1989.yr         = .2541481
+       1996.yr         = .2500164
+       1998.yr         = .2453731
+       stugov          = .1608032 (mean)
+       stugov_m        =  .022211 (mean)
+       1.e3            = .5115348 (mean)
+       2.e3            = .2481918 (mean)
+       3.e3            = .2402733 (mean)
+       lnfirmsize      = 3.966828 (mean)
+       firm_m          = .0330447 (mean)
+       government      = .1445701 (mean)
+       1.ind14         = .0131722 (mean)
+       2.ind14         = .0075606 (mean)
+       3.ind14         = .0533668 (mean)
+       4.ind14         = .2111736 (mean)
+       5.ind14         = .0757231 (mean)
+       6.ind14         = .0319339 (mean)
+       7.ind14         = .1478731 (mean)
+       8.ind14         = .0682444 (mean)
+       9.ind14         = .0562784 (mean)
+       10.ind14        = .0244386 (mean)
+       11.ind14        = .0113849 (mean)
+       12.ind14        = .2308929 (mean)
+       13.ind14        = .0640081 (mean)
+       14.ind14        = .0039494 (mean)
+       reg_hrwkv3      =  19.3318 (mean)
+       reg_hrwk_m      = .0195771 (mean)
+       reg_totalwk     = 12.97113 (mean)
+       reg_tenure_yr   =  5.18101 (mean)
+       reg_tenure_wk_m = .0158237 (mean)
+6._at: 0.female        = .4769959 (mean)
+       1.female        = .5230041 (mean)
+       agpa            =        0
+       0.mar3          = .2675928
+       1.mar3          = .6082765
+       2.mar3          = .1241307
+       age             = 31.78071
+       1.pare5         = .1620859
+       2.pare5         = .4434084
+       3.pare5         = .3841942
+       5.pare5         = .0103115
+       afqt2           = .2345544
+       afqt3           = .2383069
+       afqt4           = .2463416
+       afqtm           = .0301785
+       1.esteem5       = .3069638
+       2.esteem5       =  .236849
+       3.esteem5       = .2099753
+       4.esteem5       = .2201273
+       5.esteem5       = .0260845
+       1.eduexp5       = .3403827
+       2.eduexp5       = .1951071
+       3.eduexp5       = .3225148
+       4.eduexp5       = .1385753
+       5.eduexp5       = .0034202
+       health_limit    = .0375324
+       health_limit_m  = .0120016
+       r2              = .3053414
+       r3              =   .34044
+       r4              = .1637631
+       rm              = .0044751
+       hisp            = .0437022
+       black           = .1222089
+       1988.yr         = .2504624
+       1989.yr         = .2541481
+       1996.yr         = .2500164
+       1998.yr         = .2453731
+       stugov          = .1608032 (mean)
+       stugov_m        =  .022211 (mean)
+       1.e3            = .5115348 (mean)
+       2.e3            = .2481918 (mean)
+       3.e3            = .2402733 (mean)
+       lnfirmsize      = 3.966828 (mean)
+       firm_m          = .0330447 (mean)
+       government      = .1445701 (mean)
+       1.ind14         = .0131722 (mean)
+       2.ind14         = .0075606 (mean)
+       3.ind14         = .0533668 (mean)
+       4.ind14         = .2111736 (mean)
+       5.ind14         = .0757231 (mean)
+       6.ind14         = .0319339 (mean)
+       7.ind14         = .1478731 (mean)
+       8.ind14         = .0682444 (mean)
+       9.ind14         = .0562784 (mean)
+       10.ind14        = .0244386 (mean)
+       11.ind14        = .0113849 (mean)
+       12.ind14        = .2308929 (mean)
+       13.ind14        = .0640081 (mean)
+       14.ind14        = .0039494 (mean)
+       reg_hrwkv3      =  19.3318 (mean)
+       reg_hrwk_m      = .0195771 (mean)
+       reg_totalwk     = 12.97113 (mean)
+       reg_tenure_yr   =  5.18101 (mean)
+       reg_tenure_wk_m = .0158237 (mean)
+7._at: 0.female        = .4769959 (mean)
+       1.female        = .5230041 (mean)
+       agpa            =       .5
+       0.mar3          = .2675928
+       1.mar3          = .6082765
+       2.mar3          = .1241307
+       age             = 31.78071
+       1.pare5         = .1620859
+       2.pare5         = .4434084
+       3.pare5         = .3841942
+       5.pare5         = .0103115
+       afqt2           = .2345544
+       afqt3           = .2383069
+       afqt4           = .2463416
+       afqtm           = .0301785
+       1.esteem5       = .3069638
+       2.esteem5       =  .236849
+       3.esteem5       = .2099753
+       4.esteem5       = .2201273
+       5.esteem5       = .0260845
+       1.eduexp5       = .3403827
+       2.eduexp5       = .1951071
+       3.eduexp5       = .3225148
+       4.eduexp5       = .1385753
+       5.eduexp5       = .0034202
+       health_limit    = .0375324
+       health_limit_m  = .0120016
+       r2              = .3053414
+       r3              =   .34044
+       r4              = .1637631
+       rm              = .0044751
+       hisp            = .0437022
+       black           = .1222089
+       1988.yr         = .2504624
+       1989.yr         = .2541481
+       1996.yr         = .2500164
+       1998.yr         = .2453731
+       stugov          = .1608032 (mean)
+       stugov_m        =  .022211 (mean)
+       1.e3            = .5115348 (mean)
+       2.e3            = .2481918 (mean)
+       3.e3            = .2402733 (mean)
+       lnfirmsize      = 3.966828 (mean)
+       firm_m          = .0330447 (mean)
+       government      = .1445701 (mean)
+       1.ind14         = .0131722 (mean)
+       2.ind14         = .0075606 (mean)
+       3.ind14         = .0533668 (mean)
+       4.ind14         = .2111736 (mean)
+       5.ind14         = .0757231 (mean)
+       6.ind14         = .0319339 (mean)
+       7.ind14         = .1478731 (mean)
+       8.ind14         = .0682444 (mean)
+       9.ind14         = .0562784 (mean)
+       10.ind14        = .0244386 (mean)
+       11.ind14        = .0113849 (mean)
+       12.ind14        = .2308929 (mean)
+       13.ind14        = .0640081 (mean)
+       14.ind14        = .0039494 (mean)
+       reg_hrwkv3      =  19.3318 (mean)
+       reg_hrwk_m      = .0195771 (mean)
+       reg_totalwk     = 12.97113 (mean)
+       reg_tenure_yr   =  5.18101 (mean)
+       reg_tenure_wk_m = .0158237 (mean)
+8._at: 0.female        = .4769959 (mean)
+       1.female        = .5230041 (mean)
+       agpa            =        1
+       0.mar3          = .2675928
+       1.mar3          = .6082765
+       2.mar3          = .1241307
+       age             = 31.78071
+       1.pare5         = .1620859
+       2.pare5         = .4434084
+       3.pare5         = .3841942
+       5.pare5         = .0103115
+       afqt2           = .2345544
+       afqt3           = .2383069
+       afqt4           = .2463416
+       afqtm           = .0301785
+       1.esteem5       = .3069638
+       2.esteem5       =  .236849
+       3.esteem5       = .2099753
+       4.esteem5       = .2201273
+       5.esteem5       = .0260845
+       1.eduexp5       = .3403827
+       2.eduexp5       = .1951071
+       3.eduexp5       = .3225148
+       4.eduexp5       = .1385753
+       5.eduexp5       = .0034202
+       health_limit    = .0375324
+       health_limit_m  = .0120016
+       r2              = .3053414
+       r3              =   .34044
+       r4              = .1637631
+       rm              = .0044751
+       hisp            = .0437022
+       black           = .1222089
+       1988.yr         = .2504624
+       1989.yr         = .2541481
+       1996.yr         = .2500164
+       1998.yr         = .2453731
+       stugov          = .1608032 (mean)
+       stugov_m        =  .022211 (mean)
+       1.e3            = .5115348 (mean)
+       2.e3            = .2481918 (mean)
+       3.e3            = .2402733 (mean)
+       lnfirmsize      = 3.966828 (mean)
+       firm_m          = .0330447 (mean)
+       government      = .1445701 (mean)
+       1.ind14         = .0131722 (mean)
+       2.ind14         = .0075606 (mean)
+       3.ind14         = .0533668 (mean)
+       4.ind14         = .2111736 (mean)
+       5.ind14         = .0757231 (mean)
+       6.ind14         = .0319339 (mean)
+       7.ind14         = .1478731 (mean)
+       8.ind14         = .0682444 (mean)
+       9.ind14         = .0562784 (mean)
+       10.ind14        = .0244386 (mean)
+       11.ind14        = .0113849 (mean)
+       12.ind14        = .2308929 (mean)
+       13.ind14        = .0640081 (mean)
+       14.ind14        = .0039494 (mean)
+       reg_hrwkv3      =  19.3318 (mean)
+       reg_hrwk_m      = .0195771 (mean)
+       reg_totalwk     = 12.97113 (mean)
+       reg_tenure_yr   =  5.18101 (mean)
+       reg_tenure_wk_m = .0158237 (mean)
+9._at: 0.female        = .4769959 (mean)
+       1.female        = .5230041 (mean)
+       agpa            =      1.5
+       0.mar3          = .2675928
+       1.mar3          = .6082765
+       2.mar3          = .1241307
+       age             = 31.78071
+       1.pare5         = .1620859
+       2.pare5         = .4434084
+       3.pare5         = .3841942
+       5.pare5         = .0103115
+       afqt2           = .2345544
+       afqt3           = .2383069
+       afqt4           = .2463416
+       afqtm           = .0301785
+       1.esteem5       = .3069638
+       2.esteem5       =  .236849
+       3.esteem5       = .2099753
+       4.esteem5       = .2201273
+       5.esteem5       = .0260845
+       1.eduexp5       = .3403827
+       2.eduexp5       = .1951071
+       3.eduexp5       = .3225148
+       4.eduexp5       = .1385753
+       5.eduexp5       = .0034202
+       health_limit    = .0375324
+       health_limit_m  = .0120016
+       r2              = .3053414
+       r3              =   .34044
+       r4              = .1637631
+       rm              = .0044751
+       hisp            = .0437022
+       black           = .1222089
+       1988.yr         = .2504624
+       1989.yr         = .2541481
+       1996.yr         = .2500164
+       1998.yr         = .2453731
+       stugov          = .1608032 (mean)
+       stugov_m        =  .022211 (mean)
+       1.e3            = .5115348 (mean)
+       2.e3            = .2481918 (mean)
+       3.e3            = .2402733 (mean)
+       lnfirmsize      = 3.966828 (mean)
+       firm_m          = .0330447 (mean)
+       government      = .1445701 (mean)
+       1.ind14         = .0131722 (mean)
+       2.ind14         = .0075606 (mean)
+       3.ind14         = .0533668 (mean)
+       4.ind14         = .2111736 (mean)
+       5.ind14         = .0757231 (mean)
+       6.ind14         = .0319339 (mean)
+       7.ind14         = .1478731 (mean)
+       8.ind14         = .0682444 (mean)
+       9.ind14         = .0562784 (mean)
+       10.ind14        = .0244386 (mean)
+       11.ind14        = .0113849 (mean)
+       12.ind14        = .2308929 (mean)
+       13.ind14        = .0640081 (mean)
+       14.ind14        = .0039494 (mean)
+       reg_hrwkv3      =  19.3318 (mean)
+       reg_hrwk_m      = .0195771 (mean)
+       reg_totalwk     = 12.97113 (mean)
+       reg_tenure_yr   =  5.18101 (mean)
+       reg_tenure_wk_m = .0158237 (mean)
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+  _at#female |
+        1 0  |    7.31306   1.730656     4.23   0.000     3.921036    10.70508
+        1 1  |   4.672762   1.298738     3.60   0.000     2.127283    7.218241
+        2 0  |   6.784735   1.303999     5.20   0.000     4.228944    9.340525
+        2 1  |   4.300675   .9901931     4.34   0.000     2.359933    6.241418
+        3 0  |   6.294577   .9484717     6.64   0.000     4.435607    8.153548
+        3 1  |   3.958218   .7299335     5.42   0.000     2.527574    5.388861
+        4 0  |   5.839831   .6735019     8.67   0.000     4.519791     7.15987
+        4 1  |   3.643029   .5182465     7.03   0.000     2.627285    4.658774
+        5 0  |   5.417937   .5061511    10.70   0.000     4.425899    6.409975
+        5 1  |   3.352939   .3626986     9.24   0.000     2.642063    4.063815
+        6 0  |   5.026523   .4764604    10.55   0.000     4.092678    5.960368
+        6 1  |   3.085949   .2828344    10.91   0.000     2.531603    3.640294
+        7 0  |   4.663386   .5532187     8.43   0.000     3.579097    5.747675
+        7 1  |   2.840218   .2887135     9.84   0.000      2.27435    3.406086
+        8 0  |   4.326484   .6701436     6.46   0.000     3.013026    5.639941
+        8 1  |   2.614055   .3458103     7.56   0.000     1.936279    3.291831
+        9 0  |    4.01392   .7900539     5.08   0.000     2.465443    5.562398
+        9 1  |   2.405901   .4160319     5.78   0.000     1.590493    3.221308
+------------------------------------------------------------------------------
+
+. marginsplot, title("M4 (M3 + Employment-related characteristics)") ytitle(Number of Supervisees) xtitle(High School GP
+> A) ///    
+>         plot1opts(msymbol(circle) mcolor(gs8) msize(small) lpattern(solid) lcolor(gs8)) ///
+>         ci1opts(lpattern(solid) lcolor(gs8))  ///
+>         plot2opts(msymbol(triangle) mcolor(black) msize(small) lpattern(dash) lcolor(black)) ///
+>         ci2opts(lpattern(dash) lcolor(black)) ///
+>         graphregion(color(white)) ///
+>         ylabel(0(2)14, grid labsize(vsmall)) legend(order(1 "Men" 2 "Women")) ///
+>         xlabel(-2.5 "0.0" -2 "0.5" -1.5 "1.0" -1 "1.5" -0.5 "2.0" 0 "2.5" 0.5 "3.0" 1 "3.5" 1.5 "4.0")
+
+Variables that uniquely identify margins: agpa female
+
+. graph save Graph "s2_m4.gph"
+file s2_m4.gph saved
+
+. restore
+
+. 
+. graph combine s2_m1.gph s2_m2.gph s2_m3.gph s2_m4.gph, graphregion(color(white))
+
+. graph export "graph_Qian_Yavorsky_2021_SF_Figure3.pdf"
+file /Users/yueqian/Desktop/graph_Qian_Yavorsky_2021_SF_Figure3.pdf saved as PDF format
+
+. 
+. 
+. log close
+      name:  <unnamed>
+       log:  /Users/yueqian/Desktop/graph_Qian_Yavorsky_2021_SF.log
+  log type:  text
+ closed on:  14 Aug 2025, 23:19:08
+------------------------------------------------------------------------------------------------------------------------

@@ -1,0 +1,382 @@
+---------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/yueqian/Downloads/graph_Fan_Qian_2025_JCCA.log
+  log type:  text
+ opened on:   3 Dec 2025, 10:13:54
+
+. 
+. // #0
+. // program setup
+. version 17.0
+
+. clear all
+
+. set more off
+
+. 
+. // #1
+. // open data
+. clear
+
+. use regsample, clear
+
+. 
+. // predict insecurity
+. global control i.female age ib4.edu ruralhk party health i.marw2 i.covid i.incw1
+
+. 
+. logit insecure i.hubei i.wkunit
+
+Iteration 0:  Log likelihood = -2197.6889  
+Iteration 1:  Log likelihood = -2029.7139  
+Iteration 2:  Log likelihood = -2025.1992  
+Iteration 3:  Log likelihood = -2025.1954  
+Iteration 4:  Log likelihood = -2025.1954  
+
+Logistic regression                                     Number of obs =  3,582
+                                                        LR chi2(3)    = 344.99
+                                                        Prob > chi2   = 0.0000
+Log likelihood = -2025.1954                             Pseudo R2     = 0.0785
+
+------------------------------------------------------------------------------
+    insecure | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+     1.hubei |   .4920515   .0764268     6.44   0.000     .3422577    .6418453
+             |
+      wkunit |
+  non-state  |   1.401031   .0920332    15.22   0.000     1.220649    1.581412
+       self  |   1.667632   .1542182    10.81   0.000      1.36537    1.969894
+             |
+       _cons |  -2.066639   .0889763   -23.23   0.000    -2.241029   -1.892249
+------------------------------------------------------------------------------
+
+. outreg2 using "$date insecurity", excel dec(3) alpha(0.001, 0.01, 0.05, 0.1) symbol(*
+> **, **, *, +)
+06012024 insecurity.xml
+dir : seeout
+
+.  
+. logit insecure i.hubei i.wkunit $control
+
+Iteration 0:  Log likelihood = -2197.6889  
+Iteration 1:  Log likelihood = -1984.6848  
+Iteration 2:  Log likelihood = -1977.8255  
+Iteration 3:  Log likelihood = -1977.8084  
+Iteration 4:  Log likelihood = -1977.8084  
+
+Logistic regression                                     Number of obs =  3,582
+                                                        LR chi2(19)   = 439.76
+                                                        Prob > chi2   = 0.0000
+Log likelihood = -1977.8084                             Pseudo R2     = 0.1001
+
+------------------------------------------------------------------------------
+    insecure | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+     1.hubei |   .4714008   .0790044     5.97   0.000      .316555    .6262465
+             |
+      wkunit |
+  non-state  |   1.312207   .0952674    13.77   0.000     1.125487    1.498928
+       self  |   1.538766   .1579616     9.74   0.000     1.229167    1.848365
+             |
+    1.female |  -.1830973   .0793355    -2.31   0.021     -.338592   -.0276026
+         age |   .0038081   .0057576     0.66   0.508    -.0074766    .0150927
+             |
+         edu |
+        <hs  |   .0155906   .2062704     0.08   0.940     -.388692    .4198732
+         hs  |   .0812598   .1182063     0.69   0.492    -.1504203    .3129399
+    dazhuan  |   .0880452    .095678     0.92   0.357    -.0994802    .2755705
+             |
+     ruralhk |   .1974134   .0873148     2.26   0.024     .0262796    .3685472
+       party |  -.4637614   .1278384    -3.63   0.000      -.71432   -.2132027
+      health |  -.1771646   .0406895    -4.35   0.000    -.2569146   -.0974146
+             |
+       marw2 |
+    pre mar  |   .4390254   .2373614     1.85   0.064    -.0261945    .9042453
+  never mar  |   .1327852   .0940816     1.41   0.158    -.0516113    .3171817
+      cohab  |  -.1202287   .1794765    -0.67   0.503    -.4719962    .2315388
+             |
+       covid |
+        yes  |   1.130454   .4756667     2.38   0.017     .1981643    2.062743
+    missing  |   .2234993   .3735119     0.60   0.550    -.5085706    .9555692
+             |
+       incw1 |
+    5k-9999  |  -.2221629   .1045953    -2.12   0.034     -.427166   -.0171599
+ 10k-19,999  |  -.4627388   .1137622    -4.07   0.000    -.6857087   -.2397689
+       20k+  |  -.5096271   .1342691    -3.80   0.000    -.7727897   -.2464644
+             |
+       _cons |  -1.145139   .3002541    -3.81   0.000    -1.733626   -.5566514
+------------------------------------------------------------------------------
+
+. outreg2 using "$date insecurity", excel dec(3) alpha(0.001, 0.01, 0.05, 0.1) symbol(*
+> **, **, *, +)
+06012024 insecurity.xml
+dir : seeout
+
+. margins, dydx(hubei)
+
+Average marginal effects                                 Number of obs = 3,582
+Model VCE: OIM
+
+Expression: Pr(insecure), predict()
+dy/dx wrt:  1.hubei
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |      dy/dx   std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+     1.hubei |   .0892208   .0149462     5.97   0.000     .0599267    .1185148
+------------------------------------------------------------------------------
+Note: dy/dx for factor levels is the discrete change from the base level.
+
+. margins wkunit
+
+Predictive margins                                       Number of obs = 3,582
+Model VCE: OIM
+
+Expression: Pr(insecure), predict()
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+      wkunit |
+      state  |   .1492174   .0101071    14.76   0.000     .1294079    .1690269
+  non-state  |   .3826112   .0106793    35.83   0.000     .3616801    .4035422
+       self  |   .4346661   .0316161    13.75   0.000     .3726998    .4966324
+------------------------------------------------------------------------------
+
+. forvalues v = 2/3{
+  2.         test 1.wkunit = `v'.wkunit      
+  3. }
+
+ ( 1)  [insecure]1b.wkunit - [insecure]2.wkunit = 0
+
+           chi2(  1) =  189.72
+         Prob > chi2 =    0.0000
+
+ ( 1)  [insecure]1b.wkunit - [insecure]3.wkunit = 0
+
+           chi2(  1) =   94.89
+         Prob > chi2 =    0.0000
+
+. test 2.wkunit = 3.wkunit        
+
+ ( 1)  [insecure]2.wkunit - [insecure]3.wkunit = 0
+
+           chi2(  1) =    2.51
+         Prob > chi2 =    0.1128
+
+. 
+. margins hubei wkunit, post
+
+Predictive margins                                       Number of obs = 3,582
+Model VCE: OIM
+
+Expression: Pr(insecure), predict()
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+       hubei |
+          0  |   .2616283   .0096808    27.03   0.000     .2426542    .2806024
+          1  |   .3508491   .0111643    31.43   0.000     .3289673    .3727308
+             |
+      wkunit |
+      state  |   .1492174   .0101071    14.76   0.000     .1294079    .1690269
+  non-state  |   .3826112   .0106793    35.83   0.000     .3616801    .4035422
+       self  |   .4346661   .0316161    13.75   0.000     .3726998    .4966324
+------------------------------------------------------------------------------
+
+. estimate store job
+
+. 
+. // predict income loss
+. logit incloss i.hubei i.wkunit
+
+Iteration 0:  Log likelihood = -2480.7752  
+Iteration 1:  Log likelihood = -2433.2196  
+Iteration 2:  Log likelihood = -2433.2016  
+Iteration 3:  Log likelihood = -2433.2016  
+
+Logistic regression                                     Number of obs =  3,582
+                                                        LR chi2(3)    =  95.15
+                                                        Prob > chi2   = 0.0000
+Log likelihood = -2433.2016                             Pseudo R2     = 0.0192
+
+------------------------------------------------------------------------------
+     incloss | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+     1.hubei |   .4714326   .0681949     6.91   0.000     .3377732    .6050921
+             |
+      wkunit |
+  non-state  |   .4767125   .0718427     6.64   0.000     .3359034    .6175216
+       self  |   .3450642   .1434495     2.41   0.016     .0639083    .6262201
+             |
+       _cons |  -.5755502   .0638721    -9.01   0.000    -.7007372   -.4503632
+------------------------------------------------------------------------------
+
+. outreg2 using "$date insecurity", excel dec(3) alpha(0.001, 0.01, 0.05, 0.1) symbol(*
+> **, **, *, +)
+06012024 insecurity.xml
+dir : seeout
+
+.  
+. logit incloss i.hubei i.wkunit $control
+
+Iteration 0:  Log likelihood = -2480.7752  
+Iteration 1:  Log likelihood = -2411.1056  
+Iteration 2:  Log likelihood = -2411.0323  
+Iteration 3:  Log likelihood = -2411.0323  
+
+Logistic regression                                     Number of obs =  3,582
+                                                        LR chi2(19)   = 139.49
+                                                        Prob > chi2   = 0.0000
+Log likelihood = -2411.0323                             Pseudo R2     = 0.0281
+
+------------------------------------------------------------------------------
+     incloss | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+     1.hubei |     .49346   .0700913     7.04   0.000     .3560836    .6308364
+             |
+      wkunit |
+  non-state  |   .4699338   .0750504     6.26   0.000     .3228376      .61703
+       self  |   .3322963   .1462039     2.27   0.023      .045742    .6188507
+             |
+    1.female |  -.2931998   .0698367    -4.20   0.000    -.4300773   -.1563223
+         age |   .0001711   .0050134     0.03   0.973     -.009655    .0099973
+             |
+         edu |
+        <hs  |  -.0155029   .1926324    -0.08   0.936    -.3930554    .3620497
+         hs  |  -.0148986   .1073174    -0.14   0.890    -.2252368    .1954396
+    dazhuan  |  -.0150209   .0861337    -0.17   0.862    -.1838397     .153798
+             |
+     ruralhk |   .1521779   .0788366     1.93   0.054     -.002339    .3066948
+       party |  -.0661274   .0991147    -0.67   0.505    -.2603887    .1281339
+      health |  -.0806383     .03641    -2.21   0.027    -.1520006   -.0092759
+             |
+       marw2 |
+    pre mar  |   .2641826   .2251348     1.17   0.241    -.1770734    .7054386
+  never mar  |  -.0831537   .0836008    -0.99   0.320    -.2470084    .0807009
+      cohab  |   .2582106   .1555636     1.66   0.097    -.0466884    .5631096
+             |
+       covid |
+        yes  |   .3825724   .4504499     0.85   0.396    -.5002932    1.265438
+    missing  |   .4621897   .3496469     1.32   0.186    -.2231056    1.147485
+             |
+       incw1 |
+    5k-9999  |   .2386869   .0973491     2.45   0.014     .0478862    .4294875
+ 10k-19,999  |   .1583776    .102567     1.54   0.123    -.0426501    .3594053
+       20k+  |   .1298082   .1183542     1.10   0.273    -.1021617     .361778
+             |
+       _cons |  -.3019566    .263988    -1.14   0.253    -.8193636    .2154504
+------------------------------------------------------------------------------
+
+. outreg2 using "$date insecurity", excel dec(3) alpha(0.001, 0.01, 0.05, 0.1) symbol(*
+> **, **, *, +)
+06012024 insecurity.xml
+dir : seeout
+
+. margins, dydx(hubei)
+
+Average marginal effects                                 Number of obs = 3,582
+Model VCE: OIM
+
+Expression: Pr(incloss), predict()
+dy/dx wrt:  1.hubei
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |      dy/dx   std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+     1.hubei |   .1196588   .0168321     7.11   0.000     .0866684    .1526492
+------------------------------------------------------------------------------
+Note: dy/dx for factor levels is the discrete change from the base level.
+
+. margins wkunit
+
+Predictive margins                                       Number of obs = 3,582
+Model VCE: OIM
+
+Expression: Pr(incloss), predict()
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+      wkunit |
+      state  |   .4138447    .013675    30.26   0.000     .3870421    .4406472
+  non-state  |   .5273921   .0111351    47.36   0.000     .5055678    .5492164
+       self  |   .4939035   .0325165    15.19   0.000     .4301723    .5576347
+------------------------------------------------------------------------------
+
+. forvalues v = 2/3{
+  2.         test 1.wkunit = `v'.wkunit      
+  3. }
+
+ ( 1)  [incloss]1b.wkunit - [incloss]2.wkunit = 0
+
+           chi2(  1) =   39.21
+         Prob > chi2 =    0.0000
+
+ ( 1)  [incloss]1b.wkunit - [incloss]3.wkunit = 0
+
+           chi2(  1) =    5.17
+         Prob > chi2 =    0.0230
+
+. test 2.wkunit = 3.wkunit        
+
+ ( 1)  [incloss]2.wkunit - [incloss]3.wkunit = 0
+
+           chi2(  1) =    0.95
+         Prob > chi2 =    0.3288
+
+. 
+. margins hubei wkunit, post
+
+Predictive margins                                       Number of obs = 3,582
+Model VCE: OIM
+
+Expression: Pr(incloss), predict()
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+       hubei |
+          0  |   .4283632   .0111944    38.27   0.000     .4064226    .4503038
+          1  |    .548022   .0123131    44.51   0.000     .5238888    .5721552
+             |
+      wkunit |
+      state  |   .4138447    .013675    30.26   0.000     .3870421    .4406472
+  non-state  |   .5273921   .0111351    47.36   0.000     .5055678    .5492164
+       self  |   .4939035   .0325165    15.19   0.000     .4301723    .5576347
+------------------------------------------------------------------------------
+
+. estimate store inc
+
+. 
+. coefplot job, bylabel("Predicted probability of job insecurity") ///
+>         || inc, bylabel("Predicted probability of income loss") ///
+>         ||, vertical ///
+>         recast(bar) barwidth(0.5) color(gs0*.5) ///
+>         citop citype(logit) ciopt(recast(rcap) lcolor(gs0)) ///
+>         mlabel mlabcolor(gs0) format(%9.2f) mlabposition(2) ///
+>         yscale(range(0 .6)) ylabel(0(.1).6) ///
+>         xlabel(1 `""Non-Hubei" "residents""' 2 `""Hubei" "residents""' ///
+>         4 `""State" "sector""' 5 `""Private" "sector"' 6 `""Self-" "employment""') //
+> /
+>         groups(?.hubei = "{bf:Hubei}" ?.wkunit = "{bf:Danwei}") byopts(compact cols(1
+> ))
+
+. graph export "Figure 2.pdf"
+file /Users/yueqian/Downloads/Figure 2.pdf saved as PDF format
+
+. 
+. 
+. log close
+      name:  <unnamed>
+       log:  /Users/yueqian/Downloads/graph_Fan_Qian_2025_JCCA.log
+  log type:  text
+ closed on:   3 Dec 2025, 10:13:56
+---------------------------------------------------------------------------------------

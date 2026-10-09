@@ -1,0 +1,621 @@
+--------------------------------------------------------------------------------
+      name:  <unnamed>
+  log type:  text
+ opened on:  22 Nov 2016, 19:18:51
+
+
+. // #0
+. // program setup
+. 
+. version 14.0
+
+. clear all
+
+. set more off
+
+. macro drop _all
+
+. set linesize 80
+
+
+. // #2
+. // log-linear models
+. keep pid hhk whk hedu3 wedu3
+
+. contract hhk whk hedu3 wedu3, zero freq(count)
+
+
+. gen eduhomo = hedu3==wedu3      
+
+. tab hedu3 wedu3 [w=eduhomo], m
+(frequency weights assumed)
+
+               |          RECODE of wedu
+RECODE of hedu | HS or les  junior co    college |     Total
+---------------+---------------------------------+----------
+    HS or less |         4          0          0 |         4 
+junior college |         0          4          0 |         4 
+       college |         0          0          4 |         4 
+---------------+---------------------------------+----------
+         Total |         4          4          4 |        12 
+
+
+
+. gen hkhomo = hhk==whk
+
+. tab hhk whk [w=hkhomo], m
+(frequency weights assumed)
+
+             |          whk
+         hhk | not Shang   Shanghai |     Total
+-------------+----------------------+----------
+not Shanghai |         9          0 |         9 
+    Shanghai |         0          9 |         9 
+-------------+----------------------+----------
+       Total |         9          9 |        18 
+
+
+. glm count i.hhk##i.hedu3 i.whk##i.wedu3 eduhomo hkhomo, family(poisson) link(l
+> og)
+
+Iteration 0:   log likelihood = -203.49002  
+Iteration 1:   log likelihood = -156.92887  
+Iteration 2:   log likelihood = -156.55995  
+Iteration 3:   log likelihood = -156.55978  
+Iteration 4:   log likelihood = -156.55978  
+
+Generalized linear models                         No. of obs      =         36
+Optimization     : ML                             Residual df     =         23
+                                                  Scale parameter =          1
+Deviance         =  166.9646481                   (1/df) Deviance =   7.259333
+Pearson          =  145.2142492                   (1/df) Pearson  =   6.313663
+
+Variance function: V(u) = u                       [Poisson]
+Link function    : g(u) = ln(u)                   [Log]
+
+                                                  AIC             =   9.419988
+Log likelihood   = -156.5597822                   BIC             =   84.54371
+
+-------------------------------------------------------------------------------
+              |                 OIM
+        count |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+          hhk |
+    Shanghai  |   .5084654   .1020054     4.98   0.000     .3085386    .7083923
+              |
+        hedu3 |
+junior col..  |  -.9314368   .1723804    -5.40   0.000    -1.269296   -.5935774
+     college  |  -.3111825   .1463142    -2.13   0.033    -.5979531   -.0244119
+              |
+    hhk#hedu3 |
+    Shanghai #|
+junior col..  |   .8144205   .1854163     4.39   0.000     .4510111     1.17783
+    Shanghai #|
+     college  |   .2884663    .161559     1.79   0.074    -.0281835    .6051161
+              |
+          whk |
+    Shanghai  |  -.8383407   .1023342    -8.19   0.000    -1.038912   -.6377692
+              |
+        wedu3 |
+junior col..  |  -1.234592   .1530791    -8.07   0.000    -1.534622   -.9345628
+     college  |  -1.288827    .145158    -8.88   0.000    -1.573331   -1.004322
+              |
+    whk#wedu3 |
+    Shanghai #|
+junior col..  |    1.49894   .1705819     8.79   0.000     1.164605    1.833274
+    Shanghai #|
+     college  |   1.390605   .1641773     8.47   0.000     1.068823    1.712387
+              |
+      eduhomo |   2.167053   .0758632    28.57   0.000     2.018364    2.315743
+       hkhomo |   1.364302   .0789654    17.28   0.000     1.209533    1.519072
+        _cons |   1.887233   .1144938    16.48   0.000      1.66283    2.111637
+-------------------------------------------------------------------------------
+
+.     gen dev=e(deviance)
+
+.     display dev
+166.96465
+
+. 
+.     gen df=e(df)
+
+.     display df
+23
+
+. 
+.     egen totfreq=sum(count)
+
+.     gen lnfreq=ln(totfreq)
+
+.     gen bic = dev-df*lnfreq
+
+. 
+.     tab bic
+
+        bic |      Freq.     Percent        Cum.
+------------+-----------------------------------
+   3.009233 |         36      100.00      100.00
+------------+-----------------------------------
+      Total |         36      100.00
+
+.     drop dev-bic        
+
+.         
+.         
+. gen shanghaihk = 0
+
+. replace shanghaihk = hedu3 if hhk==1 & whk==0
+(9 real changes made)
+
+. replace shanghaihk = wedu3 if hhk==0 & whk==1
+(9 real changes made)
+
+.         
+. gen nonhk = 0
+
+. replace nonhk = wedu3 if hhk==1 & whk==0
+(9 real changes made)
+
+. replace nonhk = hedu3 if hhk==0 & whk==1        
+(9 real changes made)
+
+.         
+. glm count i.hhk i.whk i.hedu3 i.wedu3 hhk#hedu3 whk##wedu3 i.hkhomo i.eduhomo 
+> shanghaihk nonhk, family(poisson) link(log)
+
+Iteration 0:   log likelihood = -198.43069  
+Iteration 1:   log likelihood = -153.17024  
+Iteration 2:   log likelihood = -152.81534  
+Iteration 3:   log likelihood = -152.81517  
+Iteration 4:   log likelihood = -152.81517  
+
+Generalized linear models                         No. of obs      =         36
+Optimization     : ML                             Residual df     =         21
+                                                  Scale parameter =          1
+Deviance         =  159.4754288                   (1/df) Deviance =   7.594068
+Pearson          =  139.3262943                   (1/df) Pearson  =   6.634585
+
+Variance function: V(u) = u                       [Poisson]
+Link function    : g(u) = ln(u)                   [Log]
+
+                                                  AIC             =   9.323065
+Log likelihood   = -152.8151725                   BIC             =   84.22153
+
+-------------------------------------------------------------------------------
+              |                 OIM
+        count |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+          hhk |
+    Shanghai  |   .4906582   .1064512     4.61   0.000     .2820178    .6992987
+              |
+          whk |
+    Shanghai  |  -.8582139   .1055821    -8.13   0.000    -1.065151   -.6512769
+              |
+        hedu3 |
+junior col..  |   -.916295     .17257    -5.31   0.000    -1.254526    -.578064
+     college  |  -.3054515   .1458447    -2.09   0.036    -.5913018   -.0196012
+              |
+        wedu3 |
+junior col..  |  -1.274499   .1568337    -8.13   0.000    -1.581887   -.9671101
+     college  |  -1.351238   .1561694    -8.65   0.000    -1.657324   -1.045151
+              |
+    hhk#hedu3 |
+    Shanghai #|
+junior col..  |   .8478628   .1870201     4.53   0.000     .4813103    1.214415
+    Shanghai #|
+     college  |   .3548389   .1643869     2.16   0.031     .0326465    .6770314
+              |
+    whk#wedu3 |
+    Shanghai #|
+junior col..  |   1.518715   .1731065     8.77   0.000     1.179432    1.857997
+    Shanghai #|
+     college  |   1.428229   .1726343     8.27   0.000     1.089872    1.766585
+              |
+     1.hkhomo |   1.294183   .1915844     6.76   0.000      .918684    1.669681
+    1.eduhomo |   2.148493   .0761787    28.20   0.000     1.999185      2.2978
+   shanghaihk |  -.3032911   .1164794    -2.60   0.009    -.5315864   -.0749957
+        nonhk |   .2727569    .118562     2.30   0.021     .0403797    .5051341
+        _cons |   1.984421   .2016479     9.84   0.000     1.589199    2.379644
+-------------------------------------------------------------------------------
+
+.     gen dev=e(deviance)
+
+.     display dev
+159.47543
+
+. 
+.     gen df=e(df)
+
+.     display df
+21
+
+. 
+.     egen totfreq=sum(count)
+
+.     gen lnfreq=ln(totfreq)
+
+.     gen bic = dev-df*lnfreq
+
+. 
+.     tab bic
+
+        bic |      Freq.     Percent        Cum.
+------------+-----------------------------------
+   9.777014 |         36      100.00      100.00
+------------+-----------------------------------
+      Total |         36      100.00
+
+.     drop dev-bic
+
+.         
+. gen shanghaih = 0
+
+. replace shanghaih = hedu3 if hhk==1 & whk==0
+(9 real changes made)
+
+. 
+. gen shanghaiw = 0
+
+. replace shanghaiw = wedu3 if hhk==0 & whk==1
+(9 real changes made)
+
+.         
+. gen nonh = 0
+
+. replace nonh = hedu3 if hhk==0 & whk==1
+(9 real changes made)
+
+. 
+. gen nonw = 0
+
+. replace nonw = wedu3 if hhk==1 & whk==0
+(9 real changes made)
+
+.         
+. glm count i.hhk i.whk i.hedu3 i.wedu3 hhk#hedu3 whk##wedu3 i.hkhomo i.eduhomo 
+> shanghaih shanghaiw nonh nonw, family(poisson) link(log)
+
+Iteration 0:   log likelihood =  -192.6828  
+Iteration 1:   log likelihood = -148.79906  
+Iteration 2:   log likelihood = -148.43011  
+Iteration 3:   log likelihood = -148.42994  
+Iteration 4:   log likelihood = -148.42994  
+
+Generalized linear models                         No. of obs      =         36
+Optimization     : ML                             Residual df     =         19
+                                                  Scale parameter =          1
+Deviance         =  150.7049685                   (1/df) Deviance =    7.93184
+Pearson          =  133.6494195                   (1/df) Pearson  =    7.03418
+
+Variance function: V(u) = u                       [Poisson]
+Link function    : g(u) = ln(u)                   [Log]
+
+                                                  AIC             =   9.190552
+Log likelihood   = -148.4299424                   BIC             =   82.61811
+
+-------------------------------------------------------------------------------
+              |                 OIM
+        count |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+          hhk |
+    Shanghai  |   1.045459   .2216232     4.72   0.000     .6110851    1.479832
+              |
+          whk |
+    Shanghai  |  -1.421279   .2234821    -6.36   0.000    -1.859296    -.983262
+              |
+        hedu3 |
+junior col..  |  -1.054664   .1816437    -5.81   0.000    -1.410679   -.6986489
+     college  |  -.6134855   .1949129    -3.15   0.002    -.9955077   -.2314633
+              |
+        wedu3 |
+junior col..  |  -1.120697   .1690958    -6.63   0.000    -1.452118   -.7892751
+     college  |  -1.028645   .2007319    -5.12   0.000    -1.422072   -.6352178
+              |
+    hhk#hedu3 |
+    Shanghai #|
+junior col..  |   1.100375   .2067005     5.32   0.000     .6952494      1.5055
+    Shanghai #|
+     college  |   .8446867   .2379963     3.55   0.000     .3782224    1.311151
+              |
+    whk#wedu3 |
+    Shanghai #|
+junior col..  |   1.255274   .1958416     6.41   0.000     .8714319    1.639117
+    Shanghai #|
+     college  |   .9216636   .2443353     3.77   0.000     .4427753    1.400552
+              |
+     1.hkhomo |   1.423717   .2045752     6.96   0.000     1.022757    1.824677
+    1.eduhomo |   2.128869   .0761174    27.97   0.000     1.979682    2.278056
+    shanghaih |  -.4798184   .1545568    -3.10   0.002    -.7827441   -.1768926
+    shanghaiw |  -.0328826   .2099211    -0.16   0.876    -.4443205    .3785552
+         nonh |   .4731184   .2151958     2.20   0.028     .0513423    .8948945
+         nonw |   .0793624   .1689245     0.47   0.638    -.2517236    .4104483
+        _cons |   1.877132   .2113448     8.88   0.000     1.462904     2.29136
+-------------------------------------------------------------------------------
+
+.     gen dev=e(deviance)
+
+.     display dev
+150.70497
+
+. 
+.     gen df=e(df)
+
+.     display df
+19
+
+. 
+.     egen totfreq=sum(count)
+
+.     gen lnfreq=ln(totfreq)
+
+.     gen bic = dev-df*lnfreq
+
+. 
+.     tab bic
+
+        bic |      Freq.     Percent        Cum.
+------------+-----------------------------------
+   15.26354 |         36      100.00      100.00
+------------+-----------------------------------
+      Total |         36      100.00
+
+.     drop dev-bic        
+
+.         
+. test shanghaih = shanghaiw
+
+ ( 1)  [count]shanghaih - [count]shanghaiw = 0
+
+           chi2(  1) =    2.67
+         Prob > chi2 =    0.1021
+
+. test nonh = nonw        
+
+ ( 1)  [count]nonh - [count]nonw = 0
+
+           chi2(  1) =    1.76
+         Prob > chi2 =    0.1846
+
+. 
+. 
+. gen exhyper = 0
+
+. replace exhyper = 1 if hhk==1 & whk==0 & wedu3 > hedu3
+(3 real changes made)
+
+. replace exhyper = 1 if hhk==0 & whk==1 & hedu3 > wedu3
+(3 real changes made)
+
+. 
+. gen exhypo = 0
+
+. replace exhypo = 1 if hhk==1 & whk==0 & wedu3 < hedu3
+(3 real changes made)
+
+. replace exhypo = 1 if hhk==0 & whk==1 & hedu3 < wedu3
+(3 real changes made)
+
+. 
+. glm count i.hhk i.whk i.hedu3 i.wedu3 hhk#hedu3 whk##wedu3 i.hkhomo i.eduhomo 
+> exhyper exhypo, family(poisson) link(log)
+
+Iteration 0:   log likelihood = -202.40796  
+Iteration 1:   log likelihood =  -154.3561  
+Iteration 2:   log likelihood = -153.03778  
+Iteration 3:   log likelihood = -153.03427  
+Iteration 4:   log likelihood = -153.03427  
+
+Generalized linear models                         No. of obs      =         36
+Optimization     : ML                             Residual df     =         21
+                                                  Scale parameter =          1
+Deviance         =  159.9136314                   (1/df) Deviance =   7.614935
+Pearson          =  139.7813127                   (1/df) Pearson  =   6.656253
+
+Variance function: V(u) = u                       [Poisson]
+Link function    : g(u) = ln(u)                   [Log]
+
+                                                  AIC             =   9.335237
+Log likelihood   = -153.0342738                   BIC             =   84.65973
+
+-------------------------------------------------------------------------------
+              |                 OIM
+        count |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+          hhk |
+    Shanghai  |    .484636    .102606     4.72   0.000      .283532      .68574
+              |
+          whk |
+    Shanghai  |  -.8535748   .1021727    -8.35   0.000     -1.05383     -.65332
+              |
+        hedu3 |
+junior col..  |  -.9278728   .1722805    -5.39   0.000    -1.265536   -.5902092
+     college  |  -.3203095   .1457403    -2.20   0.028    -.6059551   -.0346638
+              |
+        wedu3 |
+junior col..  |  -1.281315   .1543638    -8.30   0.000    -1.583863   -.9787681
+     college  |    -1.3446   .1465999    -9.17   0.000    -1.631931    -1.05727
+              |
+    hhk#hedu3 |
+    Shanghai #|
+junior col..  |   .8667306   .1855548     4.67   0.000     .5030498    1.230411
+    Shanghai #|
+     college  |   .3603171   .1624357     2.22   0.027     .0419489    .6786853
+              |
+    whk#wedu3 |
+    Shanghai #|
+junior col..  |   1.517676    .169633     8.95   0.000     1.185201     1.85015
+    Shanghai #|
+     college  |   1.419012   .1635477     8.68   0.000     1.098464    1.739559
+              |
+     1.hkhomo |   1.303985    .086304    15.11   0.000     1.134832    1.473138
+    1.eduhomo |   2.102022   .0842295    24.96   0.000     1.936935    2.267108
+      exhyper |   .1110888   .2628589     0.42   0.673    -.4041051    .6262826
+       exhypo |  -.6044427   .2545812    -2.37   0.018    -1.103413   -.1054728
+        _cons |   2.017901     .13526    14.92   0.000     1.752797    2.283006
+-------------------------------------------------------------------------------
+
+.     gen dev=e(deviance)
+
+.     display dev
+159.91364
+
+. 
+.     gen df=e(df)
+
+.     display df
+21
+
+. 
+.     egen totfreq=sum(count)
+
+.     gen lnfreq=ln(totfreq)
+
+.     gen bic = dev-df*lnfreq
+
+. 
+.     tab bic
+
+        bic |      Freq.     Percent        Cum.
+------------+-----------------------------------
+   10.21522 |         36      100.00      100.00
+------------+-----------------------------------
+      Total |         36      100.00
+
+.     drop dev-bic
+
+. 
+. 
+. gen exhyper_shh = 0
+
+. replace exhyper_shh = 1 if hhk==1 & whk==0 & wedu3 > hedu3
+(3 real changes made)
+
+. 
+. gen exhyper_shw = 0
+
+. replace exhyper_shw = 1 if hhk==0 & whk==1 & hedu3 > wedu3
+(3 real changes made)
+
+. 
+. gen exhypo_shh = 0
+
+. replace exhypo_shh = 1 if hhk==1 & whk==0 & wedu3 < hedu3
+(3 real changes made)
+
+. 
+. gen exhypo_shw = 0
+
+. replace exhypo_shw = 1 if hhk==0 & whk==1 & hedu3 < wedu3
+(3 real changes made)
+
+. 
+. glm count i.hhk i.whk i.hedu3 i.wedu3 hhk#hedu3 whk##wedu3 i.hkhomo i.eduhomo 
+> exhyper_shh exhyper_shw exhypo_shh exhypo_shw, family(poisson) link(log)
+
+Iteration 0:   log likelihood = -199.12871  
+Iteration 1:   log likelihood = -154.54809  
+Iteration 2:   log likelihood = -152.98577  
+Iteration 3:   log likelihood = -152.96367  
+Iteration 4:   log likelihood = -152.96366  
+
+Generalized linear models                         No. of obs      =         36
+Optimization     : ML                             Residual df     =         19
+                                                  Scale parameter =          1
+Deviance         =  159.7724136                   (1/df) Deviance =   8.409074
+Pearson          =  139.1582648                   (1/df) Pearson  =   7.324119
+
+Variance function: V(u) = u                       [Poisson]
+Link function    : g(u) = ln(u)                   [Log]
+
+                                                  AIC             =   9.442426
+Log likelihood   = -152.9636649                   BIC             =   91.68555
+
+-------------------------------------------------------------------------------
+              |                 OIM
+        count |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+          hhk |
+    Shanghai  |    .491936   .1060955     4.64   0.000     .2839927    .6998794
+              |
+          whk |
+    Shanghai  |  -.8610859   .1055977    -8.15   0.000    -1.068054   -.6541181
+              |
+        hedu3 |
+junior col..  |  -.9317448   .1739315    -5.36   0.000    -1.272644   -.5908453
+     college  |  -.3316187   .1534389    -2.16   0.031    -.6323534   -.0308839
+              |
+        wedu3 |
+junior col..  |  -1.276122   .1565174    -8.15   0.000    -1.582891   -.9693537
+     college  |  -1.332648   .1541126    -8.65   0.000    -1.634703   -1.030593
+              |
+    hhk#hedu3 |
+    Shanghai #|
+junior col..  |   .8702766   .1858306     4.68   0.000     .5060553    1.234498
+    Shanghai #|
+     college  |    .366441   .1635755     2.24   0.025     .0458388    .6870432
+              |
+    whk#wedu3 |
+    Shanghai #|
+junior col..  |   1.512453   .1701504     8.89   0.000     1.178965    1.845942
+    Shanghai #|
+     college  |   1.412444   .1645628     8.58   0.000     1.089906    1.734981
+              |
+     1.hkhomo |   1.307913   .0874471    14.96   0.000      1.13652    1.479306
+    1.eduhomo |   2.100962   .0842719    24.93   0.000     1.935792    2.266132
+  exhyper_shh |    .030041   .3504714     0.09   0.932    -.6568703    .7169524
+  exhyper_shw |   .2219328   .3924648     0.57   0.572    -.5472841    .9911498
+   exhypo_shh |  -.6165158   .2953502    -2.09   0.037    -1.195392     -.03764
+   exhypo_shw |  -.5657054   .4826217    -1.17   0.241    -1.511627    .3802156
+        _cons |   2.015132   .1360195    14.82   0.000     1.748538    2.281725
+-------------------------------------------------------------------------------
+
+.     gen dev=e(deviance)
+
+.     display dev
+159.77242
+
+. 
+.     gen df=e(df)
+
+.     display df
+19
+
+. 
+.     egen totfreq=sum(count)
+
+.     gen lnfreq=ln(totfreq)
+
+.     gen bic = dev-df*lnfreq
+
+. 
+.     tab bic
+
+        bic |      Freq.     Percent        Cum.
+------------+-----------------------------------
+   24.33099 |         36      100.00      100.00
+------------+-----------------------------------
+      Total |         36      100.00
+
+.     drop dev-bic        
+
+.         
+. test exhyper_shh = exhyper_shw
+
+ ( 1)  [count]exhyper_shh - [count]exhyper_shw = 0
+
+           chi2(  1) =    0.13
+         Prob > chi2 =    0.7136
+
+. test exhypo_shh = exhypo_shw    
+
+ ( 1)  [count]exhypo_shh - [count]exhypo_shw = 0
+
+           chi2(  1) =    0.01
+         Prob > chi2 =    0.9277
+
+. 
+. log close
+      name:  <unnamed>
+  log type:  text
+ closed on:  22 Nov 2016, 19:18:53
+--------------------------------------------------------------------------------

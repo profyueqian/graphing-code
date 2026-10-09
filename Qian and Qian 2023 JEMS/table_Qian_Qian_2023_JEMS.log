@@ -1,0 +1,1241 @@
+------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/yueqian/Desktop/table_Qian_Qian_2023_JEMS.log
+  log type:  text
+ opened on:  15 Aug 2025, 11:35:27
+
+. 
+. **************************************************************************
+. *********Stata codes used to produce Table 3 and Table 4******************
+. /* Qian, Zhenchao, & Qian, Yue. (2023). Generation, education, and intermarriage of Asian Americans. Journal of Ethnic
+>  and Migration Studies, 46(24), 2880–2895. https://doi.org/10.1080/1369183X.2019.1585006
+> */
+. **************************************************************************
+. 
+. /*
+> Stata package desmat needs to be installed to run log-linear models
+> The command desmat can be obtained by typing search dm73_3 in the command line
+> */
+. 
+. // #0
+. // program setup
+. version 14.0
+
+. clear all
+
+. set more off
+
+. matrix drop _all
+
+. set linesize 120
+
+. 
+. 
+. // #1
+. // open data
+. clear
+
+. use "count data", clear
+
+. 
+. /*
+> How were count data and assortative mating variables generated?
+> 
+> * convert couple-level data to count data
+> contract yr0515 r4_1 r4_2 ed1 ed2, zero freq(count)
+> tab count, m
+> 
+> rename r4_1 h
+> rename r4_2 w
+> *** note: h = 1 first generation asian; h = 2 second generation asian; h = 3 third generation asian; h = 4 white
+> *** w: same coding for wives' generational status
+> *** ed1 husband's edu
+> *** ed2 wife's edu
+> 
+> gen c = 0
+> replace c = 1 if (h<2 & w>=2) | (w<2 & h>=2)
+> replace c = 2 if (h<3 & w>=3) | (w<3 & h>=3)
+> replace c = 3 if (h<4 & w>=4) | (w<4 & h>=4)
+> label var c "nativity crossings"
+> 
+> gen nhyper = h>w
+> label var nhyper "husband more native than wife"        
+> 
+> gen eduhomo = ed1==ed2
+> label var eduhomo "edu homogamy"        
+> 
+> gen educol = ed1==2 & ed2==2
+> label var educol "both college"
+> 
+> saveold "count data"
+> */
+. 
+. 
+. // #2
+. // log-linear models - Table 3
+. ** model 1: marginal
+. desmat: glm count yr0515 h w ed1 ed2 h*ed1 w*ed2, family(poisson) link(log)
+-------------------------------------------------------------------------------
+   glm
+-------------------------------------------------------------------------------
+   Dependent variable                                                     count
+   Distribution family:                                    Poisson distribution
+   Link function:                                                      log link
+   Number of observations:                                                  128
+   Deviance:                                                          29597.951
+   Deviance dispersion:                                                 264.267
+   Deviance scale factor:                                                 1.000
+   df                                                                       112
+   Prob:                                                                  0.000
+-------------------------------------------------------------------------------
+nr Effect                                                     Coeff        s.e.
+-------------------------------------------------------------------------------
+   yr0515
+1                                                            -0.326**     0.008
+   h
+2                                                            -0.834**     0.084
+3                                                            -1.063**     0.092
+4                                                             4.476**     0.047
+   w
+5                                                            -0.991**     0.086
+6                                                            -1.046**     0.087
+7                                                             4.333**     0.045
+   ed1
+8                                                            -0.342**     0.072
+   ed2
+9                                                            -0.199**     0.066
+   h.ed1
+10                                                            0.220       0.126
+11                                                           -0.099       0.145
+12                                                           -0.375**     0.073
+   w.ed2
+13                                                            0.521**     0.117
+14                                                           -0.232       0.137
+15                                                           -0.359**     0.067
+16                                                            0.782**     0.064
+-------------------------------------------------------------------------------
+*  p < .05
+** p < .01
+
+.     gen dev=e(deviance)
+
+.     display dev
+29597.951
+
+. 
+.     gen df= $S_2
+
+.     display df
+112
+
+. 
+.     egen totfreq=sum(count)
+
+.     gen lnfreq=ln(totfreq)
+
+.     gen bic = dev-df*lnfreq
+
+. 
+.     tab bic
+
+        bic |      Freq.     Percent        Cum.
+------------+-----------------------------------
+   28362.06 |        128      100.00      100.00
+------------+-----------------------------------
+      Total |        128      100.00
+
+.     drop dev-bic
+
+.         
+. ** model 2: add nativity crossings
+. desmat: glm count yr0515 h w ed1 ed2 h*ed1 w*ed2 c, family(poisson) link(log)
+-------------------------------------------------------------------------------
+   glm
+-------------------------------------------------------------------------------
+   Dependent variable                                                     count
+   Distribution family:                                    Poisson distribution
+   Link function:                                                      log link
+   Number of observations:                                                  128
+   Deviance:                                                          21397.360
+   Deviance dispersion:                                                 196.306
+   Deviance scale factor:                                                 1.000
+   df                                                                       109
+   Prob:                                                                  0.000
+-------------------------------------------------------------------------------
+nr Effect                                                     Coeff        s.e.
+-------------------------------------------------------------------------------
+   yr0515
+1                                                            -0.326**     0.008
+   h
+2                                                            -0.600**     0.089
+3                                                            -0.549**     0.101
+4                                                             2.783**     0.057
+   w
+5                                                            -0.802**     0.089
+6                                                            -0.699**     0.095
+7                                                             2.220**     0.056
+   ed1
+8                                                            -0.342**     0.072
+   ed2
+9                                                            -0.199**     0.066
+   h.ed1
+10                                                            0.220       0.126
+11                                                           -0.099       0.145
+12                                                           -0.375**     0.073
+   w.ed2
+13                                                            0.521**     0.117
+14                                                           -0.232       0.137
+15                                                           -0.359**     0.067
+   c
+16                                                           -1.366**     0.088
+17                                                           -2.376**     0.121
+18                                                           -3.330**     0.039
+19                                                            4.606**     0.059
+-------------------------------------------------------------------------------
+*  p < .05
+** p < .01
+
+.     gen dev=e(deviance)
+
+.     display dev
+21397.359
+
+. 
+.     gen df= $S_2
+
+.     display df
+109
+
+. 
+.     egen totfreq=sum(count)
+
+.     gen lnfreq=ln(totfreq)
+
+.     gen bic = dev-df*lnfreq
+
+. 
+.     tab bic
+
+        bic |      Freq.     Percent        Cum.
+------------+-----------------------------------
+   20194.57 |        128      100.00      100.00
+------------+-----------------------------------
+      Total |        128      100.00
+
+.     drop dev-bic                
+
+. 
+. ** model 3: add gender asymmetry in generational pairing
+. desmat: glm count yr0515 h w ed1 ed2 h*ed1 w*ed2 c nhyper, family(poisson) link(log)
+-------------------------------------------------------------------------------
+   glm
+-------------------------------------------------------------------------------
+   Dependent variable                                                     count
+   Distribution family:                                    Poisson distribution
+   Link function:                                                      log link
+   Number of observations:                                                  128
+   Deviance:                                                          21397.357
+   Deviance dispersion:                                                 198.124
+   Deviance scale factor:                                                 1.000
+   df                                                                       108
+   Prob:                                                                  0.000
+-------------------------------------------------------------------------------
+nr Effect                                                     Coeff        s.e.
+-------------------------------------------------------------------------------
+   yr0515
+1                                                            -0.326**     0.008
+   h
+2                                                            -0.602**     0.099
+3                                                            -0.551**     0.111
+4                                                             2.777**     0.123
+   w
+5                                                            -0.800**     0.097
+6                                                            -0.697**     0.104
+7                                                             2.225**     0.121
+   ed1
+8                                                            -0.342**     0.072
+   ed2
+9                                                            -0.199**     0.066
+   h.ed1
+10                                                            0.220       0.126
+11                                                           -0.099       0.145
+12                                                           -0.375**     0.073
+   w.ed2
+13                                                            0.521**     0.117
+14                                                           -0.232       0.137
+15                                                           -0.359**     0.067
+   c
+16                                                           -1.371**     0.123
+17                                                           -2.380**     0.150
+18                                                           -3.334**     0.093
+   nhyper
+19                                                            0.009       0.171
+20                                                            4.607**     0.059
+-------------------------------------------------------------------------------
+*  p < .05
+** p < .01
+
+.     gen dev=e(deviance)
+
+.     display dev
+21397.357
+
+. 
+.     gen df= $S_2
+
+.     display df
+108
+
+. 
+.     egen totfreq=sum(count)
+
+.     gen lnfreq=ln(totfreq)
+
+.     gen bic = dev-df*lnfreq
+
+. 
+.     tab bic
+
+        bic |      Freq.     Percent        Cum.
+------------+-----------------------------------
+    20205.6 |        128      100.00      100.00
+------------+-----------------------------------
+      Total |        128      100.00
+
+.     drop dev-bic                
+
+.         
+. ** model 4: nativity crossings + educol (both spouses are college graduates)
+. desmat: glm count yr0515 h w ed1 ed2 h*ed1 w*ed2 c educol, family(poisson) link(log)
+-------------------------------------------------------------------------------
+   glm
+-------------------------------------------------------------------------------
+   Dependent variable                                                     count
+   Distribution family:                                    Poisson distribution
+   Link function:                                                      log link
+   Number of observations:                                                  128
+   Deviance:                                                           1362.630
+   Deviance dispersion:                                                  12.617
+   Deviance scale factor:                                                 1.000
+   df                                                                       108
+   Prob:                                                                  0.000
+-------------------------------------------------------------------------------
+nr Effect                                                     Coeff        s.e.
+-------------------------------------------------------------------------------
+   yr0515
+1                                                            -0.326**     0.008
+   h
+2                                                            -0.555**     0.090
+3                                                            -0.584**     0.102
+4                                                             2.728**     0.058
+   w
+5                                                            -0.795**     0.090
+6                                                            -0.710**     0.096
+7                                                             2.182**     0.057
+   ed1
+8                                                            -1.698**     0.079
+   ed2
+9                                                            -1.290**     0.072
+   h.ed1
+10                                                            0.111       0.129
+11                                                           -0.008       0.151
+12                                                           -0.226**     0.078
+   w.ed2
+13                                                            0.507**     0.120
+14                                                           -0.212       0.142
+15                                                           -0.265**     0.072
+   c
+16                                                           -1.364**     0.088
+17                                                           -2.373**     0.121
+18                                                           -3.323**     0.039
+   educol
+19                                                            2.667**     0.021
+20                                                            4.960**     0.055
+-------------------------------------------------------------------------------
+*  p < .05
+** p < .01
+
+.     gen dev=e(deviance)
+
+.     display dev
+1362.6301
+
+. 
+.     gen df= $S_2
+
+.     display df
+108
+
+. 
+.     egen totfreq=sum(count)
+
+.     gen lnfreq=ln(totfreq)
+
+.     gen bic = dev-df*lnfreq
+
+. 
+.     tab bic
+
+        bic |      Freq.     Percent        Cum.
+------------+-----------------------------------
+   170.8742 |        128      100.00      100.00
+------------+-----------------------------------
+      Total |        128      100.00
+
+.     drop dev-bic        
+
+.         
+. ** model 5: marginal distributions of nativity vary by year
+. desmat: glm count yr0515 h w ed1 ed2 h*ed1 w*ed2 c educol yr0515*h yr0515*w, family(poisson) link(log)
+-------------------------------------------------------------------------------
+   glm
+-------------------------------------------------------------------------------
+   Dependent variable                                                     count
+   Distribution family:                                    Poisson distribution
+   Link function:                                                      log link
+   Number of observations:                                                  128
+   Deviance:                                                           1175.878
+   Deviance dispersion:                                                  11.528
+   Deviance scale factor:                                                 1.000
+   df                                                                       102
+   Prob:                                                                  0.000
+-------------------------------------------------------------------------------
+nr Effect                                                     Coeff        s.e.
+-------------------------------------------------------------------------------
+   yr0515
+1                                                            -0.144       0.077
+   h
+2                                                            -1.052**     0.127
+3                                                            -0.544**     0.125
+4                                                             2.703**     0.073
+   w
+5                                                            -1.109**     0.120
+6                                                            -0.758**     0.122
+7                                                             2.300**     0.071
+   ed1
+8                                                            -1.697**     0.079
+   ed2
+9                                                            -1.290**     0.072
+   h.ed1
+10                                                            0.105       0.129
+11                                                           -0.008       0.151
+12                                                           -0.227**     0.078
+   w.ed2
+13                                                            0.507**     0.120
+14                                                           -0.212       0.142
+15                                                           -0.265**     0.072
+   c
+16                                                           -1.324**     0.089
+17                                                           -2.353**     0.121
+18                                                           -3.306**     0.039
+   educol
+19                                                            2.667**     0.021
+   yr0515.h
+20                                                            0.831**     0.143
+21                                                           -0.095       0.163
+22                                                            0.050       0.096
+   yr0515.w
+23                                                            0.520**     0.130
+24                                                            0.102       0.153
+25                                                           -0.247**     0.090
+26                                                            4.873**     0.066
+-------------------------------------------------------------------------------
+*  p < .05
+** p < .01
+
+.     gen dev=e(deviance)
+
+.     display dev
+1175.8781
+
+. 
+.     gen df= $S_2
+
+.     display df
+102
+
+. 
+.     egen totfreq=sum(count)
+
+.     gen lnfreq=ln(totfreq)
+
+.     gen bic = dev-df*lnfreq
+
+. 
+.     tab bic
+
+        bic |      Freq.     Percent        Cum.
+------------+-----------------------------------
+   50.33083 |        128      100.00      100.00
+------------+-----------------------------------
+      Total |        128      100.00
+
+.     drop dev-bic
+
+. 
+. ** model 6: nativity crossings vary by year
+. desmat: glm count yr0515 h w ed1 ed2 h*ed1 w*ed2 c educol yr0515*h yr0515*w yr0515*c, family(poisson) link(log)
+-------------------------------------------------------------------------------
+   glm
+-------------------------------------------------------------------------------
+   Dependent variable                                                     count
+   Distribution family:                                    Poisson distribution
+   Link function:                                                      log link
+   Number of observations:                                                  128
+   Deviance:                                                           1164.611
+   Deviance dispersion:                                                  11.764
+   Deviance scale factor:                                                 1.000
+   df                                                                        99
+   Prob:                                                                  0.000
+-------------------------------------------------------------------------------
+nr Effect                                                     Coeff        s.e.
+-------------------------------------------------------------------------------
+   yr0515
+1                                                            -0.185*      0.083
+   h
+2                                                            -1.019**     0.130
+3                                                            -0.586**     0.126
+4                                                             2.692**     0.074
+   w
+5                                                            -1.071**     0.122
+6                                                            -0.770**     0.121
+7                                                             2.292**     0.073
+   ed1
+8                                                            -1.697**     0.079
+   ed2
+9                                                            -1.290**     0.072
+   h.ed1
+10                                                            0.105       0.129
+11                                                           -0.008       0.151
+12                                                           -0.227**     0.078
+   w.ed2
+13                                                            0.507**     0.120
+14                                                           -0.211       0.142
+15                                                           -0.264**     0.072
+   c
+16                                                           -1.630**     0.161
+17                                                           -2.128**     0.158
+18                                                           -3.336**     0.055
+   educol
+19                                                            2.667**     0.021
+   yr0515.h
+20                                                            0.786**     0.145
+21                                                           -0.015       0.167
+22                                                            0.066       0.097
+   yr0515.w
+23                                                            0.480**     0.132
+24                                                            0.139       0.154
+25                                                           -0.222*      0.095
+   yr0515.c
+26                                                            0.457*      0.193
+27                                                           -0.498*      0.246
+28                                                            0.056       0.079
+29                                                            4.893**     0.067
+-------------------------------------------------------------------------------
+*  p < .05
+** p < .01
+
+.     gen dev=e(deviance)
+
+.     display dev
+1164.6112
+
+. 
+.     gen df= $S_2
+
+.     display df
+99
+
+. 
+.     egen totfreq=sum(count)
+
+.     gen lnfreq=ln(totfreq)
+
+.     gen bic = dev-df*lnfreq
+
+. 
+.     tab bic
+
+        bic |      Freq.     Percent        Cum.
+------------+-----------------------------------
+   72.16831 |        128      100.00      100.00
+------------+-----------------------------------
+      Total |        128      100.00
+
+.     drop dev-bic        
+
+. 
+. ** model 7: marginal distributions of education vary by year
+. desmat: glm count yr0515 h w ed1 ed2 h*ed1 w*ed2 c educol yr0515*h yr0515*w ///
+>                                         yr0515*ed1 yr0515*ed2, family(poisson) link(log)
+-------------------------------------------------------------------------------
+   glm
+-------------------------------------------------------------------------------
+   Dependent variable                                                     count
+   Distribution family:                                    Poisson distribution
+   Link function:                                                      log link
+   Number of observations:                                                  128
+   Deviance:                                                            328.548
+   Deviance dispersion:                                                   3.285
+   Deviance scale factor:                                                 1.000
+   df                                                                       100
+   Prob:                                                                  0.000
+-------------------------------------------------------------------------------
+nr Effect                                                     Coeff        s.e.
+-------------------------------------------------------------------------------
+   yr0515
+1                                                            -0.371**     0.078
+   h
+2                                                            -1.028**     0.125
+3                                                            -0.546**     0.124
+4                                                             2.699**     0.072
+   w
+5                                                            -1.039**     0.116
+6                                                            -0.767**     0.119
+7                                                             2.275**     0.069
+   ed1
+8                                                            -1.692**     0.079
+   ed2
+9                                                            -1.530**     0.073
+   h.ed1
+10                                                            0.056       0.129
+11                                                           -0.003       0.152
+12                                                           -0.234**     0.079
+   w.ed2
+13                                                            0.430**     0.121
+14                                                           -0.221       0.143
+15                                                           -0.235**     0.073
+   c
+16                                                           -1.326**     0.089
+17                                                           -2.354**     0.121
+18                                                           -3.308**     0.039
+   educol
+19                                                            2.666**     0.021
+   yr0515.h
+20                                                            0.828**     0.143
+21                                                           -0.095       0.163
+22                                                            0.066       0.096
+   yr0515.w
+23                                                            0.468**     0.131
+24                                                            0.128       0.154
+25                                                           -0.219*      0.090
+   yr0515.ed1
+26                                                            0.005       0.021
+   yr0515.ed2
+27                                                            0.488**     0.020
+28                                                            4.975**     0.064
+-------------------------------------------------------------------------------
+*  p < .05
+** p < .01
+
+.     gen dev=e(deviance)
+
+.     display dev
+328.54825
+
+. 
+.     gen df= $S_2
+
+.     display df
+100
+
+. 
+.     egen totfreq=sum(count)
+
+.     gen lnfreq=ln(totfreq)
+
+.     gen bic = dev-df*lnfreq
+
+. 
+.     tab bic
+
+        bic |      Freq.     Percent        Cum.
+------------+-----------------------------------
+  -774.9294 |        128      100.00      100.00
+------------+-----------------------------------
+      Total |        128      100.00
+
+.     drop dev-bic
+
+. 
+. ** model 8: educol vary by year
+. desmat: glm count yr0515 h w ed1 ed2 h*ed1 w*ed2 c educol yr0515*h yr0515*w ///
+>                                         yr0515*ed1 yr0515*ed2 yr0515*educol, family(poisson) link(log)
+-------------------------------------------------------------------------------
+   glm
+-------------------------------------------------------------------------------
+   Dependent variable                                                     count
+   Distribution family:                                    Poisson distribution
+   Link function:                                                      log link
+   Number of observations:                                                  128
+   Deviance:                                                            325.104
+   Deviance dispersion:                                                   3.284
+   Deviance scale factor:                                                 1.000
+   df                                                                        99
+   Prob:                                                                  0.000
+-------------------------------------------------------------------------------
+nr Effect                                                     Coeff        s.e.
+-------------------------------------------------------------------------------
+   yr0515
+1                                                            -0.376**     0.078
+   h
+2                                                            -1.029**     0.125
+3                                                            -0.546**     0.124
+4                                                             2.699**     0.072
+   w
+5                                                            -1.039**     0.116
+6                                                            -0.767**     0.119
+7                                                             2.275**     0.069
+   ed1
+8                                                            -1.708**     0.080
+   ed2
+9                                                            -1.544**     0.074
+   h.ed1
+10                                                            0.057       0.129
+11                                                           -0.004       0.152
+12                                                           -0.234**     0.078
+   w.ed2
+13                                                            0.431**     0.121
+14                                                           -0.221       0.143
+15                                                           -0.235**     0.073
+   c
+16                                                           -1.326**     0.089
+17                                                           -2.354**     0.121
+18                                                           -3.308**     0.039
+   educol
+19                                                            2.700**     0.028
+   yr0515.h
+20                                                            0.828**     0.143
+21                                                           -0.095       0.163
+22                                                            0.066       0.096
+   yr0515.w
+23                                                            0.468**     0.131
+24                                                            0.128       0.154
+25                                                           -0.219*      0.090
+   yr0515.ed1
+26                                                            0.048       0.031
+   yr0515.ed2
+27                                                            0.518**     0.026
+   yr0515.educol
+28                                                           -0.078       0.042
+29                                                            4.976**     0.064
+-------------------------------------------------------------------------------
+*  p < .05
+** p < .01
+
+.         gen dev=e(deviance)
+
+.     display dev
+325.10425
+
+. 
+.     gen df= $S_2
+
+.     display df
+99
+
+. 
+.     egen totfreq=sum(count)
+
+.     gen lnfreq=ln(totfreq)
+
+.     gen bic = dev-df*lnfreq
+
+. 
+.     tab bic
+
+        bic |      Freq.     Percent        Cum.
+------------+-----------------------------------
+  -767.3386 |        128      100.00      100.00
+------------+-----------------------------------
+      Total |        128      100.00
+
+.     drop dev-bic                
+
+.         
+. ** model 9: nativity crossings vary by educational pairings
+. desmat: glm count yr0515 h w ed1 ed2 h*ed1 w*ed2 yr0515*h yr0515*w yr0515*ed1 yr0515*ed2 ///
+>                                         c educol c*educol, family(poisson) link(log)
+-------------------------------------------------------------------------------
+   glm
+-------------------------------------------------------------------------------
+   Dependent variable                                                     count
+   Distribution family:                                    Poisson distribution
+   Link function:                                                      log link
+   Number of observations:                                                  128
+   Deviance:                                                            250.696
+   Deviance dispersion:                                                   2.584
+   Deviance scale factor:                                                 1.000
+   df                                                                        97
+   Prob:                                                                  0.000
+-------------------------------------------------------------------------------
+nr Effect                                                     Coeff        s.e.
+-------------------------------------------------------------------------------
+   yr0515
+1                                                            -0.369**     0.078
+   h
+2                                                            -1.029**     0.126
+3                                                            -0.478**     0.128
+4                                                             2.687**     0.074
+   w
+5                                                            -1.042**     0.116
+6                                                            -0.719**     0.122
+7                                                             2.223**     0.072
+   ed1
+8                                                            -1.720**     0.080
+   ed2
+9                                                            -1.640**     0.075
+   h.ed1
+10                                                            0.060       0.130
+11                                                           -0.202       0.156
+12                                                           -0.204*      0.080
+   w.ed2
+13                                                            0.423**     0.121
+14                                                           -0.334*      0.145
+15                                                           -0.122       0.075
+   yr0515.h
+16                                                            0.827**     0.143
+17                                                           -0.110       0.164
+18                                                            0.057       0.096
+   yr0515.w
+19                                                            0.475**     0.131
+20                                                            0.138       0.155
+21                                                           -0.211*      0.090
+   yr0515.ed1
+22                                                            0.004       0.021
+   yr0515.ed2
+23                                                            0.489**     0.020
+   c
+24                                                           -1.209**     0.105
+25                                                           -2.744**     0.168
+26                                                           -3.511**     0.049
+   educol
+27                                                            2.656**     0.021
+   c.educol
+28                                                           -0.334       0.187
+29                                                            1.001**     0.240
+30                                                            0.588**     0.076
+31                                                            5.039**     0.064
+-------------------------------------------------------------------------------
+*  p < .05
+** p < .01
+
+.     gen dev=e(deviance)
+
+.     display dev
+250.69559
+
+. 
+.     gen df= $S_2
+
+.     display df
+97
+
+. 
+.     egen totfreq=sum(count)
+
+.     gen lnfreq=ln(totfreq)
+
+.     gen bic = dev-df*lnfreq
+
+. 
+.     tab bic
+
+        bic |      Freq.     Percent        Cum.
+------------+-----------------------------------
+  -819.6777 |        128      100.00      100.00
+------------+-----------------------------------
+      Total |        128      100.00
+
+.     drop dev-bic        
+
+. 
+. ** model 10: nativity crossings * educational pairings * year
+. desmat: glm count yr0515 h w ed1 ed2 h*ed1 w*ed2 yr0515*h yr0515*w yr0515*ed1 yr0515*ed2 ///
+>                                         c educol c*educol*yr0515, family(poisson) link(log)
+-------------------------------------------------------------------------------
+   glm
+-------------------------------------------------------------------------------
+   Dependent variable                                                     count
+   Distribution family:                                    Poisson distribution
+   Link function:                                                      log link
+   Number of observations:                                                  128
+   Deviance:                                                            225.598
+   Deviance dispersion:                                                   2.507
+   Deviance scale factor:                                                 1.000
+   df                                                                        90
+   Prob:                                                                  0.000
+-------------------------------------------------------------------------------
+nr Effect                                                     Coeff        s.e.
+-------------------------------------------------------------------------------
+   yr0515
+1                                                            -0.399**     0.084
+   h
+2                                                            -0.992**     0.129
+3                                                            -0.530**     0.127
+4                                                             2.676**     0.074
+   w
+5                                                            -1.002**     0.120
+6                                                            -0.735**     0.120
+7                                                             2.225**     0.073
+   ed1
+8                                                            -1.733**     0.081
+   ed2
+9                                                            -1.653**     0.076
+   h.ed1
+10                                                            0.067       0.130
+11                                                           -0.207       0.156
+12                                                           -0.207**     0.080
+   w.ed2
+13                                                            0.411**     0.121
+14                                                           -0.341*      0.145
+15                                                           -0.124       0.075
+   yr0515.h
+16                                                            0.772**     0.146
+17                                                           -0.009       0.168
+18                                                            0.076       0.098
+   yr0515.w
+19                                                            0.442**     0.133
+20                                                            0.194       0.156
+21                                                           -0.206*      0.095
+   yr0515.ed1
+22                                                            0.048       0.031
+   yr0515.ed2
+23                                                            0.520**     0.026
+   c
+24                                                           -1.665**     0.194
+25                                                           -2.545**     0.215
+26                                                           -3.461**     0.065
+   educol
+27                                                            2.692**     0.028
+   c.educol
+28                                                            0.133       0.317
+29                                                            1.169**     0.303
+30                                                            0.438**     0.108
+   c.yr0515
+31                                                            0.680**     0.227
+32                                                           -0.460       0.341
+33                                                           -0.117       0.098
+   educol.yr0515
+34                                                           -0.082       0.042
+   c.educol.yr0515
+35                                                           -0.698       0.374
+36                                                           -0.274       0.458
+37                                                            0.287*      0.141
+38                                                            5.050**     0.066
+-------------------------------------------------------------------------------
+*  p < .05
+** p < .01
+
+.     gen dev=e(deviance)
+
+.     display dev
+225.59828
+
+. 
+.     gen df= $S_2
+
+.     display df
+90
+
+. 
+.     egen totfreq=sum(count)
+
+.     gen lnfreq=ln(totfreq)
+
+.     gen bic = dev-df*lnfreq
+
+. 
+.     tab bic
+
+        bic |      Freq.     Percent        Cum.
+------------+-----------------------------------
+  -767.5316 |        128      100.00      100.00
+------------+-----------------------------------
+      Total |        128      100.00
+
+.     drop dev-bic                
+
+. 
+. // #3
+. // log-linear models - Table 4
+. ** model 7: marginal distributions of education vary by year
+. glm count i.yr0515 i.h i.w i.ed1 i.ed2 h#ed1 w#ed2 yr0515#h yr0515#w yr0515#ed1 yr0515#ed2 ///
+>                         i.c i.educol, family(poisson) link(log)
+
+Iteration 0:  Log likelihood = -13111.121  
+Iteration 1:  Log likelihood = -1365.1666  
+Iteration 2:  Log likelihood = -508.68558  
+Iteration 3:  Log likelihood = -432.61109  
+Iteration 4:  Log likelihood = -429.32945  
+Iteration 5:  Log likelihood = -429.32479  
+Iteration 6:  Log likelihood = -429.32479  
+
+Generalized linear models                         Number of obs   =        128
+Optimization     : ML                             Residual df     =        100
+                                                  Scale parameter =          1
+Deviance         =  328.5482468                   (1/df) Deviance =   3.285482
+Pearson          =  347.1797781                   (1/df) Pearson  =   3.471798
+
+Variance function: V(u) = u                       [Poisson]
+Link function    : g(u) = ln(u)                   [Log]
+
+                                                  AIC             =     7.1457
+Log likelihood   = -429.3247943                   BIC             =  -156.6548
+
+------------------------------------------------------------------------------
+             |                 OIM
+       count | Coefficient  std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+    1.yr0515 |  -.3711065   .0779902    -4.76   0.000    -.5239646   -.2182485
+             |
+           h |
+          2  |  -1.028158   .1246333    -8.25   0.000    -1.272435   -.7838813
+          3  |  -.5458821   .1235054    -4.42   0.000    -.7879482   -.3038159
+          4  |   2.699004   .0720914    37.44   0.000     2.557708    2.840301
+             |
+           w |
+          2  |  -1.039218   .1155884    -8.99   0.000    -1.265767   -.8126689
+          3  |  -.7671399    .118573    -6.47   0.000    -.9995388   -.5347411
+          4  |   2.275031   .0694958    32.74   0.000     2.138822     2.41124
+             |
+         ed1 |
+  >=college  |  -1.692003   .0793864   -21.31   0.000    -1.847597   -1.536408
+             |
+         ed2 |
+  >=college  |  -1.530176   .0734419   -20.84   0.000    -1.674119   -1.386232
+             |
+       h#ed1 |
+2#>=college  |   .0560127   .1294938     0.43   0.665    -.1977905     .309816
+3#>=college  |   -.003445    .151579    -0.02   0.982    -.3005345    .2936444
+4#>=college  |  -.2338482    .078505    -2.98   0.003    -.3877151   -.0799813
+             |
+       w#ed2 |
+2#>=college  |    .430486   .1206858     3.57   0.000     .1939461     .667026
+3#>=college  |  -.2209374   .1432858    -1.54   0.123    -.5017724    .0598975
+4#>=college  |  -.2351588   .0726787    -3.24   0.001    -.3776065   -.0927112
+             |
+    yr0515#h |
+        1 2  |   .8275269   .1434893     5.77   0.000     .5462931    1.108761
+        1 3  |  -.0950462   .1633523    -0.58   0.561    -.4152109    .2251186
+        1 4  |   .0660723   .0964895     0.68   0.493    -.1230436    .2551881
+             |
+    yr0515#w |
+        1 2  |   .4678948   .1312572     3.56   0.000     .2106355    .7251541
+        1 3  |    .127848   .1541969     0.83   0.407    -.1743724    .4300684
+        1 4  |  -.2188669   .0901221    -2.43   0.015     -.395503   -.0422308
+             |
+  yr0515#ed1 |
+1#>=college  |   .0054207    .021024     0.26   0.797    -.0357856    .0466269
+             |
+  yr0515#ed2 |
+1#>=college  |   .4884257   .0204804    23.85   0.000     .4482847    .5285666
+             |
+           c |
+          1  |  -1.325971   .0886821   -14.95   0.000    -1.499785   -1.152158
+          2  |   -2.35409   .1208368   -19.48   0.000    -2.590926   -2.117254
+          3  |  -3.307973    .039317   -84.14   0.000    -3.385033   -3.230913
+             |
+    1.educol |   2.666403   .0208924   127.63   0.000     2.625454    2.707351
+       _cons |   4.974544    .063891    77.86   0.000      4.84932    5.099768
+------------------------------------------------------------------------------
+
+. 
+. ** model 9: nativity crossings vary by educational pairings
+. glm count i.yr0515 i.h i.w i.ed1 i.ed2 h#ed1 w#ed2 yr0515#h yr0515#w yr0515#ed1 yr0515#ed2 ///
+>                         i.c i.educol ///
+>                         c#educol, family(poisson) link(log)
+
+Iteration 0:  Log likelihood = -12136.994  
+Iteration 1:  Log likelihood = -1497.4783  
+Iteration 2:  Log likelihood = -486.38224  
+Iteration 3:  Log likelihood = -394.74929  
+Iteration 4:  Log likelihood = -390.43334  
+Iteration 5:  Log likelihood = -390.39847  
+Iteration 6:  Log likelihood = -390.39847  
+
+Generalized linear models                         Number of obs   =        128
+Optimization     : ML                             Residual df     =         97
+                                                  Scale parameter =          1
+Deviance         =  250.6955921                   (1/df) Deviance =   2.584491
+Pearson          =   277.605288                   (1/df) Pearson  =    2.86191
+
+Variance function: V(u) = u                       [Poisson]
+Link function    : g(u) = ln(u)                   [Log]
+
+                                                  AIC             =   6.584351
+Log likelihood   =  -390.398467                   BIC             =  -219.9513
+
+------------------------------------------------------------------------------
+             |                 OIM
+       count | Coefficient  std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+    1.yr0515 |  -.3692577   .0779363    -4.74   0.000      -.52201   -.2165054
+             |
+           h |
+          2  |  -1.028987   .1255671    -8.19   0.000    -1.275094   -.7828804
+          3  |  -.4776798   .1275316    -3.75   0.000    -.7276371   -.2277226
+          4  |   2.687126   .0742468    36.19   0.000     2.541605    2.832647
+             |
+           w |
+          2  |  -1.041757   .1162131    -8.96   0.000    -1.269531   -.8139835
+          3  |  -.7191021   .1222204    -5.88   0.000    -.9586496   -.4795546
+          4  |   2.223455   .0717427    30.99   0.000     2.082842    2.364068
+             |
+         ed1 |
+  >=college  |  -1.720096   .0804313   -21.39   0.000    -1.877738   -1.562453
+             |
+         ed2 |
+  >=college  |  -1.639625   .0754846   -21.72   0.000    -1.787572   -1.491678
+             |
+       h#ed1 |
+2#>=college  |   .0598754   .1303095     0.46   0.646    -.1955265    .3152773
+3#>=college  |  -.2020941   .1555171    -1.30   0.194     -.506902    .1027138
+4#>=college  |  -.2038816   .0796273    -2.56   0.010    -.3599483   -.0478149
+             |
+       w#ed2 |
+2#>=college  |   .4234411   .1210593     3.50   0.000     .1861693    .6607129
+3#>=college  |  -.3344499   .1445162    -2.31   0.021    -.6176964   -.0512034
+4#>=college  |  -.1222596   .0747864    -1.63   0.102    -.2688383    .0243191
+             |
+    yr0515#h |
+        1 2  |   .8272564   .1431504     5.78   0.000     .5466869    1.107826
+        1 3  |  -.1100573   .1639189    -0.67   0.502    -.4313324    .2112179
+        1 4  |   .0565476   .0964189     0.59   0.558    -.1324299    .2455252
+             |
+    yr0515#w |
+        1 2  |   .4746604   .1309427     3.62   0.000     .2180175    .7313034
+        1 3  |   .1382629   .1549372     0.89   0.372    -.1654085    .4419343
+        1 4  |  -.2111216   .0901553    -2.34   0.019    -.3878229   -.0344204
+             |
+  yr0515#ed1 |
+1#>=college  |   .0043059   .0210261     0.20   0.838    -.0369046    .0455163
+             |
+  yr0515#ed2 |
+1#>=college  |   .4890891   .0204794    23.88   0.000     .4489502     .529228
+             |
+           c |
+          1  |  -1.208874   .1054606   -11.46   0.000    -1.415573   -1.002175
+          2  |  -2.743572   .1679074   -16.34   0.000    -3.072664   -2.414479
+          3  |  -3.511107   .0493631   -71.13   0.000    -3.607857   -3.414357
+             |
+    1.educol |   2.656262   .0209508   126.79   0.000       2.6152    2.697325
+             |
+    c#educol |
+        1 1  |  -.3344363    .186841    -1.79   0.073     -.700638    .0317654
+        2 1  |   1.001406    .239893     4.17   0.000      .531224    1.471587
+        3 1  |   .5878479   .0759173     7.74   0.000     .4390528     .736643
+             |
+       _cons |   5.038647   .0643649    78.28   0.000     4.912494      5.1648
+------------------------------------------------------------------------------
+
+. 
+. ** model 10: nativity crossings * educational pairings * year
+. glm count i.yr0515 i.h i.w i.ed1 i.ed2 h#ed1 w#ed2 yr0515#h yr0515#w yr0515#ed1 yr0515#ed2 ///
+>                         i.c i.educol ///
+>                         c#yr0515 educol#yr0515 c#educol ///
+>                         c#educol#yr0515, family(poisson) link(log)
+
+Iteration 0:  Log likelihood = -12086.723  
+Iteration 1:  Log likelihood = -1490.2259  
+Iteration 2:  Log likelihood =  -475.9109  
+Iteration 3:  Log likelihood = -382.39037  
+Iteration 4:  Log likelihood = -377.90051  
+Iteration 5:  Log likelihood = -377.84983  
+Iteration 6:  Log likelihood = -377.84981  
+
+Generalized linear models                         Number of obs   =        128
+Optimization     : ML                             Residual df     =         90
+                                                  Scale parameter =          1
+Deviance         =  225.5982768                   (1/df) Deviance =   2.506648
+Pearson          =  250.9025515                   (1/df) Pearson  =   2.787806
+
+Variance function: V(u) = u                       [Poisson]
+Link function    : g(u) = ln(u)                   [Log]
+
+                                                  AIC             =   6.497653
+Log likelihood   = -377.8498093                   BIC             =  -211.0844
+
+---------------------------------------------------------------------------------
+                |                 OIM
+          count | Coefficient  std. err.      z    P>|z|     [95% conf. interval]
+----------------+----------------------------------------------------------------
+       1.yr0515 |  -.3993742    .084162    -4.75   0.000    -.5643287   -.2344196
+                |
+              h |
+             2  |  -.9915282   .1292226    -7.67   0.000      -1.2448   -.7382565
+             3  |    -.52979   .1270983    -4.17   0.000    -.7788981   -.2806818
+             4  |   2.676299   .0742053    36.07   0.000     2.530859    2.821738
+                |
+              w |
+             2  |  -1.001501   .1196532    -8.37   0.000    -1.236017   -.7669846
+             3  |  -.7347001   .1203709    -6.10   0.000    -.9706226   -.4987775
+             4  |   2.224984   .0725353    30.67   0.000     2.082818    2.367151
+                |
+            ed1 |
+     >=college  |  -1.733359   .0810108   -21.40   0.000    -1.892137   -1.574581
+                |
+            ed2 |
+     >=college  |  -1.652624   .0759903   -21.75   0.000    -1.801562   -1.503686
+                |
+          h#ed1 |
+   2#>=college  |   .0666613   .1303794     0.51   0.609    -.1888776    .3222002
+   3#>=college  |  -.2071304   .1556946    -1.33   0.183    -.5122863    .0980254
+   4#>=college  |  -.2073329   .0797011    -2.60   0.009    -.3635443   -.0511216
+                |
+          w#ed2 |
+   2#>=college  |   .4106946   .1210445     3.39   0.001     .1734517    .6479374
+   3#>=college  |  -.3414495   .1445364    -2.36   0.018    -.6247356   -.0581634
+   4#>=college  |  -.1236595   .0748768    -1.65   0.099    -.2704153    .0230962
+                |
+       yr0515#h |
+           1 2  |   .7716683   .1455066     5.30   0.000     .4864806    1.056856
+           1 3  |  -.0088875   .1679361    -0.05   0.958    -.3380362    .3202613
+           1 4  |   .0758959   .0975455     0.78   0.437    -.1152896    .2670815
+                |
+       yr0515#w |
+           1 2  |   .4416728   .1325536     3.33   0.001     .1818726     .701473
+           1 3  |    .194166    .156028     1.24   0.213    -.1116433    .4999753
+           1 4  |  -.2055674    .095361    -2.16   0.031    -.3924715   -.0186634
+                |
+     yr0515#ed1 |
+   1#>=college  |    .048106   .0310881     1.55   0.122    -.0128256    .1090375
+                |
+     yr0515#ed2 |
+   1#>=college  |   .5196239   .0259596    20.02   0.000      .468744    .5705038
+                |
+              c |
+             1  |  -1.665139   .1939884    -8.58   0.000     -2.04535   -1.284929
+             2  |  -2.545454     .21489   -11.85   0.000    -2.966631   -2.124277
+             3  |  -3.461188   .0652501   -53.04   0.000    -3.589076     -3.3333
+                |
+       1.educol |   2.691824    .027866    96.60   0.000     2.637208    2.746441
+                |
+       c#yr0515 |
+           1 1  |    .680311   .2273298     2.99   0.003     .2347529    1.125869
+           2 1  |  -.4602609   .3412618    -1.35   0.177    -1.129122    .2085998
+           3 1  |  -.1174713   .0976584    -1.20   0.229    -.3088783    .0739356
+                |
+  educol#yr0515 |
+           1 1  |    -.08209    .042224    -1.94   0.052    -.1648476    .0006675
+                |
+       c#educol |
+           1 1  |   .1328039   .3166572     0.42   0.675    -.4878328    .7534407
+           2 1  |   1.169119   .3025408     3.86   0.000     .5761497    1.762088
+           3 1  |   .4383499   .1077402     4.07   0.000      .227183    .6495167
+                |
+c#educol#yr0515 |
+         1 1 1  |  -.6979656   .3736629    -1.87   0.062    -1.430331    .0344002
+         2 1 1  |  -.2742348   .4579006    -0.60   0.549    -1.171703    .6232338
+         3 1 1  |   .2868793   .1410779     2.03   0.042     .0103716    .5633869
+                |
+          _cons |   5.049887    .065716    76.84   0.000     4.921086    5.178688
+---------------------------------------------------------------------------------
+
+.                         
+. log close
+      name:  <unnamed>
+       log:  /Users/yueqian/Desktop/table_Qian_Qian_2023_JEMS.log
+  log type:  text
+ closed on:  15 Aug 2025, 11:35:33
+------------------------------------------------------------------------------------------------------------------------

@@ -1,0 +1,554 @@
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/yueqian/Desktop/graph_Tian_Qian_2022_PSP.log
+  log type:  text
+ opened on:  15 Aug 2025, 09:12:31
+
+. 
+. // #0
+. // program setup
+. version 14.2
+
+. clear all
+
+. set more off
+
+. matrix drop _all
+
+. set linesize 120
+
+. 
+. 
+. **************************************************************************
+. ************************** Figure 1 - migrant men ************************
+. **************************************************************************
+. 
+. // #1
+. // open data for Figure 1
+. clear
+
+. use "regsample_men.dta", clear
+
+. 
+. // #2
+. // graph Figure 1
+. gen int1 = me2*mbar
+
+. gen int2 = me3*mbar
+
+. 
+. *https://stats.idre.ucla.edu/stata/faq/how-can-i-compute-predictive-margins-for-xtmelogit-with-random-effects/
+. meqrlogit inter me2 me3 mbar mexpo msexr mgdp mrank1 mrank3 int1 int2 mage murbanhk mwork mlninc mhan rentpri rentpub 
+> housoth || h0: me2 me3
+
+Refining starting values: 
+
+Iteration 0:  Log likelihood = -328.17084  
+Iteration 1:  Log likelihood = -320.16742  
+Iteration 2:  Log likelihood = -318.13719  
+
+Performing gradient-based optimization: 
+
+Iteration 0:  Log likelihood = -318.13719  (not concave)
+Iteration 1:  Log likelihood = -317.87413  (not concave)
+Iteration 2:  Log likelihood = -317.81217  
+Iteration 3:  Log likelihood = -317.30922  
+Iteration 4:  Log likelihood = -317.19197  
+Iteration 5:  Log likelihood = -317.19026  
+Iteration 6:  Log likelihood = -317.19025  
+
+Mixed-effects logistic regression               Number of obs     =      1,276
+Group variable: h0                              Number of groups  =         42
+
+                                                Obs per group:
+                                                              min =          1
+                                                              avg =       30.4
+                                                              max =        308
+
+Integration points =   7                        Wald chi2(18)     =     190.68
+Log likelihood = -317.19025                     Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+       inter | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+         me2 |  -.7862168   .5590041    -1.41   0.160    -1.881845    .3094111
+         me3 |  -.3313148   .6330116    -0.52   0.601    -1.571995    .9093651
+        mbar |  -.4137836   .3280941    -1.26   0.207    -1.056836     .229269
+       mexpo |   2.089231   1.184146     1.76   0.078    -.2316529    4.410115
+       msexr |  -.3997398   1.150488    -0.35   0.728    -2.654656    1.855176
+        mgdp |   -.025212   .0146355    -1.72   0.085    -.0538971     .003473
+      mrank1 |   .3995035   .3859651     1.04   0.301    -.3569742    1.155981
+      mrank3 |   -.096679   .3799802    -0.25   0.799    -.8414265    .6480684
+        int1 |   .6449573   .2922329     2.21   0.027     .0721914    1.217723
+        int2 |   .6885294   .3458125     1.99   0.046     .0107494    1.366309
+        mage |   .0842384   .0292861     2.88   0.004     .0268387    .1416382
+    murbanhk |    .136186   .2627454     0.52   0.604    -.3787855    .6511575
+       mwork |  -1.189822   1.020241    -1.17   0.244    -3.189457    .8098136
+      mlninc |   .0398242   .1348565     0.30   0.768    -.2244897    .3041382
+        mhan |   .3571872    .539612     0.66   0.508     -.700433    1.414807
+     rentpri |  -1.654067   .3642026    -4.54   0.000    -2.367891   -.9402428
+     rentpub |   -2.62632   .2550545   -10.30   0.000    -3.126218   -2.126423
+     housoth |  -1.408591     .41236    -3.42   0.001    -2.216802   -.6003804
+       _cons |  -1.981723   2.102732    -0.94   0.346    -6.103003    2.139556
+------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------
+  Random-effects parameters  |   Estimate   Std. err.     [95% conf. interval]
+-----------------------------+------------------------------------------------
+h0: Independent              |
+                    var(me2) |   1.79e-11   4.54e-06             0           .
+                    var(me3) |   .3013206   .2786181      .0491993    1.845433
+                  var(_cons) |   4.93e-20   7.62e-11             0           .
+------------------------------------------------------------------------------
+LR test vs. logistic model: chi2(3) = 3.38                Prob > chi2 = 0.3363
+
+Note: LR test is conservative and provided only for reference.
+
+. matrix list e(b)        
+
+e(b)[1,22]
+           eq1:        eq1:        eq1:        eq1:        eq1:        eq1:        eq1:        eq1:        eq1:
+           me2         me3        mbar       mexpo       msexr        mgdp      mrank1      mrank3        int1
+y1   -.7862168  -.33131484  -.41378358    2.089231  -.39973979  -.02521203    .3995035  -.09667902   .64495735
+
+           eq1:        eq1:        eq1:        eq1:        eq1:        eq1:        eq1:        eq1:        eq1:
+          int2        mage    murbanhk       mwork      mlninc        mhan     rentpri     rentpub     housoth
+y1    .6885294   .08423845   .13618599  -1.1898218   .03982423    .3571872  -1.6540667  -2.6263204  -1.4085912
+
+           eq1:   lns1_1_1:   lns1_1_2:   lns1_1_3:
+         _cons       _cons       _cons       _cons
+y1  -1.9817234  -12.374075  -.59979031  -22.228544
+
+. predict re*, reffects   
+
+. describe re1 re2
+
+Variable      Storage   Display    Value
+    name         type    format    label      Variable label
+------------------------------------------------------------------------------------------------------------------------
+re1             float   %9.0g                 random effects for h0: me2
+re2             float   %9.0g                 random effects for h0: me3
+
+. 
+. tempvar rxb0 rxb1 rxb2 p0 p1 p2
+
+. generate `rxb0' = .    // initialize temp var
+(1,276 missing values generated)
+
+. generate `rxb1' = .    // initialize temp var
+(1,276 missing values generated)
+
+. generate `rxb2' = .    // initialize temp var
+(1,276 missing values generated)
+
+. generate `p0' = .      // initialize temp var
+(1,276 missing values generated)
+
+. generate `p1' = .      // initialize temp var  
+(1,276 missing values generated)
+
+. generate `p2' = .      // initialize temp var
+(1,276 missing values generated)
+
+. matrix m = J(22,1,0)    // initialize matrix for me1
+
+. matrix f = J(22,1,0)    // initialize matrix for me2
+
+. matrix z = J(22,1,0)    // initialize matrix for me3
+
+. 
+. local i = 1            // initialize local macro
+
+. 
+. foreach j of numlist 0.08 0.2(0.2)3.0 3.18 {
+  2.         
+. quietly replace `rxb0' = (_b[me2]+re1)*0 + (_b[me3]+re2)*0 + (_b[mbar])*`j' + (_b[mexpo])*mexpo + (_b[msexr])*msexr + 
+> (_b[mgdp])*mgdp + (_b[mrank1])*mrank1 + (_b[mrank3])*mrank3 ///
+>                                                 + (_b[int1])*0*`j' + (_b[int2])*0*`j' ///
+>                                                 + (_b[mage])*mage + (_b[murbanhk])*murbanhk + (_b[mwork])*mwork + (_b[
+> mlninc])*mlninc + (_b[mhan])*mhan ///
+>                                                 + (_b[rentpri])*rentpri + (_b[rentpub])*rentpub + (_b[housoth])*housot
+> h ///
+>                                                 + (_b[_cons]+re3)
+  3.                                                 
+. quietly replace `rxb1' = (_b[me2]+re1)*1 + (_b[me3]+re2)*0 + (_b[mbar])*`j' + (_b[mexpo])*mexpo + (_b[msexr])*msexr + 
+> (_b[mgdp])*mgdp + (_b[mrank1])*mrank1 + (_b[mrank3])*mrank3 ///
+>                                                 + (_b[int1])*1*`j' + (_b[int2])*0*`j' ///
+>                                                 + (_b[mage])*mage + (_b[murbanhk])*murbanhk + (_b[mwork])*mwork + (_b[
+> mlninc])*mlninc + (_b[mhan])*mhan ///
+>                                                 + (_b[rentpri])*rentpri + (_b[rentpub])*rentpub + (_b[housoth])*housot
+> h ///
+>                                                 + (_b[_cons]+re3)
+  4.                                                 
+. quietly replace `rxb2' = (_b[me2]+re1)*0 + (_b[me3]+re2)*1 + (_b[mbar])*`j' + (_b[mexpo])*mexpo + (_b[msexr])*msexr + 
+> (_b[mgdp])*mgdp + (_b[mrank1])*mrank1 + (_b[mrank3])*mrank3 ///
+>                                                 + (_b[int1])*0*`j' + (_b[int2])*1*`j' ///
+>                                                 + (_b[mage])*mage + (_b[murbanhk])*murbanhk + (_b[mwork])*mwork + (_b[
+> mlninc])*mlninc + (_b[mhan])*mhan ///
+>                                                 + (_b[rentpri])*rentpri + (_b[rentpub])*rentpub + (_b[housoth])*housot
+> h ///
+>                                                 + (_b[_cons]+re3)
+  5.                                                 
+. quietly replace `p0' = exp(`rxb0')/(1+exp(`rxb0'))
+  6. quietly sum `p0'
+  7. matrix m[`i',1] = r(mean)
+  8. 
+. quietly replace `p1' = exp(`rxb1')/(1+exp(`rxb1'))
+  9. quietly sum `p1'
+ 10. matrix f[`i',1] = r(mean)
+ 11. 
+. quietly replace `p2' = exp(`rxb2')/(1+exp(`rxb2'))
+ 12. quietly sum `p2'
+ 13. matrix z[`i',1] = r(mean)
+ 14. local i = `i' + 1      // increment local macro
+ 15. }
+
+. 
+. matrix list m
+
+m[22,1]
+            c1
+ r1  .14032205
+ r2  .13616587
+ r3  .12943201
+ r4  .12293573
+ r5  .11667282
+ r6  .11063918
+ r7  .10483082
+ r8  .09924386
+ r9   .0938745
+r10  .08871894
+r11  .08377344
+r12   .0790342
+r13  .07449737
+r14  .07015905
+r15  .06601519
+r16  .06206166
+r17  .05866265
+r18          0
+r19          0
+r20          0
+r21          0
+r22          0
+
+. matrix r = (0.08\.2\.4\.6\.8\1.0\1.2\1.4\1.6\1.8\2.0\2.2\2.4\2.6\2.8\3.0\3.18)
+
+. svmat r
+
+. svmat m
+
+. svmat f
+
+. svmat z
+
+. list r1 m1 f1 z1 in 1/17
+
+     +---------------------------------------+
+     |   r1         m1         f1         z1 |
+     |---------------------------------------|
+  1. |  .08    .140322   .0873288   .1206852 |
+  2. |   .2   .1361659   .0890139   .1232554 |
+  3. |   .4    .129432    .091875   .1276256 |
+  4. |   .6   .1229357   .0948024    .132105 |
+  5. |   .8   .1166728   .0977967   .1366951 |
+     |---------------------------------------|
+  6. |    1   .1106392   .1008586   .1413971 |
+  7. |  1.2   .1048308   .1039887   .1462125 |
+  8. |  1.4   .0992439   .1071878   .1511426 |
+  9. |  1.6   .0938745   .1104565   .1561889 |
+ 10. |  1.8   .0887189   .1137955   .1613529 |
+     |---------------------------------------|
+ 11. |    2   .0837734   .1172054   .1666358 |
+ 12. |  2.2   .0790342    .120687   .1720391 |
+ 13. |  2.4   .0744974    .124241   .1775641 |
+ 14. |  2.6    .070159    .127868   .1832123 |
+ 15. |  2.8   .0660152    .131569    .188985 |
+     |---------------------------------------|
+ 16. |    3   .0620617   .1353445   .1948835 |
+ 17. | 3.18   .0586626   .1388068   .2003006 |
+     +---------------------------------------+
+
+. twoway (line m1 r1, lpattern(solid) lcolor(gs8)) ///
+>                 (line f1 r1, lpattern(dash) lcolor(black)) ///
+>                 (line z1 r1, lpattern(shortdash_dot) lcolor(black)), ///
+>                 graphregion(color(white)) ///
+>                 title("Migrant Men") ytitle("Probability of Intermarriage") xtitle("The City's Entry Barrier (CEB) Ind
+> ex") ///  
+>                 ylabel(0(.05).45, grid labsize(vsmall)) legend(order(1 "<high school" 2 "High school" 3 "college or ab
+> ove")) ///
+>                 xla(0(0.2)3.2, format(%9.1f))
+
+. graph export "graph_Tian_Qian_2022_PSP_Figure1.pdf"
+file /Users/yueqian/Desktop/graph_Tian_Qian_2022_PSP_Figure1.pdf saved as PDF format
+
+. 
+. 
+. 
+. **************************************************************************
+. ************************** Figure 2 - migrant women **********************
+. **************************************************************************
+. 
+. // #3
+. // open data for Figure 2
+. clear
+
+. use "regsample_women.dta", clear
+
+. 
+. // #2
+. // graph Figure 2
+. gen int1 = fe2*fbar
+
+. gen int2 = fe3*fbar
+
+. 
+. *https://stats.idre.ucla.edu/stata/faq/how-can-i-compute-predictive-margins-for-xtmelogit-with-random-effects/
+. meqrlogit inter fe2 fe3 fbar fexpo fsexr fgdp frank1 frank3 int1 int2 fage furbanhk fwork flninc fhan rentpri rentpub 
+> housoth || h0: fe2 fe3
+
+Refining starting values: 
+
+Iteration 0:  Log likelihood = -565.25114  (not concave)
+Iteration 1:  Log likelihood = -559.94798  
+Iteration 2:  Log likelihood = -556.65403  
+
+Performing gradient-based optimization: 
+
+Iteration 0:  Log likelihood = -556.65403  
+Iteration 1:  Log likelihood = -555.89163  (not concave)
+Iteration 2:  Log likelihood = -554.04509  
+Iteration 3:  Log likelihood = -553.80454  
+Iteration 4:  Log likelihood = -553.80356  
+Iteration 5:  Log likelihood = -553.80356  
+
+Mixed-effects logistic regression               Number of obs     =      1,589
+Group variable: h0                              Number of groups  =         43
+
+                                                Obs per group:
+                                                              min =          1
+                                                              avg =       37.0
+                                                              max =        373
+
+Integration points =   7                        Wald chi2(18)     =     443.34
+Log likelihood = -553.80356                     Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+       inter | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+         fe2 |   .7953506   .4409332     1.80   0.071    -.0688626    1.659564
+         fe3 |   1.138348   .8848895     1.29   0.198    -.5960037    2.872699
+        fbar |  -.1152394   .2239275    -0.51   0.607    -.5541293    .3236504
+       fexpo |   2.842286    .872663     3.26   0.001     1.131898    4.552674
+       fsexr |   -.414781   .9142857    -0.45   0.650    -2.206748    1.377186
+        fgdp |  -.0038612   .0103191    -0.37   0.708    -.0240863    .0163638
+      frank1 |    .409043   .3160432     1.29   0.196    -.2103902    1.028476
+      frank3 |  -.4804873   .3128208    -1.54   0.125    -1.093605    .1326302
+        int1 |  -.0813951   .2036083    -0.40   0.689    -.4804601    .3176699
+        int2 |  -.2074559    .532188    -0.39   0.697    -1.250525    .8356135
+        fage |   .0379672   .0255696     1.48   0.138    -.0121482    .0880826
+    furbanhk |   .1846477   .2068392     0.89   0.372    -.2207497    .5900451
+       fwork |   .5268387   .4640093     1.14   0.256    -.3826029     1.43628
+      flninc |  -.1590989   .0680329    -2.34   0.019     -.292441   -.0257569
+        fhan |  -.5409641   .4069731    -1.33   0.184    -1.338617    .2566885
+     rentpri |  -1.671616   .2428488    -6.88   0.000    -2.147591   -1.195641
+     rentpub |  -3.852551   .1954921   -19.71   0.000    -4.235709   -3.469394
+     housoth |  -2.246918   .3065095    -7.33   0.000    -2.847666   -1.646171
+       _cons |  -.3957747   1.443537    -0.27   0.784    -3.225055    2.433505
+------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------
+  Random-effects parameters  |   Estimate   Std. err.     [95% conf. interval]
+-----------------------------+------------------------------------------------
+h0: Independent              |
+                    var(fe2) |   5.78e-19   3.48e-10             0           .
+                    var(fe3) |   2.407904   1.465466      .7304528    7.937543
+                  var(_cons) |   3.43e-19   2.18e-10             0           .
+------------------------------------------------------------------------------
+LR test vs. logistic model: chi2(3) = 19.80               Prob > chi2 = 0.0002
+
+Note: LR test is conservative and provided only for reference.
+
+. matrix list e(b)        
+
+e(b)[1,22]
+           eq1:        eq1:        eq1:        eq1:        eq1:        eq1:        eq1:        eq1:        eq1:
+           fe2         fe3        fbar       fexpo       fsexr        fgdp      frank1      frank3        int1
+y1   .79535063   1.1383478  -.11523941   2.8422861    -.414781  -.00386125     .409043  -.48048728  -.08139513
+
+           eq1:        eq1:        eq1:        eq1:        eq1:        eq1:        eq1:        eq1:        eq1:
+          int2        fage    furbanhk       fwork      flninc        fhan     rentpri     rentpub     housoth
+y1  -.20745588   .03796722   .18464767   .52683866  -.15909895   -.5409641  -1.6716161  -3.8525513  -2.2469183
+
+           eq1:   lns1_1_1:   lns1_1_2:   lns1_1_3:
+         _cons       _cons       _cons       _cons
+y1  -.39577469  -20.997058    .4393783  -21.258968
+
+. predict re*, reffects   
+
+. describe re1 re2
+
+Variable      Storage   Display    Value
+    name         type    format    label      Variable label
+------------------------------------------------------------------------------------------------------------------------
+re1             float   %9.0g                 random effects for h0: fe2
+re2             float   %9.0g                 random effects for h0: fe3
+
+. 
+. tempvar rxb0 rxb1 rxb2 p0 p1 p2
+
+. generate `rxb0' = .    // initialize temp var
+(1,589 missing values generated)
+
+. generate `rxb1' = .    // initialize temp var
+(1,589 missing values generated)
+
+. generate `rxb2' = .    // initialize temp var
+(1,589 missing values generated)
+
+. generate `p0' = .      // initialize temp var
+(1,589 missing values generated)
+
+. generate `p1' = .      // initialize temp var  
+(1,589 missing values generated)
+
+. generate `p2' = .      // initialize temp var
+(1,589 missing values generated)
+
+. matrix m = J(22,1,0)    // initialize matrix for fe1
+
+. matrix f = J(22,1,0)    // initialize matrix for fe2
+
+. matrix z = J(22,1,0)    // initialize matrix for fe3
+
+. 
+. local i = 1            // initialize local macro
+
+. 
+. foreach j of numlist 0.08 0.2(0.2)3.0 3.18 {
+  2.         
+. quietly replace `rxb0' = (_b[fe2]+re1)*0 + (_b[fe3]+re2)*0 + (_b[fbar])*`j' + (_b[fexpo])*fexpo + (_b[fsexr])*fsexr + 
+> (_b[fgdp])*fgdp + (_b[frank1])*frank1 + (_b[frank3])*frank3 ///
+>                                                 + (_b[int1])*0*`j' + (_b[int2])*0*`j' ///
+>                                                 + (_b[fage])*fage + (_b[furbanhk])*furbanhk + (_b[fwork])*fwork + (_b[
+> flninc])*flninc + (_b[fhan])*fhan ///
+>                                                 + (_b[rentpri])*rentpri + (_b[rentpub])*rentpub + (_b[housoth])*housot
+> h ///
+>                                                 + (_b[_cons]+re3)
+  3.                                                 
+. quietly replace `rxb1' = (_b[fe2]+re1)*1 + (_b[fe3]+re2)*0 + (_b[fbar])*`j' + (_b[fexpo])*fexpo + (_b[fsexr])*fsexr + 
+> (_b[fgdp])*fgdp + (_b[frank1])*frank1 + (_b[frank3])*frank3 ///
+>                                                 + (_b[int1])*1*`j' + (_b[int2])*0*`j' ///
+>                                                 + (_b[fage])*fage + (_b[furbanhk])*furbanhk + (_b[fwork])*fwork + (_b[
+> flninc])*flninc + (_b[fhan])*fhan ///
+>                                                 + (_b[rentpri])*rentpri + (_b[rentpub])*rentpub + (_b[housoth])*housot
+> h ///
+>                                                 + (_b[_cons]+re3)
+  4.                                                 
+. quietly replace `rxb2' = (_b[fe2]+re1)*0 + (_b[fe3]+re2)*1 + (_b[fbar])*`j' + (_b[fexpo])*fexpo + (_b[fsexr])*fsexr + 
+> (_b[fgdp])*fgdp + (_b[frank1])*frank1 + (_b[frank3])*frank3 ///
+>                                                 + (_b[int1])*0*`j' + (_b[int2])*1*`j' ///
+>                                                 + (_b[fage])*fage + (_b[furbanhk])*furbanhk + (_b[fwork])*fwork + (_b[
+> flninc])*flninc + (_b[fhan])*fhan ///
+>                                                 + (_b[rentpri])*rentpri + (_b[rentpub])*rentpub + (_b[housoth])*housot
+> h ///
+>                                                 + (_b[_cons]+re3)
+  5.                                                 
+. quietly replace `p0' = exp(`rxb0')/(1+exp(`rxb0'))
+  6. quietly sum `p0'
+  7. matrix m[`i',1] = r(mean)
+  8. 
+. quietly replace `p1' = exp(`rxb1')/(1+exp(`rxb1'))
+  9. quietly sum `p1'
+ 10. matrix f[`i',1] = r(mean)
+ 11. 
+. quietly replace `p2' = exp(`rxb2')/(1+exp(`rxb2'))
+ 12. quietly sum `p2'
+ 13. matrix z[`i',1] = r(mean)
+ 14. local i = `i' + 1      // increment local macro
+ 15. }
+
+. 
+. matrix list m
+
+m[22,1]
+            c1
+ r1  .28359766
+ r2  .28214032
+ r3  .27971796
+ r4  .27730368
+ r5  .27489741
+ r6  .27249907
+ r7  .27010859
+ r8  .26772589
+ r9  .26535092
+r10  .26298361
+r11   .2606239
+r12  .25827175
+r13   .2559271
+r14  .25358993
+r15  .25126018
+r16  .24893782
+r17    .246854
+r18          0
+r19          0
+r20          0
+r21          0
+r22          0
+
+. matrix r = (0.08\.2\.4\.6\.8\1.0\1.2\1.4\1.6\1.8\2.0\2.2\2.4\2.6\2.8\3.0\3.18)
+
+. svmat r
+
+. svmat m
+
+. svmat f
+
+. svmat z
+
+. list r1 m1 f1 z1 in 1/17
+
+     +---------------------------------------+
+     |   r1         m1         f1         z1 |
+     |---------------------------------------|
+  1. |  .08   .2835976   .3723815   .4273522 |
+  2. |   .2   .2821403   .3695408    .422067 |
+  3. |   .4    .279718   .3648347   .4133282 |
+  4. |   .6   .2773037   .3601637    .404678 |
+  5. |   .8   .2748974    .355527   .3961181 |
+     |---------------------------------------|
+  6. |    1   .2724991   .3509242   .3876499 |
+  7. |  1.2   .2701086   .3463546   .3792745 |
+  8. |  1.4   .2677259   .3418174   .3709927 |
+  9. |  1.6   .2653509   .3373122   .3628053 |
+ 10. |  1.8   .2629836   .3328381   .3547126 |
+     |---------------------------------------|
+ 11. |    2   .2606239   .3283947    .346715 |
+ 12. |  2.2   .2582718   .3239811   .3388125 |
+ 13. |  2.4   .2559271   .3195968    .331005 |
+ 14. |  2.6   .2535899   .3152411   .3232926 |
+ 15. |  2.8   .2512602   .3109134   .3156748 |
+     |---------------------------------------|
+ 16. |    3   .2489378   .3066131   .3081515 |
+ 17. | 3.18    .246854   .3027658    .301461 |
+     +---------------------------------------+
+
+. twoway (line m1 r1, lpattern(solid) lcolor(gs8)) ///
+>                 (line f1 r1, lpattern(dash) lcolor(black)) ///
+>                 (line z1 r1, lpattern(shortdash_dot) lcolor(black)), ///
+>                 graphregion(color(white)) ///
+>                 title("Migrant Women") ytitle("Probability of Intermarriage") xtitle("The City's Entry Barrier (CEB) I
+> ndex") ///        
+>                 ylabel(0(.05).45, grid labsize(vsmall)) legend(order(1 "<high school" 2 "High school" 3 "college or ab
+> ove")) ///
+>                 xla(0(0.2)3.2, format(%9.1f))
+
+. graph export "graph_Tian_Qian_2022_PSP_Figure2.pdf"
+file /Users/yueqian/Desktop/graph_Tian_Qian_2022_PSP_Figure2.pdf saved as PDF format
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /Users/yueqian/Desktop/graph_Tian_Qian_2022_PSP.log
+  log type:  text
+ closed on:  15 Aug 2025, 09:15:51
+------------------------------------------------------------------------------------------------------------------------

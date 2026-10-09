@@ -1,0 +1,348 @@
+------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/yueqian/Desktop/graph_Fan_Qian_2023_JOHS.log
+  log type:  text
+ opened on:  14 Aug 2025, 18:24:41
+
+. 
+. // #0
+. // program setup
+. version 16.1
+
+. clear all
+
+. set more off
+
+. matrix drop _all
+
+. set linesize 120
+
+. 
+. 
+. // #1
+. // open data
+. use insecure_wave123, clear
+
+. 
+. * xtset
+. xtset RespId
+
+Panel variable: RespId (unbalanced)
+
+. sort RespId wave
+
+. 
+. 
+. // #2
+. // demean variables
+. gen insec1 = insecurity==1
+
+. gen insec2 = insecurity==2
+
+. gen insec3 = insecurity==3
+
+. bysort RespId: egen minsec1 = mean(insec1)
+
+. bysort RespId: egen minsec2 = mean(insec2)
+
+. bysort RespId: egen minsec3 = mean(insec3)
+
+. forvalues v = 1/3{
+  2.         gen dminsec`v' = insec`v' - minsec`v'
+  3.         tab dminsec`v', m
+  4. }
+
+   dminsec1 |      Freq.     Percent        Cum.
+------------+-----------------------------------
+  -.6666667 |        123        4.29        4.29
+        -.5 |        100        3.49        7.78
+  -.3333333 |        282        9.84       17.62
+          0 |      1,874       65.39       83.01
+   .3333333 |        246        8.58       91.59
+         .5 |        100        3.49       95.08
+   .6666666 |        141        4.92      100.00
+------------+-----------------------------------
+      Total |      2,866      100.00
+
+   dminsec2 |      Freq.     Percent        Cum.
+------------+-----------------------------------
+  -.6666667 |        158        5.51        5.51
+        -.5 |        118        4.12        9.63
+  -.3333333 |        298       10.40       20.03
+          0 |      1,709       59.63       79.66
+   .3333333 |        316       11.03       90.68
+         .5 |        118        4.12       94.80
+   .6666666 |        149        5.20      100.00
+------------+-----------------------------------
+      Total |      2,866      100.00
+
+   dminsec3 |      Freq.     Percent        Cum.
+------------+-----------------------------------
+  -.6666667 |         18        0.63        0.63
+        -.5 |         48        1.67        2.30
+  -.3333333 |        126        4.40        6.70
+          0 |      2,527       88.17       94.87
+   .3333333 |         36        1.26       96.13
+         .5 |         48        1.67       97.80
+   .6666666 |         63        2.20      100.00
+------------+-----------------------------------
+      Total |      2,866      100.00
+
+. 
+. bysort RespId: egen mcase = mean(daycase)
+
+. gen dmcase = daycase - mcase
+
+. sum dmcase
+
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+      dmcase |      2,866   -4.63e-08    3.425957    -7.7335   10.28367
+
+. 
+. 
+. // #3
+. // graph Figure 2
+. sum dmcase
+
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+      dmcase |      2,866   -4.63e-08    3.425957    -7.7335   10.28367
+
+. xtreg mh c.dminsec2##c.dmcase c.dminsec3##c.dmcase mstringencyindex unemp covidc i.wkunit i.wkhome i.wkhours, fe vce(c
+> luster ppstaten)
+note: dmcase omitted because of collinearity
+
+Fixed-effects (within) regression               Number of obs     =      2,866
+Group variable: RespId                          Number of groups  =      1,306
+
+R-squared:                                      Obs per group:
+     Within  = 0.0368                                         min =          1
+     Between = 0.0010                                         avg =        2.2
+     Overall = 0.0079                                         max =          3
+
+                                                F(14, 50)         =       9.62
+corr(u_i, Xb) = -0.0204                         Prob > F          =     0.0000
+
+                                     (Std. err. adjusted for 51 clusters in ppstaten)
+-------------------------------------------------------------------------------------
+                    |               Robust
+                 mh | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+--------------------+----------------------------------------------------------------
+           dminsec2 |  -.1036567   .0327212    -3.17   0.003    -.1693792   -.0379343
+             dmcase |  -.0041475   .0022825    -1.82   0.075     -.008732    .0004371
+                    |
+c.dminsec2#c.dmcase |  -.0028732   .0105477    -0.27   0.786    -.0240589    .0183126
+                    |
+           dminsec3 |  -.1291454   .0568453    -2.27   0.027    -.2433225   -.0149683
+             dmcase |          0  (omitted)
+                    |
+c.dminsec3#c.dmcase |  -.0359446   .0169659    -2.12   0.039    -.0700216   -.0018676
+                    |
+   mstringencyindex |   .0005455    .000751     0.73   0.471     -.000963     .002054
+              unemp |  -.0089136   .0028196    -3.16   0.003    -.0145769   -.0032504
+             covidc |  -.0043228   .0414011    -0.10   0.917    -.0874794    .0788338
+                    |
+             wkunit |
+           private  |   .0201943   .0672113     0.30   0.765    -.1148035    .1551922
+              self  |  -.0473581    .094331    -0.50   0.618    -.2368275    .1421112
+                    |
+             wkhome |
+              home  |  -.0695437   .0375057    -1.85   0.070    -.1448762    .0057887
+             leave  |  -.0599924    .051394    -1.17   0.249    -.1632202    .0432355
+                    |
+            wkhours |
+             35-49  |   .0044149   .0336789     0.13   0.896    -.0632312     .072061
+               50+  |   .0317632   .0489425     0.65   0.519    -.0665407     .130067
+                    |
+              _cons |   2.195062   .0826041    26.57   0.000     2.029147    2.360978
+--------------------+----------------------------------------------------------------
+            sigma_u |  .60302779
+            sigma_e |  .36440682
+                rho |  .73250804   (fraction of variance due to u_i)
+-------------------------------------------------------------------------------------
+
+. margins, dydx(dminsec2) at(dmcase=(-7(1)10)) post
+
+Average marginal effects                                 Number of obs = 2,866
+Model VCE: Robust
+
+Expression: Linear prediction, predict()
+dy/dx wrt:  dminsec2
+1._at:  dmcase = -7
+2._at:  dmcase = -6
+3._at:  dmcase = -5
+4._at:  dmcase = -4
+5._at:  dmcase = -3
+6._at:  dmcase = -2
+7._at:  dmcase = -1
+8._at:  dmcase =  0
+9._at:  dmcase =  1
+10._at: dmcase =  2
+11._at: dmcase =  3
+12._at: dmcase =  4
+13._at: dmcase =  5
+14._at: dmcase =  6
+15._at: dmcase =  7
+16._at: dmcase =  8
+17._at: dmcase =  9
+18._at: dmcase = 10
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |      dy/dx   std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+dminsec2     |
+         _at |
+          1  |  -.0835447   .0873887    -0.96   0.339    -.2548233     .087734
+          2  |  -.0864178    .077661    -1.11   0.266    -.2386306     .065795
+          3  |   -.089291   .0681777    -1.31   0.190    -.2229169    .0443349
+          4  |  -.0921641   .0590566    -1.56   0.119    -.2079129    .0235846
+          5  |  -.0950373   .0504942    -1.88   0.060     -.194004    .0039295
+          6  |  -.0979104   .0428271    -2.29   0.022    -.1818499   -.0139709
+          7  |  -.1007836   .0366219    -2.75   0.006    -.1725611    -.029006
+          8  |  -.1036567   .0327212    -3.17   0.002    -.1677891   -.0395244
+          9  |  -.1065299   .0319797    -3.33   0.001     -.169209   -.0438509
+         10  |  -.1094031   .0346011    -3.16   0.002    -.1772199   -.0415862
+         11  |  -.1122762   .0399284    -2.81   0.005    -.1905345   -.0340179
+         12  |  -.1151494   .0470514    -2.45   0.014    -.2073684   -.0229303
+         13  |  -.1180225   .0552802    -2.13   0.033    -.2263697   -.0096754
+         14  |  -.1208957   .0641909    -1.88   0.060    -.2467075    .0049162
+         15  |  -.1237688   .0735361    -1.68   0.092    -.2678969    .0203592
+         16  |   -.126642   .0831694    -1.52   0.128     -.289651     .036367
+         17  |  -.1295151   .0930014    -1.39   0.164    -.3117945    .0527642
+         18  |  -.1323883   .1029751    -1.29   0.199    -.3342157    .0694392
+------------------------------------------------------------------------------
+
+. estimates store case2
+
+. 
+. xtreg mh c.dminsec2##c.dmcase c.dminsec3##c.dmcase mstringencyindex unemp covidc i.wkunit i.wkhome i.wkhours, fe vce(c
+> luster ppstaten)
+note: dmcase omitted because of collinearity
+
+Fixed-effects (within) regression               Number of obs     =      2,866
+Group variable: RespId                          Number of groups  =      1,306
+
+R-squared:                                      Obs per group:
+     Within  = 0.0368                                         min =          1
+     Between = 0.0010                                         avg =        2.2
+     Overall = 0.0079                                         max =          3
+
+                                                F(14, 50)         =       9.62
+corr(u_i, Xb) = -0.0204                         Prob > F          =     0.0000
+
+                                     (Std. err. adjusted for 51 clusters in ppstaten)
+-------------------------------------------------------------------------------------
+                    |               Robust
+                 mh | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+--------------------+----------------------------------------------------------------
+           dminsec2 |  -.1036567   .0327212    -3.17   0.003    -.1693792   -.0379343
+             dmcase |  -.0041475   .0022825    -1.82   0.075     -.008732    .0004371
+                    |
+c.dminsec2#c.dmcase |  -.0028732   .0105477    -0.27   0.786    -.0240589    .0183126
+                    |
+           dminsec3 |  -.1291454   .0568453    -2.27   0.027    -.2433225   -.0149683
+             dmcase |          0  (omitted)
+                    |
+c.dminsec3#c.dmcase |  -.0359446   .0169659    -2.12   0.039    -.0700216   -.0018676
+                    |
+   mstringencyindex |   .0005455    .000751     0.73   0.471     -.000963     .002054
+              unemp |  -.0089136   .0028196    -3.16   0.003    -.0145769   -.0032504
+             covidc |  -.0043228   .0414011    -0.10   0.917    -.0874794    .0788338
+                    |
+             wkunit |
+           private  |   .0201943   .0672113     0.30   0.765    -.1148035    .1551922
+              self  |  -.0473581    .094331    -0.50   0.618    -.2368275    .1421112
+                    |
+             wkhome |
+              home  |  -.0695437   .0375057    -1.85   0.070    -.1448762    .0057887
+             leave  |  -.0599924    .051394    -1.17   0.249    -.1632202    .0432355
+                    |
+            wkhours |
+             35-49  |   .0044149   .0336789     0.13   0.896    -.0632312     .072061
+               50+  |   .0317632   .0489425     0.65   0.519    -.0665407     .130067
+                    |
+              _cons |   2.195062   .0826041    26.57   0.000     2.029147    2.360978
+--------------------+----------------------------------------------------------------
+            sigma_u |  .60302779
+            sigma_e |  .36440682
+                rho |  .73250804   (fraction of variance due to u_i)
+-------------------------------------------------------------------------------------
+
+. margins, dydx(dminsec3) at(dmcase=(-7(1)10)) post
+
+Average marginal effects                                 Number of obs = 2,866
+Model VCE: Robust
+
+Expression: Linear prediction, predict()
+dy/dx wrt:  dminsec3
+1._at:  dmcase = -7
+2._at:  dmcase = -6
+3._at:  dmcase = -5
+4._at:  dmcase = -4
+5._at:  dmcase = -3
+6._at:  dmcase = -2
+7._at:  dmcase = -1
+8._at:  dmcase =  0
+9._at:  dmcase =  1
+10._at: dmcase =  2
+11._at: dmcase =  3
+12._at: dmcase =  4
+13._at: dmcase =  5
+14._at: dmcase =  6
+15._at: dmcase =  7
+16._at: dmcase =  8
+17._at: dmcase =  9
+18._at: dmcase = 10
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |      dy/dx   std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+dminsec3     |
+         _at |
+          1  |    .122467   .1416033     0.86   0.387    -.1550704    .4000044
+          2  |   .0865224   .1261807     0.69   0.493    -.1607873    .3338321
+          3  |   .0505778   .1112085     0.45   0.649    -.1673869    .2685425
+          4  |   .0146331   .0968957     0.15   0.880     -.175279    .2045452
+          5  |  -.0213115   .0835817    -0.25   0.799    -.1851287    .1425057
+          6  |  -.0572561   .0718242    -0.80   0.425     -.198029    .0835167
+          7  |  -.0932008   .0625077    -1.49   0.136    -.2157135     .029312
+          8  |  -.1291454   .0568453    -2.27   0.023    -.2405601   -.0177307
+          9  |    -.16509   .0559575    -2.95   0.003    -.2747647   -.0554153
+         10  |  -.2010347   .0600565    -3.35   0.001    -.3187433   -.0833261
+         11  |  -.2369793   .0682496    -3.47   0.001    -.3707461   -.1032125
+         12  |  -.2729239   .0792775    -3.44   0.001    -.4283049   -.1175429
+         13  |  -.3088686   .0921277    -3.35   0.001    -.4894355   -.1283016
+         14  |  -.3448132   .1061404    -3.25   0.001    -.5528445   -.1367819
+         15  |  -.3807578   .1209121    -3.15   0.002    -.6177412   -.1437744
+         16  |  -.4167025   .1361961    -3.06   0.002    -.6836419    -.149763
+         17  |  -.4526471   .1518377    -2.98   0.003    -.7502436   -.1550506
+         18  |  -.4885917    .167737    -2.91   0.004    -.8173503   -.1598332
+------------------------------------------------------------------------------
+
+. estimates store case3
+
+. 
+. coefplot (case2, label(not too likely)) (case3, label(fairly/very likely)), yline(0) vertical at recast(line) lwidth(*
+> 2) ciopts(recast(rline) lpattern(dash))
+
+. coefplot (case2, lcolor(black)), bylabel("Average marginal effect of 'not too likely'") ///
+>                 || (case3, lcolor(black)), bylabel("Average marginal effect of 'fairly/very likely'") ///
+>                 xtitle(Change in COVID-19 case rate) xscale(r(-10(2)10)) ///
+>                 ytitle(Change in mental health) ///
+>                 yline(0, lcolor(gray) lpattern(solid)) vertical at recast(line) lwidth(*2) ciopts(recast(rline) lpatte
+> rn(dash) color(gray)) yscale(r(-1(0.2)1))
+
+. graph export "graph_Fan_Qian_2023_JOHS_Figure2.pdf"
+file /Users/yueqian/Desktop/graph_Fan_Qian_2023_JOHS_Figure2.pdf saved as PDF format
+
+. 
+. 
+. log close
+      name:  <unnamed>
+       log:  /Users/yueqian/Desktop/graph_Fan_Qian_2023_JOHS.log
+  log type:  text
+ closed on:  14 Aug 2025, 18:24:44
+------------------------------------------------------------------------------------------------------------------------

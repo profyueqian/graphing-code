@@ -1,0 +1,418 @@
+------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/yueqian/Desktop/graph_Qian_Hu_2025_SocSci.log
+  log type:  text
+ opened on:  13 Aug 2025, 17:17:45
+
+. 
+. // #0
+. // program setup
+. version 18.0
+
+. clear all
+
+. set more off
+
+. matrix drop _all
+
+. set linesize 120
+
+. 
+. // #1
+. // open data for Figure 1
+. clear
+
+. use regressdata_quality, clear
+
+. 
+. // #2
+. // define macro for Figure 1
+. global controls "dur_yr c.dur_yr#c.dur_yr i.relstatus age c.age#c.age i.rrace i.col i.wave"
+
+. 
+. // #3
+. // graph Figure 1
+. foreach v in dif_iden dif_attract{
+  2. 
+. regress satisfy i.`v' i.samesex i.female ///
+>         `v'#samesex `v'#female samesex#female ///
+>         `v'#samesex#female ///
+>         $controls, vce(cluster pid) 
+  3.         
+. margins female#samesex, dydx(`v') post
+  4. estimates store `v'_main
+  5. 
+. }
+
+Linear regression                               Number of obs     =      5,705
+                                                F(19, 2874)       =      13.85
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.0593
+                                                Root MSE          =     .72855
+
+                                           (Std. err. adjusted for 2,875 clusters in pid)
+-----------------------------------------------------------------------------------------
+                        |               Robust
+                satisfy | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+------------------------+----------------------------------------------------------------
+             1.dif_iden |  -.3815134   .1122865    -3.40   0.001    -.6016836   -.1613433
+              1.samesex |   .0029088   .0571163     0.05   0.959    -.1090844    .1149019
+               1.female |  -.0654451    .027213    -2.40   0.016    -.1188041    -.012086
+                        |
+       dif_iden#samesex |
+                   1 1  |   .1265553   .2602246     0.49   0.627    -.3836905    .6368011
+                        |
+        dif_iden#female |
+                   1 1  |   .2698309   .1275104     2.12   0.034     .0198097    .5198521
+                        |
+         samesex#female |
+                   1 1  |    .015229   .1043153     0.15   0.884    -.1893114    .2197693
+                        |
+dif_iden#samesex#female |
+                 1 1 1  |  -.0355072   .3123389    -0.11   0.909     -.647938    .5769237
+                        |
+                 dur_yr |  -.0423235   .0340653    -1.24   0.214    -.1091184    .0244713
+                        |
+      c.dur_yr#c.dur_yr |   .0089531   .0052768     1.70   0.090    -.0013937    .0192998
+                        |
+              relstatus |
+                 cohab  |   .2112229   .0479917     4.40   0.000     .1171213    .3053245
+                   mar  |   .3428502   .0450409     7.61   0.000     .2545345    .4311659
+                        |
+                    age |  -.1934292   .0555819    -3.48   0.001    -.3024137   -.0844447
+                        |
+            c.age#c.age |   .0202545   .0052647     3.85   0.000     .0099314    .0305775
+                        |
+                  rrace |
+              NH black  |  -.2165127   .0488847    -4.43   0.000    -.3123653   -.1206601
+              Hispanic  |  -.1030145    .042711    -2.41   0.016    -.1867617   -.0192673
+              NH Other  |  -.1012562   .0518176    -1.95   0.051    -.2028596    .0003472
+                        |
+                  1.col |   .0686033   .0260596     2.63   0.009      .017506    .1197007
+                        |
+                   wave |
+                    12  |   -.096719   .0188571    -5.13   0.000    -.1336939   -.0597442
+                    13  |   -.141035   .0212609    -6.63   0.000    -.1827232   -.0993467
+                        |
+                  _cons |   4.698056   .1289072    36.45   0.000     4.445296    4.950816
+-----------------------------------------------------------------------------------------
+
+Average marginal effects                                 Number of obs = 5,705
+Model VCE: Robust
+
+Expression: Linear prediction, predict()
+dy/dx wrt:  1.dif_iden
+
+--------------------------------------------------------------------------------
+               |            Delta-method
+               |      dy/dx   std. err.      t    P>|t|     [95% conf. interval]
+---------------+----------------------------------------------------------------
+0.dif_iden     |  (base outcome)
+---------------+----------------------------------------------------------------
+1.dif_iden     |
+female#samesex |
+          0 0  |  -.3815134   .1122865    -3.40   0.001    -.6016836   -.1613433
+          0 1  |  -.2549582   .2348205    -1.09   0.278    -.7153918    .2054755
+          1 0  |  -.1116826   .0615465    -1.81   0.070    -.2323623    .0089972
+          1 1  |  -.0206344   .1621964    -0.13   0.899    -.3386675    .2973986
+--------------------------------------------------------------------------------
+Note: dy/dx for factor levels is the discrete change from the base level.
+
+Linear regression                               Number of obs     =      5,705
+                                                F(19, 2874)       =      14.52
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.0647
+                                                Root MSE          =     .72648
+
+                                              (Std. err. adjusted for 2,875 clusters in pid)
+--------------------------------------------------------------------------------------------
+                           |               Robust
+                   satisfy | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+---------------------------+----------------------------------------------------------------
+             1.dif_attract |   -.474851   .1009066    -4.71   0.000    -.6727077   -.2769943
+                 1.samesex |  -.0070115   .0587902    -0.12   0.905    -.1222868    .1082638
+                  1.female |  -.0614707   .0272899    -2.25   0.024    -.1149806   -.0079609
+                           |
+       dif_attract#samesex |
+                      1 1  |    .347469   .1978506     1.76   0.079    -.0404744    .7354124
+                           |
+        dif_attract#female |
+                      1 1  |   .3293293   .1148207     2.87   0.004     .1041901    .5544685
+                           |
+            samesex#female |
+                      1 1  |   .0464739   .1148136     0.40   0.686    -.1786515    .2715992
+                           |
+dif_attract#samesex#female |
+                    1 1 1  |   -.292901   .2533242    -1.16   0.248    -.7896164    .2038145
+                           |
+                    dur_yr |  -.0448977    .034059    -1.32   0.188    -.1116803     .021885
+                           |
+         c.dur_yr#c.dur_yr |   .0089984   .0052677     1.71   0.088    -.0013304    .0193272
+                           |
+                 relstatus |
+                    cohab  |    .214865   .0480281     4.47   0.000      .120692    .3090379
+                      mar  |   .3489708   .0450185     7.75   0.000      .260699    .4372427
+                           |
+                       age |  -.1951509   .0549765    -3.55   0.000    -.3029483   -.0873535
+                           |
+               c.age#c.age |   .0203791   .0051978     3.92   0.000     .0101874    .0305709
+                           |
+                     rrace |
+                 NH black  |  -.2227124   .0485042    -4.59   0.000    -.3178189   -.1276058
+                 Hispanic  |  -.1080224   .0425216    -2.54   0.011    -.1913984   -.0246464
+                 NH Other  |  -.1029716   .0518462    -1.99   0.047     -.204631   -.0013122
+                           |
+                     1.col |   .0705916   .0259862     2.72   0.007     .0196381    .1215452
+                           |
+                      wave |
+                       12  |  -.0964989   .0188203    -5.13   0.000    -.1334015   -.0595963
+                       13  |  -.1408753   .0212201    -6.64   0.000    -.1824834   -.0992672
+                           |
+                     _cons |   4.712218   .1278509    36.86   0.000     4.461529    4.962907
+--------------------------------------------------------------------------------------------
+
+Average marginal effects                                 Number of obs = 5,705
+Model VCE: Robust
+
+Expression: Linear prediction, predict()
+dy/dx wrt:  1.dif_attract
+
+--------------------------------------------------------------------------------
+               |            Delta-method
+               |      dy/dx   std. err.      t    P>|t|     [95% conf. interval]
+---------------+----------------------------------------------------------------
+0.dif_attract  |  (base outcome)
+---------------+----------------------------------------------------------------
+1.dif_attract  |
+female#samesex |
+          0 0  |   -.474851   .1009066    -4.71   0.000    -.6727077   -.2769943
+          0 1  |   -.127382   .1704764    -0.75   0.455    -.4616503    .2068863
+          1 0  |  -.1455217   .0555121    -2.62   0.009    -.2543693    -.036674
+          1 1  |  -.0909536   .1487343    -0.61   0.541    -.3825903    .2006831
+--------------------------------------------------------------------------------
+Note: dy/dx for factor levels is the discrete change from the base level.
+
+. 
+. coefplot dif_iden_main, bylabel({bf:Identity–partnership inconsistency}) || ///
+>         dif_attract_main, bylabel({bf:Attraction–partnership inconsistency}) ///
+>         ||, yline(0) ytitle("Average maginal effects", size(small)) vertical ///
+>         mlabel format(%9.2f) mlabposition(2) ///
+>         levels(95 90) ///
+>         coeflabels(0.female#0.samesex = `""Men in" "different-sex" "partnerships""' ///
+>         0.female#1.samesex = `""Men in" "same-sex" "partnerships""' ///
+>         1.female#0.samesex = `""Women in" "different-sex" "partnerships""' ///
+>         1.female#1.samesex = `""Women in" "same-sex" "partnerships""', labsize(small)) ///
+>         subtitle(, size(small) bcolor(gs15) bmargin(zero)) ///
+>         yscale(range(-1(0.5)1)) ylabel(-1(0.5)1)
+
+. graph export "graph_Qian_Hu_2025_SocSci_Figure1.pdf"
+file /Users/yueqian/Desktop/graph_Qian_Hu_2025_SocSci_Figure1.pdf saved as PDF format
+
+. 
+. // #4
+. // open data Figure 2
+. clear
+
+. use regressdata_breakup, clear
+
+. 
+. * clear macro / stored estimates
+. macro drop _all
+
+. estimates clear
+
+. 
+. // #5
+. // define macro Figure 2
+. global controls "dur_yr c.dur_yr#c.dur_yr i.relstatus age_vary c.age_vary#c.age_vary i.rrace i.col i.retro"
+
+. 
+. // #6
+. // graph Figure 2
+. foreach v in dif_iden dif_attract{
+  2. 
+. logit _d i.`v' i.samesex i.female ///
+>         `v'#samesex `v'#female samesex#female ///
+>         `v'#samesex#female ///
+>         $controls, vce(cluster pid) 
+  3.         
+. margins female#samesex, dydx(`v') post
+  4. estimates store `v'_main
+  5. 
+. }
+
+Iteration 0:  Log pseudolikelihood = -4156.6535  
+Iteration 1:  Log pseudolikelihood = -3715.9365  
+Iteration 2:  Log pseudolikelihood =  -3588.026  
+Iteration 3:  Log pseudolikelihood = -3582.5601  
+Iteration 4:  Log pseudolikelihood = -3582.4044  
+Iteration 5:  Log pseudolikelihood = -3582.4042  
+
+Logistic regression                                    Number of obs = 147,127
+                                                       Wald chi2(18) =  873.06
+                                                       Prob > chi2   =  0.0000
+Log pseudolikelihood = -3582.4042                      Pseudo R2     =  0.1382
+
+                                           (Std. err. adjusted for 3,307 clusters in pid)
+-----------------------------------------------------------------------------------------
+                        |               Robust
+                     _d | Coefficient  std. err.      z    P>|z|     [95% conf. interval]
+------------------------+----------------------------------------------------------------
+             1.dif_iden |   .5888977   .1985831     2.97   0.003      .199682    .9781133
+              1.samesex |   .2167378   .1517562     1.43   0.153    -.0806989    .5141744
+               1.female |  -.2933399   .1002958    -2.92   0.003    -.4899159   -.0967638
+                        |
+       dif_iden#samesex |
+                   1 1  |  -.9471616   .5381026    -1.76   0.078    -2.001823    .1075001
+                        |
+        dif_iden#female |
+                   1 1  |   .2295745   .2570927     0.89   0.372     -.274318    .7334669
+                        |
+         samesex#female |
+                   1 1  |   .4133347   .2602162     1.59   0.112    -.0966798    .9233491
+                        |
+dif_iden#samesex#female |
+                 1 1 1  |  -.2662555   .6904861    -0.39   0.700    -1.619583    1.087072
+                        |
+                 dur_yr |   -1.16094   .1240705    -9.36   0.000    -1.404113   -.9177659
+                        |
+      c.dur_yr#c.dur_yr |   .1234891   .0237048     5.21   0.000     .0770285    .1699497
+                        |
+              relstatus |
+                 cohab  |  -.8632018   .1099185    -7.85   0.000    -1.078638   -.6477655
+                   mar  |  -1.616216   .1252657   -12.90   0.000    -1.861732   -1.370699
+                        |
+               age_vary |   .1154061   .1539264     0.75   0.453    -.1862841    .4170962
+                        |
+  c.age_vary#c.age_vary |   -.007011   .0174741    -0.40   0.688    -.0412597    .0272377
+                        |
+                  rrace |
+              NH black  |   .1907734   .1338035     1.43   0.154    -.0714767    .4530236
+              Hispanic  |   .1058542   .1125221     0.94   0.347    -.1146849    .3263934
+              NH Other  |  -.1593736   .1751519    -0.91   0.363    -.5026649    .1839177
+                        |
+                  1.col |  -.0143032   .0916938    -0.16   0.876    -.1940197    .1654133
+                1.retro |   .0453788   .0937965     0.48   0.629     -.138459    .2292166
+                  _cons |  -3.779197   .3210643   -11.77   0.000    -4.408471   -3.149922
+-----------------------------------------------------------------------------------------
+
+Average marginal effects                               Number of obs = 147,127
+Model VCE: Robust
+
+Expression: Pr(_d), predict()
+dy/dx wrt:  1.dif_iden
+
+--------------------------------------------------------------------------------
+               |            Delta-method
+               |      dy/dx   std. err.      z    P>|z|     [95% conf. interval]
+---------------+----------------------------------------------------------------
+0.dif_iden     |  (base outcome)
+---------------+----------------------------------------------------------------
+1.dif_iden     |
+female#samesex |
+          0 0  |   .0035718   .0015042     2.37   0.018     .0006236    .0065199
+          0 1  |  -.0016841   .0020172    -0.83   0.404    -.0056378    .0022696
+          1 0  |    .004233   .0010519     4.02   0.000     .0021713    .0062947
+          1 1  |  -.0020498   .0018725    -1.09   0.274    -.0057198    .0016202
+--------------------------------------------------------------------------------
+Note: dy/dx for factor levels is the discrete change from the base level.
+
+Iteration 0:  Log pseudolikelihood = -4156.6535  
+Iteration 1:  Log pseudolikelihood = -3712.6531  
+Iteration 2:  Log pseudolikelihood = -3583.7362  
+Iteration 3:  Log pseudolikelihood = -3578.2181  
+Iteration 4:  Log pseudolikelihood = -3578.0568  
+Iteration 5:  Log pseudolikelihood = -3578.0566  
+
+Logistic regression                                    Number of obs = 147,127
+                                                       Wald chi2(18) =  869.66
+                                                       Prob > chi2   =  0.0000
+Log pseudolikelihood = -3578.0566                      Pseudo R2     =  0.1392
+
+                                              (Std. err. adjusted for 3,307 clusters in pid)
+--------------------------------------------------------------------------------------------
+                           |               Robust
+                        _d | Coefficient  std. err.      z    P>|z|     [95% conf. interval]
+---------------------------+----------------------------------------------------------------
+             1.dif_attract |   .7927916   .1970081     4.02   0.000     .4066628     1.17892
+                 1.samesex |   .2276884   .1577647     1.44   0.149    -.0815246    .5369015
+                  1.female |  -.3030873   .1020597    -2.97   0.003    -.5031205    -.103054
+                           |
+       dif_attract#samesex |
+                      1 1  |  -.8349584   .3900339    -2.14   0.032    -1.599411    -.070506
+                           |
+        dif_attract#female |
+                      1 1  |   .0088131   .2534437     0.03   0.972    -.4879275    .5055537
+                           |
+            samesex#female |
+                      1 1  |   .2617969   .2905426     0.90   0.368    -.3076562      .83125
+                           |
+dif_attract#samesex#female |
+                    1 1 1  |   .1700617   .5444773     0.31   0.755    -.8970942    1.237218
+                           |
+                    dur_yr |  -1.158702   .1238565    -9.36   0.000    -1.401456   -.9159476
+                           |
+         c.dur_yr#c.dur_yr |    .122992    .023821     5.16   0.000     .0763038    .1696803
+                           |
+                 relstatus |
+                    cohab  |  -.8640716   .1094013    -7.90   0.000    -1.078494    -.649649
+                      mar  |   -1.61391   .1240926   -13.01   0.000    -1.857128   -1.370693
+                           |
+                  age_vary |   .1285823   .1540417     0.83   0.404    -.1733338    .4304985
+                           |
+     c.age_vary#c.age_vary |  -.0080077   .0174965    -0.46   0.647    -.0423002    .0262848
+                           |
+                     rrace |
+                 NH black  |   .1775697    .136943     1.30   0.195    -.0908336     .445973
+                 Hispanic  |   .0983666   .1145452     0.86   0.390    -.1261379    .3228711
+                 NH Other  |  -.1494401   .1753401    -0.85   0.394    -.4931005    .1942203
+                           |
+                     1.col |  -.0444703   .0918324    -0.48   0.628    -.2244586     .135518
+                   1.retro |   .0585719   .0954449     0.61   0.539    -.1284966    .2456405
+                     _cons |  -3.833115   .3233646   -11.85   0.000    -4.466898   -3.199332
+--------------------------------------------------------------------------------------------
+
+Average marginal effects                               Number of obs = 147,127
+Model VCE: Robust
+
+Expression: Pr(_d), predict()
+dy/dx wrt:  1.dif_attract
+
+--------------------------------------------------------------------------------
+               |            Delta-method
+               |      dy/dx   std. err.      z    P>|z|     [95% conf. interval]
+---------------+----------------------------------------------------------------
+0.dif_attract  |  (base outcome)
+---------------+----------------------------------------------------------------
+1.dif_attract  |
+female#samesex |
+          0 0  |   .0052426   .0017561     2.99   0.003     .0018007    .0086845
+          0 1  |  -.0002273   .0017876    -0.13   0.899     -.003731    .0032764
+          1 0  |   .0039852   .0009889     4.03   0.000      .002047    .0059233
+          1 1  |   .0007724   .0019628     0.39   0.694    -.0030746    .0046194
+--------------------------------------------------------------------------------
+Note: dy/dx for factor levels is the discrete change from the base level.
+
+. 
+. coefplot dif_iden_main, bylabel({bf:Identity–partnership inconsistency}) || ///
+>         dif_attract_main, bylabel({bf:Attraction–partnership inconsistency}) ///
+>         ||, yline(0) ytitle("Average maginal effects in percentage points (%)", size(small)) vertical ///
+>         mlabel format(%9.2f) mlabposition(2) ///
+>         levels(95 90) rescale(100) ///
+>         coeflabels(0.female#0.samesex = `""Men in" "different-sex" "partnerships""' ///
+>         0.female#1.samesex = `""Men in" "same-sex" "partnerships""' ///
+>         1.female#0.samesex = `""Women in" "different-sex" "partnerships""' ///
+>         1.female#1.samesex = `""Women in" "same-sex" "partnerships""', labsize(small)) ///
+>         subtitle(, size(small) bcolor(gs15) bmargin(zero)) ///
+>         yscale(range(-1(0.5)1)) ylabel(-1(0.5)1)
+
+. graph export "graph_Qian_Hu_2025_SocSci_Figure2.pdf"
+file /Users/yueqian/Desktop/graph_Qian_Hu_2025_SocSci_Figure2.pdf saved as PDF format
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /Users/yueqian/Desktop/graph_Qian_Hu_2025_SocSci.log
+  log type:  text
+ closed on:  13 Aug 2025, 17:17:58
+------------------------------------------------------------------------------------------------------------------------

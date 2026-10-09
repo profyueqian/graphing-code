@@ -1,0 +1,1164 @@
+-------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/yueqian/Desktop/graph_Qian_Sayer_2022_Socius.log
+  log type:  text
+ opened on:  14 Aug 2025, 18:48:15
+
+. 
+. // #0
+. // program setup
+. version 16.1
+
+. clear all
+
+. set more off
+
+. matrix drop _all
+
+. set linesize 120
+
+. 
+. ***********************************************************************
+. **************************svyset data**********************************
+. ***********************************************************************  
+. 
+. /* 
+> information sources:
+> Nielsen, R. B. & Seay, M. C. (2014). ATUS complex sample specification for SAS and Stata. Technical
+> note, Department of Housing and Consumer Economics, University of Georgia, Athens, GA.
+> https://drive.google.com/file/d/0B4rt_j6NBtDQa09xbXRwOFdhSDg/edit?resourcekey=0-onDOCDNNPt-FeNHK04X3Kw
+> https://cps.ipums.org/cps/repwt.shtml 
+> */
+. use regsample, clear
+
+. tab year, m
+
+survey year |      Freq.     Percent        Cum.
+------------+-----------------------------------
+       2017 |      5,187       51.50       51.50
+       2018 |      4,884       48.50      100.00
+------------+-----------------------------------
+      Total |     10,071      100.00
+
+. svyset [pweight=lvwt], sdrweight(rlvwt_1-rlvwt_160) vce(sdr)
+
+Sampling weights: lvwt
+             VCE: sdr
+             MSE: off
+     SDR weights: rlvwt_1 .. rlvwt_160
+     Single unit: missing
+        Strata 1: <one>
+ Sampling unit 1: <observations>
+           FPC 1: <zero>
+
+. 
+. * define macro
+. global control "ib2.wkhr i.spousepres age i.race4 i.prof_manag kid agec i.weekend i.year i.summer"
+
+. global predictor "ib3.access3 i.shift i.wkwkend3 i.inflex i.shortnotice i.col"
+
+. 
+. ***********************************************************************
+. **************************margins & figure 1***************************
+. *********************************************************************** 
+. 
+. **figure 1A
+. svy, subpop(reg_female): reg educare $predictor $control ///
+>                 shift#col
+(running regress on estimation sample)
+
+SDR replications (160): .........10.........20.........30.........40.........50.........60.........70.........80........
+> .90.........100.........110.........120.........130.........140.........150.........160 done
+
+Survey: Linear regression                   Number of obs   =           10,071
+                                            Population size =  105,335,334,706
+                                            Subpop. no. obs =            1,752
+                                            Subpop. size    = 12,905,943,786.1
+                                            Replications    =              160
+                                            Wald chi2(26)   =           134.78
+                                            Prob > chi2     =           0.0000
+                                            R-squared       =           0.0879
+
+---------------------------------------------------------------------------------------------------------
+                                        |                 SDR
+                                educare | Coefficient  std. err.      z    P>|z|     [95% conf. interval]
+----------------------------------------+----------------------------------------------------------------
+                                access3 |
+                              no leave  |   .2367725   10.51697     0.02   0.982    -20.37611    20.84966
+                          unpaid leave  |   .5343287   4.621467     0.12   0.908    -8.523581    9.592238
+                                        |
+                                  shift |
+                         evening/night  |  -7.982936   7.952594    -1.00   0.315    -23.56973    7.603861
+                                 other  |   -23.9173   9.904837    -2.41   0.016    -43.33042   -4.504175
+                                        |
+                               wkwkend3 |
+                              weekends  |  -5.659258   6.826837    -0.83   0.407    -19.03961    7.721098
+                                  vary  |   10.09981   7.398009     1.37   0.172    -4.400017    24.59965
+                                        |
+                               1.inflex |   2.170097   3.772785     0.58   0.565    -5.224426    9.564621
+                          1.shortnotice |  -.3129574   5.834062    -0.05   0.957    -11.74751    11.12159
+                                  1.col |   9.869392   5.196609     1.90   0.058    -.3157738    20.05456
+                                        |
+                                   wkhr |
+                                    PT  |   16.39511   5.277657     3.11   0.002      6.05109    26.73913
+                               long FT  |  -4.943103     4.5567    -1.08   0.278    -13.87407    3.987865
+                           FT hrs vary  |  -11.97613   7.496299    -1.60   0.110     -26.6686    2.716349
+                                        |
+                             spousepres |
+             unmarried partner present  |  -6.158728   8.533074    -0.72   0.470    -22.88324    10.56579
+no spouse or unmarried partner present  |  -10.03895   4.079445    -2.46   0.014    -18.03451   -2.043381
+                                        |
+                                    age |  -.3399337   .3614285    -0.94   0.347    -1.048321     .368453
+                                        |
+                                  race4 |
+                    non-Hispanic black  |  -8.195278   5.794076    -1.41   0.157    -19.55146    3.160901
+                              Hispanic  |  -10.92123   5.249256    -2.08   0.037    -21.20958    -.632873
+                            other race  |  -.7049169   6.367417    -0.11   0.912    -13.18483    11.77499
+                                        |
+                           1.prof_manag |   6.370433   5.218176     1.22   0.222    -3.857004    16.59787
+                                    kid |  -.7516665    2.17259    -0.35   0.729    -5.009865    3.506532
+                                   agec |  -2.749238   .5849786    -4.70   0.000    -3.895775   -1.602701
+                              1.weekend |   5.759658    3.96543     1.45   0.146    -2.012442    13.53176
+                                        |
+                                   year |
+                                  2018  |   2.433072   3.723305     0.65   0.513    -4.864472    9.730616
+                                        |
+                               1.summer |  -9.258756   4.408597    -2.10   0.036    -17.89945   -.6180653
+                                        |
+                              shift#col |
+                       evening/night#1  |   17.15761   16.48092     1.04   0.298     -15.1444    49.45962
+                               other#1  |   32.32952   18.61692     1.74   0.082    -4.158961    68.81801
+                                        |
+                                  _cons |    63.9623   13.27106     4.82   0.000     37.95149    89.97311
+---------------------------------------------------------------------------------------------------------
+
+. margins shift, subpop(if reg_female==1) at(col=0) atmeans post
+
+Adjusted predictions                         Number of obs   =           4,743
+                                             Population size = 105,335,334,706
+                                             Subpop. no. obs =           1,752
+Model VCE: SDR                               Subpop. size    =               .
+
+Expression: Linear prediction, predict()
+At: 1.access3     = .0452859 (mean)
+    2.access3     = .2847013 (mean)
+    3.access3     = .6700128 (mean)
+    1.shift       = .8791182 (mean)
+    2.shift       = .0790037 (mean)
+    3.shift       = .0418781 (mean)
+    1.wkwkend3    = .7277205 (mean)
+    2.wkwkend3    = .1654807 (mean)
+    3.wkwkend3    = .1067988 (mean)
+    0.inflex      = .5467754 (mean)
+    1.inflex      = .4532246 (mean)
+    0.shortnotice = .7488482 (mean)
+    1.shortnotice = .2511518 (mean)
+    col           =        0
+    1.wkhr        = .2500696 (mean)
+    2.wkhr        = .5367937 (mean)
+    3.wkhr        = .1889101 (mean)
+    4.wkhr        = .0242266 (mean)
+    1.spousepres  = .6788953 (mean)
+    2.spousepres  = .0618722 (mean)
+    3.spousepres  = .2592326 (mean)
+    age           = 36.24541 (mean)
+    1.race4       = .6528205 (mean)
+    2.race4       = .1185007 (mean)
+    3.race4       = .1574963 (mean)
+    4.race4       = .0711825 (mean)
+    0.prof_manag  = .4763357 (mean)
+    1.prof_manag  = .5236643 (mean)
+    kid           = 1.949295 (mean)
+    agec          = 5.360502 (mean)
+    0.weekend     = .7236843 (mean)
+    1.weekend     = .2763157 (mean)
+    2017.year     = .5060025 (mean)
+    2018.year     = .4939975 (mean)
+    0.summer      = .7490999 (mean)
+    1.summer      = .2509001 (mean)
+
+--------------------------------------------------------------------------------
+               |            Delta-method
+               |     Margin   std. err.      z    P>|z|     [95% conf. interval]
+---------------+----------------------------------------------------------------
+         shift |
+          day  |   37.60617   3.210387    11.71   0.000     31.31393    43.89841
+evening/night  |   29.62323    7.19982     4.11   0.000     15.51185    43.73462
+        other  |   13.68887   9.591178     1.43   0.154    -5.109492    32.48723
+--------------------------------------------------------------------------------
+
+. estimates store f0_educare
+
+. 
+. svy, subpop(reg_female): reg educare $predictor $control ///
+>                 shift#col
+(running regress on estimation sample)
+
+SDR replications (160): .........10.........20.........30.........40.........50.........60.........70.........80........
+> .90.........100.........110.........120.........130.........140.........150.........160 done
+
+Survey: Linear regression                   Number of obs   =           10,071
+                                            Population size =  105,335,334,706
+                                            Subpop. no. obs =            1,752
+                                            Subpop. size    = 12,905,943,786.1
+                                            Replications    =              160
+                                            Wald chi2(26)   =           134.78
+                                            Prob > chi2     =           0.0000
+                                            R-squared       =           0.0879
+
+---------------------------------------------------------------------------------------------------------
+                                        |                 SDR
+                                educare | Coefficient  std. err.      z    P>|z|     [95% conf. interval]
+----------------------------------------+----------------------------------------------------------------
+                                access3 |
+                              no leave  |   .2367725   10.51697     0.02   0.982    -20.37611    20.84966
+                          unpaid leave  |   .5343287   4.621467     0.12   0.908    -8.523581    9.592238
+                                        |
+                                  shift |
+                         evening/night  |  -7.982936   7.952594    -1.00   0.315    -23.56973    7.603861
+                                 other  |   -23.9173   9.904837    -2.41   0.016    -43.33042   -4.504175
+                                        |
+                               wkwkend3 |
+                              weekends  |  -5.659258   6.826837    -0.83   0.407    -19.03961    7.721098
+                                  vary  |   10.09981   7.398009     1.37   0.172    -4.400017    24.59965
+                                        |
+                               1.inflex |   2.170097   3.772785     0.58   0.565    -5.224426    9.564621
+                          1.shortnotice |  -.3129574   5.834062    -0.05   0.957    -11.74751    11.12159
+                                  1.col |   9.869392   5.196609     1.90   0.058    -.3157738    20.05456
+                                        |
+                                   wkhr |
+                                    PT  |   16.39511   5.277657     3.11   0.002      6.05109    26.73913
+                               long FT  |  -4.943103     4.5567    -1.08   0.278    -13.87407    3.987865
+                           FT hrs vary  |  -11.97613   7.496299    -1.60   0.110     -26.6686    2.716349
+                                        |
+                             spousepres |
+             unmarried partner present  |  -6.158728   8.533074    -0.72   0.470    -22.88324    10.56579
+no spouse or unmarried partner present  |  -10.03895   4.079445    -2.46   0.014    -18.03451   -2.043381
+                                        |
+                                    age |  -.3399337   .3614285    -0.94   0.347    -1.048321     .368453
+                                        |
+                                  race4 |
+                    non-Hispanic black  |  -8.195278   5.794076    -1.41   0.157    -19.55146    3.160901
+                              Hispanic  |  -10.92123   5.249256    -2.08   0.037    -21.20958    -.632873
+                            other race  |  -.7049169   6.367417    -0.11   0.912    -13.18483    11.77499
+                                        |
+                           1.prof_manag |   6.370433   5.218176     1.22   0.222    -3.857004    16.59787
+                                    kid |  -.7516665    2.17259    -0.35   0.729    -5.009865    3.506532
+                                   agec |  -2.749238   .5849786    -4.70   0.000    -3.895775   -1.602701
+                              1.weekend |   5.759658    3.96543     1.45   0.146    -2.012442    13.53176
+                                        |
+                                   year |
+                                  2018  |   2.433072   3.723305     0.65   0.513    -4.864472    9.730616
+                                        |
+                               1.summer |  -9.258756   4.408597    -2.10   0.036    -17.89945   -.6180653
+                                        |
+                              shift#col |
+                       evening/night#1  |   17.15761   16.48092     1.04   0.298     -15.1444    49.45962
+                               other#1  |   32.32952   18.61692     1.74   0.082    -4.158961    68.81801
+                                        |
+                                  _cons |    63.9623   13.27106     4.82   0.000     37.95149    89.97311
+---------------------------------------------------------------------------------------------------------
+
+. margins shift, subpop(if reg_female==1) at(col=1) atmeans post
+
+Adjusted predictions                         Number of obs   =           4,743
+                                             Population size = 105,335,334,706
+                                             Subpop. no. obs =           1,752
+Model VCE: SDR                               Subpop. size    =               .
+
+Expression: Linear prediction, predict()
+At: 1.access3     = .0452859 (mean)
+    2.access3     = .2847013 (mean)
+    3.access3     = .6700128 (mean)
+    1.shift       = .8791182 (mean)
+    2.shift       = .0790037 (mean)
+    3.shift       = .0418781 (mean)
+    1.wkwkend3    = .7277205 (mean)
+    2.wkwkend3    = .1654807 (mean)
+    3.wkwkend3    = .1067988 (mean)
+    0.inflex      = .5467754 (mean)
+    1.inflex      = .4532246 (mean)
+    0.shortnotice = .7488482 (mean)
+    1.shortnotice = .2511518 (mean)
+    col           =        1
+    1.wkhr        = .2500696 (mean)
+    2.wkhr        = .5367937 (mean)
+    3.wkhr        = .1889101 (mean)
+    4.wkhr        = .0242266 (mean)
+    1.spousepres  = .6788953 (mean)
+    2.spousepres  = .0618722 (mean)
+    3.spousepres  = .2592326 (mean)
+    age           = 36.24541 (mean)
+    1.race4       = .6528205 (mean)
+    2.race4       = .1185007 (mean)
+    3.race4       = .1574963 (mean)
+    4.race4       = .0711825 (mean)
+    0.prof_manag  = .4763357 (mean)
+    1.prof_manag  = .5236643 (mean)
+    kid           = 1.949295 (mean)
+    agec          = 5.360502 (mean)
+    0.weekend     = .7236843 (mean)
+    1.weekend     = .2763157 (mean)
+    2017.year     = .5060025 (mean)
+    2018.year     = .4939975 (mean)
+    0.summer      = .7490999 (mean)
+    1.summer      = .2509001 (mean)
+
+--------------------------------------------------------------------------------
+               |            Delta-method
+               |     Margin   std. err.      z    P>|z|     [95% conf. interval]
+---------------+----------------------------------------------------------------
+         shift |
+          day  |   47.47556      3.414    13.91   0.000     40.78424    54.16688
+evening/night  |   56.65024    15.9441     3.55   0.000     25.40038    87.90009
+        other  |   55.88779   15.59613     3.58   0.000     25.31994    86.45563
+--------------------------------------------------------------------------------
+
+. estimates store f1_educare
+
+. 
+. graph set window fontface "Times New Roman"
+
+. coefplot        (f0_educare, label("Less than BA") msymbol(o) mlcolor(gs0) mfcolor(gs16) ciopt(color(gs0)) mlabel mlab
+> color(gs0) mlabposition(12)) ///
+>                         (f1_educare, label("BA or above") msymbol(o) mlcolor(gs8) mfcolor(gs8) ciopt(color(gs8)) mlabe
+> l mlabcolor(gs8) mlabposition(12)), ///
+>                         ||, title("1A: Type of Work Shift") format(%5.2f) ylabel(1 "A regular day shift" 2 "A regular 
+> evening/night shift" 3 "Other shifts", notick) ///
+>                         xtitle("Mothers' Developmental Child Care Time (Minutes)", size(small)) yscale(noline) xlabel(
+> 0 30 60 90 120) legend(position(6) rows(1) region(lcolor(black))) 
+
+. graph save "F1A"
+file F1A.gph saved
+
+. 
+. 
+. **figure 1B
+. svy, subpop(reg_female): reg educare $predictor $control ///
+>                 wkwkend3#col
+(running regress on estimation sample)
+
+SDR replications (160): .........10.........20.........30.........40.........50.........60.........70.........80........
+> .90.........100.........110.........120.........130.........140.........150.........160 done
+
+Survey: Linear regression                   Number of obs   =           10,071
+                                            Population size =  105,335,334,706
+                                            Subpop. no. obs =            1,752
+                                            Subpop. size    = 12,905,943,786.1
+                                            Replications    =              160
+                                            Wald chi2(26)   =           145.90
+                                            Prob > chi2     =           0.0000
+                                            R-squared       =           0.0905
+
+---------------------------------------------------------------------------------------------------------
+                                        |                 SDR
+                                educare | Coefficient  std. err.      z    P>|z|     [95% conf. interval]
+----------------------------------------+----------------------------------------------------------------
+                                access3 |
+                              no leave  |   1.446878   10.56815     0.14   0.891    -19.26632    22.16008
+                          unpaid leave  |   .6773583   4.637701     0.15   0.884    -8.412369    9.767085
+                                        |
+                                  shift |
+                         evening/night  |  -4.232723   7.726132    -0.55   0.584    -19.37566    10.91022
+                                 other  |  -14.18026   8.673652    -1.63   0.102     -31.1803    2.819786
+                                        |
+                               wkwkend3 |
+                              weekends  |  -14.39573   7.579521    -1.90   0.058    -29.25132    .4598575
+                                  vary  |   8.861339   9.264282     0.96   0.339    -9.296321      27.019
+                                        |
+                               1.inflex |   2.182836   3.750877     0.58   0.561    -5.168747    9.534419
+                          1.shortnotice |  -.2380641   5.747472    -0.04   0.967     -11.5029    11.02677
+                                  1.col |     7.8471   5.125719     1.53   0.126    -2.199125    17.89332
+                                        |
+                                   wkhr |
+                                    PT  |   16.69142   5.237927     3.19   0.001     6.425268    26.95757
+                               long FT  |  -5.303632   4.465224    -1.19   0.235    -14.05531    3.448045
+                           FT hrs vary  |  -12.41879   7.655031    -1.62   0.105    -27.42237    2.584796
+                                        |
+                             spousepres |
+             unmarried partner present  |    -7.0085   8.718419    -0.80   0.421    -24.09629    10.07929
+no spouse or unmarried partner present  |  -9.878448   3.976147    -2.48   0.013    -17.67155   -2.085343
+                                        |
+                                    age |  -.3370294   .3626101    -0.93   0.353    -1.047732    .3736732
+                                        |
+                                  race4 |
+                    non-Hispanic black  |  -7.580974   5.754214    -1.32   0.188    -18.85903    3.697078
+                              Hispanic  |  -11.15981   5.280251    -2.11   0.035    -21.50891   -.8107087
+                            other race  |   .1534122    6.35935     0.02   0.981    -12.31068    12.61751
+                                        |
+                           1.prof_manag |   6.322634   5.199652     1.22   0.224    -3.868497    16.51377
+                                    kid |  -.5312947   2.158112    -0.25   0.806    -4.761116    3.698527
+                                   agec |  -2.817152    .583677    -4.83   0.000    -3.961138   -1.673166
+                              1.weekend |   5.822102   4.007499     1.45   0.146    -2.032452    13.67666
+                                        |
+                                   year |
+                                  2018  |   2.666488   3.706224     0.72   0.472    -4.597577    9.930553
+                                        |
+                               1.summer |  -8.701525   4.385801    -1.98   0.047    -17.29754   -.1055123
+                                        |
+                           wkwkend3#col |
+                            weekends#1  |   30.69278    12.3087     2.49   0.013     6.568165    54.81739
+                                vary#1  |   2.413766   13.32763     0.18   0.856     -23.7079    28.53543
+                                        |
+                                  _cons |   64.57513   13.57327     4.76   0.000     37.97201    91.17825
+---------------------------------------------------------------------------------------------------------
+
+. margins wkwkend3, subpop(if reg_female==1) at(col=0) atmeans post
+
+Adjusted predictions                         Number of obs   =           4,743
+                                             Population size = 105,335,334,706
+                                             Subpop. no. obs =           1,752
+Model VCE: SDR                               Subpop. size    =               .
+
+Expression: Linear prediction, predict()
+At: 1.access3     = .0452859 (mean)
+    2.access3     = .2847013 (mean)
+    3.access3     = .6700128 (mean)
+    1.shift       = .8791182 (mean)
+    2.shift       = .0790037 (mean)
+    3.shift       = .0418781 (mean)
+    1.wkwkend3    = .7277205 (mean)
+    2.wkwkend3    = .1654807 (mean)
+    3.wkwkend3    = .1067988 (mean)
+    0.inflex      = .5467754 (mean)
+    1.inflex      = .4532246 (mean)
+    0.shortnotice = .7488482 (mean)
+    1.shortnotice = .2511518 (mean)
+    col           =        0
+    1.wkhr        = .2500696 (mean)
+    2.wkhr        = .5367937 (mean)
+    3.wkhr        = .1889101 (mean)
+    4.wkhr        = .0242266 (mean)
+    1.spousepres  = .6788953 (mean)
+    2.spousepres  = .0618722 (mean)
+    3.spousepres  = .2592326 (mean)
+    age           = 36.24541 (mean)
+    1.race4       = .6528205 (mean)
+    2.race4       = .1185007 (mean)
+    3.race4       = .1574963 (mean)
+    4.race4       = .0711825 (mean)
+    0.prof_manag  = .4763357 (mean)
+    1.prof_manag  = .5236643 (mean)
+    kid           = 1.949295 (mean)
+    agec          = 5.360502 (mean)
+    0.weekend     = .7236843 (mean)
+    1.weekend     = .2763157 (mean)
+    2017.year     = .5060025 (mean)
+    2018.year     = .4939975 (mean)
+    0.summer      = .7490999 (mean)
+    1.summer      = .2509001 (mean)
+
+--------------------------------------------------------------------------------
+               |            Delta-method
+               |     Margin   std. err.      z    P>|z|     [95% conf. interval]
+---------------+----------------------------------------------------------------
+      wkwkend3 |
+weekdays only  |   37.76745   3.726671    10.13   0.000     30.46331    45.07159
+     weekends  |   23.37172   6.256513     3.74   0.000     11.10918    35.63425
+         vary  |   46.62879     8.3611     5.58   0.000     30.24133    63.01624
+--------------------------------------------------------------------------------
+
+. estimates store f2_educare
+
+. 
+. svy, subpop(reg_female): reg educare $predictor $control ///
+>                 wkwkend3#col
+(running regress on estimation sample)
+
+SDR replications (160): .........10.........20.........30.........40.........50.........60.........70.........80........
+> .90.........100.........110.........120.........130.........140.........150.........160 done
+
+Survey: Linear regression                   Number of obs   =           10,071
+                                            Population size =  105,335,334,706
+                                            Subpop. no. obs =            1,752
+                                            Subpop. size    = 12,905,943,786.1
+                                            Replications    =              160
+                                            Wald chi2(26)   =           145.90
+                                            Prob > chi2     =           0.0000
+                                            R-squared       =           0.0905
+
+---------------------------------------------------------------------------------------------------------
+                                        |                 SDR
+                                educare | Coefficient  std. err.      z    P>|z|     [95% conf. interval]
+----------------------------------------+----------------------------------------------------------------
+                                access3 |
+                              no leave  |   1.446878   10.56815     0.14   0.891    -19.26632    22.16008
+                          unpaid leave  |   .6773583   4.637701     0.15   0.884    -8.412369    9.767085
+                                        |
+                                  shift |
+                         evening/night  |  -4.232723   7.726132    -0.55   0.584    -19.37566    10.91022
+                                 other  |  -14.18026   8.673652    -1.63   0.102     -31.1803    2.819786
+                                        |
+                               wkwkend3 |
+                              weekends  |  -14.39573   7.579521    -1.90   0.058    -29.25132    .4598575
+                                  vary  |   8.861339   9.264282     0.96   0.339    -9.296321      27.019
+                                        |
+                               1.inflex |   2.182836   3.750877     0.58   0.561    -5.168747    9.534419
+                          1.shortnotice |  -.2380641   5.747472    -0.04   0.967     -11.5029    11.02677
+                                  1.col |     7.8471   5.125719     1.53   0.126    -2.199125    17.89332
+                                        |
+                                   wkhr |
+                                    PT  |   16.69142   5.237927     3.19   0.001     6.425268    26.95757
+                               long FT  |  -5.303632   4.465224    -1.19   0.235    -14.05531    3.448045
+                           FT hrs vary  |  -12.41879   7.655031    -1.62   0.105    -27.42237    2.584796
+                                        |
+                             spousepres |
+             unmarried partner present  |    -7.0085   8.718419    -0.80   0.421    -24.09629    10.07929
+no spouse or unmarried partner present  |  -9.878448   3.976147    -2.48   0.013    -17.67155   -2.085343
+                                        |
+                                    age |  -.3370294   .3626101    -0.93   0.353    -1.047732    .3736732
+                                        |
+                                  race4 |
+                    non-Hispanic black  |  -7.580974   5.754214    -1.32   0.188    -18.85903    3.697078
+                              Hispanic  |  -11.15981   5.280251    -2.11   0.035    -21.50891   -.8107087
+                            other race  |   .1534122    6.35935     0.02   0.981    -12.31068    12.61751
+                                        |
+                           1.prof_manag |   6.322634   5.199652     1.22   0.224    -3.868497    16.51377
+                                    kid |  -.5312947   2.158112    -0.25   0.806    -4.761116    3.698527
+                                   agec |  -2.817152    .583677    -4.83   0.000    -3.961138   -1.673166
+                              1.weekend |   5.822102   4.007499     1.45   0.146    -2.032452    13.67666
+                                        |
+                                   year |
+                                  2018  |   2.666488   3.706224     0.72   0.472    -4.597577    9.930553
+                                        |
+                               1.summer |  -8.701525   4.385801    -1.98   0.047    -17.29754   -.1055123
+                                        |
+                           wkwkend3#col |
+                            weekends#1  |   30.69278    12.3087     2.49   0.013     6.568165    54.81739
+                                vary#1  |   2.413766   13.32763     0.18   0.856     -23.7079    28.53543
+                                        |
+                                  _cons |   64.57513   13.57327     4.76   0.000     37.97201    91.17825
+---------------------------------------------------------------------------------------------------------
+
+. margins wkwkend3, subpop(if reg_female==1) at(col=1) atmeans post
+
+Adjusted predictions                         Number of obs   =           4,743
+                                             Population size = 105,335,334,706
+                                             Subpop. no. obs =           1,752
+Model VCE: SDR                               Subpop. size    =               .
+
+Expression: Linear prediction, predict()
+At: 1.access3     = .0452859 (mean)
+    2.access3     = .2847013 (mean)
+    3.access3     = .6700128 (mean)
+    1.shift       = .8791182 (mean)
+    2.shift       = .0790037 (mean)
+    3.shift       = .0418781 (mean)
+    1.wkwkend3    = .7277205 (mean)
+    2.wkwkend3    = .1654807 (mean)
+    3.wkwkend3    = .1067988 (mean)
+    0.inflex      = .5467754 (mean)
+    1.inflex      = .4532246 (mean)
+    0.shortnotice = .7488482 (mean)
+    1.shortnotice = .2511518 (mean)
+    col           =        1
+    1.wkhr        = .2500696 (mean)
+    2.wkhr        = .5367937 (mean)
+    3.wkhr        = .1889101 (mean)
+    4.wkhr        = .0242266 (mean)
+    1.spousepres  = .6788953 (mean)
+    2.spousepres  = .0618722 (mean)
+    3.spousepres  = .2592326 (mean)
+    age           = 36.24541 (mean)
+    1.race4       = .6528205 (mean)
+    2.race4       = .1185007 (mean)
+    3.race4       = .1574963 (mean)
+    4.race4       = .0711825 (mean)
+    0.prof_manag  = .4763357 (mean)
+    1.prof_manag  = .5236643 (mean)
+    kid           = 1.949295 (mean)
+    agec          = 5.360502 (mean)
+    0.weekend     = .7236843 (mean)
+    1.weekend     = .2763157 (mean)
+    2017.year     = .5060025 (mean)
+    2018.year     = .4939975 (mean)
+    0.summer      = .7490999 (mean)
+    1.summer      = .2509001 (mean)
+
+--------------------------------------------------------------------------------
+               |            Delta-method
+               |     Margin   std. err.      z    P>|z|     [95% conf. interval]
+---------------+----------------------------------------------------------------
+      wkwkend3 |
+weekdays only  |   45.61455   3.451111    13.22   0.000     38.85049     52.3786
+     weekends  |   61.91159   10.64916     5.81   0.000     41.03962    82.78357
+         vary  |   56.88965   10.59694     5.37   0.000     36.12004    77.65926
+--------------------------------------------------------------------------------
+
+. estimates store f3_educare
+
+. 
+. coefplot        (f2_educare, label("Less than BA") msymbol(o) mlcolor(gs0) mfcolor(gs16) ciopt(color(gs0)) mlabel mlab
+> color(gs0) mlabposition(12)) ///
+>                         (f3_educare, label("BA or above") msymbol(o) mlcolor(gs8) mfcolor(gs8) ciopt(color(gs8)) mlabe
+> l mlabcolor(gs8) mlabposition(12)), ///
+>                         ||, title("1B: Usual Days Worked") format(%5.2f) ylabel(1 "Work on weekdays only" 2 "Work on w
+> eekends" 3 "Usual days worked vary", notick) ///
+>                         xtitle("Mothers' Developmental Child Care Time (Minutes)", size(small)) yscale(noline) xlabel(
+> 0 30 60 90 120) legend(position(6) rows(1) region(lcolor(black))) 
+
+. graph save "F1B"
+file F1B.gph saved
+
+. 
+. 
+. **figure 1
+. graph combine F1A.gph F1B.gph, col(2)
+
+. graph export "graph_Qian_Sayer_2022_Socius_Figure1.pdf"
+file /Users/yueqian/Desktop/graph_Qian_Sayer_2022_Socius_Figure1.pdf saved as PDF format
+
+. 
+. 
+. ***********************************************************************
+. **************************margins & figure 2***************************
+. *********************************************************************** 
+. 
+. **figure 2A
+. svy, subpop(reg_male): reg routine $predictor $control ///
+>                 shift#col
+(running regress on estimation sample)
+
+SDR replications (160): .........10.........20.........30.........40.........50.........60.........70.........80........
+> .90.........100.........110.........120.........130.........140.........150.........160 done
+
+Survey: Linear regression                   Number of obs   =           10,071
+                                            Population size =  105,335,334,706
+                                            Subpop. no. obs =            1,698
+                                            Subpop. size    = 13,804,355,471.4
+                                            Replications    =              160
+                                            Wald chi2(26)   =           263.87
+                                            Prob > chi2     =           0.0000
+                                            R-squared       =           0.1101
+
+---------------------------------------------------------------------------------------------------------
+                                        |                 SDR
+                                routine | Coefficient  std. err.      z    P>|z|     [95% conf. interval]
+----------------------------------------+----------------------------------------------------------------
+                                access3 |
+                              no leave  |   -19.8558   4.039625    -4.92   0.000    -27.77332   -11.93828
+                          unpaid leave  |  -8.076081     3.7834    -2.13   0.033    -15.49141   -.6607534
+                                        |
+                                  shift |
+                         evening/night  |  -1.845659   4.565005    -0.40   0.686     -10.7929    7.101586
+                                 other  |   21.57778   10.31124     2.09   0.036     1.368113    41.78744
+                                        |
+                               wkwkend3 |
+                              weekends  |  -.4641085   4.238215    -0.11   0.913    -8.770857     7.84264
+                                  vary  |  -6.281372   7.183129    -0.87   0.382    -20.36005    7.797301
+                                        |
+                               1.inflex |  -8.335809   3.418497    -2.44   0.015    -15.03594   -1.635679
+                          1.shortnotice |  -1.987636   3.279989    -0.61   0.545    -8.416297    4.441025
+                                  1.col |   16.31486   3.436398     4.75   0.000     9.579643    23.05008
+                                        |
+                                   wkhr |
+                                    PT  |   10.29131   6.896103     1.49   0.136    -3.224798    23.80743
+                               long FT  |  -11.20959   3.135147    -3.58   0.000    -17.35437   -5.064819
+                           FT hrs vary  |  -5.652573   8.030828    -0.70   0.482    -21.39271    10.08756
+                                        |
+                             spousepres |
+             unmarried partner present  |  -12.50094   5.004765    -2.50   0.012     -22.3101   -2.691784
+no spouse or unmarried partner present  |   3.161466   5.450597     0.58   0.562    -7.521507    13.84444
+                                        |
+                                    age |  -.0428685    .190056    -0.23   0.822    -.4153714    .3296344
+                                        |
+                                  race4 |
+                    non-Hispanic black  |  -2.282036   7.140709    -0.32   0.749    -16.27757     11.7135
+                              Hispanic  |  -13.62119   3.482488    -3.91   0.000    -20.44674   -6.795643
+                            other race  |   -7.03589   4.793936    -1.47   0.142    -16.43183    2.360052
+                                        |
+                           1.prof_manag |  -5.291061   3.740226    -1.41   0.157    -12.62177    2.039647
+                                    kid |   1.469837   1.483711     0.99   0.322    -1.438183    4.377857
+                                   agec |  -3.239348    .465917    -6.95   0.000    -4.152528   -2.326167
+                              1.weekend |   6.947445   3.017005     2.30   0.021     1.034225    12.86067
+                                        |
+                                   year |
+                                  2018  |  -3.136143    2.85442    -1.10   0.272    -8.730704    2.458417
+                                        |
+                               1.summer |    .858197   3.622354     0.24   0.813    -6.241487    7.957881
+                                        |
+                              shift#col |
+                       evening/night#1  |  -7.725763   8.596751    -0.90   0.369    -24.57509    9.123559
+                               other#1  |  -36.27706   12.26815    -2.96   0.003    -60.32219   -12.23194
+                                        |
+                                  _cons |   61.99819   8.363711     7.41   0.000     45.60562    78.39077
+---------------------------------------------------------------------------------------------------------
+
+. margins shift, subpop(if reg_male==1) at(col=0) atmeans post
+
+Adjusted predictions                         Number of obs   =           4,743
+                                             Population size = 105,335,334,706
+                                             Subpop. no. obs =           1,698
+Model VCE: SDR                               Subpop. size    =               .
+
+Expression: Linear prediction, predict()
+At: 1.access3     = .0515606 (mean)
+    2.access3     = .1772735 (mean)
+    3.access3     = .7711659 (mean)
+    1.shift       = .8664587 (mean)
+    2.shift       = .0660491 (mean)
+    3.shift       = .0674922 (mean)
+    1.wkwkend3    = .7284318 (mean)
+    2.wkwkend3    = .2166881 (mean)
+    3.wkwkend3    = .0548801 (mean)
+    0.inflex      =  .584117 (mean)
+    1.inflex      =  .415883 (mean)
+    0.shortnotice = .6238789 (mean)
+    1.shortnotice = .3761211 (mean)
+    col           =        0
+    1.wkhr        = .0355959 (mean)
+    2.wkhr        = .4881498 (mean)
+    3.wkhr        = .4314556 (mean)
+    4.wkhr        = .0447987 (mean)
+    1.spousepres  = .8672784 (mean)
+    2.spousepres  = .0765082 (mean)
+    3.spousepres  = .0562134 (mean)
+    age           = 38.36956 (mean)
+    1.race4       = .6433919 (mean)
+    2.race4       = .0790931 (mean)
+    3.race4       = .1918394 (mean)
+    4.race4       = .0856755 (mean)
+    0.prof_manag  = .5489911 (mean)
+    1.prof_manag  = .4510089 (mean)
+    kid           = 1.993713 (mean)
+    agec          = 4.995281 (mean)
+    0.weekend     =  .701445 (mean)
+    1.weekend     =  .298555 (mean)
+    2017.year     =    .4923 (mean)
+    2018.year     =    .5077 (mean)
+    0.summer      =  .756084 (mean)
+    1.summer      =  .243916 (mean)
+
+--------------------------------------------------------------------------------
+               |            Delta-method
+               |     Margin   std. err.      z    P>|z|     [95% conf. interval]
+---------------+----------------------------------------------------------------
+         shift |
+          day  |   29.39383    2.07486    14.17   0.000     25.32718    33.46048
+evening/night  |   27.54817   4.272199     6.45   0.000     19.17482    35.92153
+        other  |   50.97161    10.3586     4.92   0.000     30.66913    71.27409
+--------------------------------------------------------------------------------
+
+. estimates store m0_routine
+
+. 
+. svy, subpop(reg_male): reg routine $predictor $control ///
+>                 shift#col
+(running regress on estimation sample)
+
+SDR replications (160): .........10.........20.........30.........40.........50.........60.........70.........80........
+> .90.........100.........110.........120.........130.........140.........150.........160 done
+
+Survey: Linear regression                   Number of obs   =           10,071
+                                            Population size =  105,335,334,706
+                                            Subpop. no. obs =            1,698
+                                            Subpop. size    = 13,804,355,471.4
+                                            Replications    =              160
+                                            Wald chi2(26)   =           263.87
+                                            Prob > chi2     =           0.0000
+                                            R-squared       =           0.1101
+
+---------------------------------------------------------------------------------------------------------
+                                        |                 SDR
+                                routine | Coefficient  std. err.      z    P>|z|     [95% conf. interval]
+----------------------------------------+----------------------------------------------------------------
+                                access3 |
+                              no leave  |   -19.8558   4.039625    -4.92   0.000    -27.77332   -11.93828
+                          unpaid leave  |  -8.076081     3.7834    -2.13   0.033    -15.49141   -.6607534
+                                        |
+                                  shift |
+                         evening/night  |  -1.845659   4.565005    -0.40   0.686     -10.7929    7.101586
+                                 other  |   21.57778   10.31124     2.09   0.036     1.368113    41.78744
+                                        |
+                               wkwkend3 |
+                              weekends  |  -.4641085   4.238215    -0.11   0.913    -8.770857     7.84264
+                                  vary  |  -6.281372   7.183129    -0.87   0.382    -20.36005    7.797301
+                                        |
+                               1.inflex |  -8.335809   3.418497    -2.44   0.015    -15.03594   -1.635679
+                          1.shortnotice |  -1.987636   3.279989    -0.61   0.545    -8.416297    4.441025
+                                  1.col |   16.31486   3.436398     4.75   0.000     9.579643    23.05008
+                                        |
+                                   wkhr |
+                                    PT  |   10.29131   6.896103     1.49   0.136    -3.224798    23.80743
+                               long FT  |  -11.20959   3.135147    -3.58   0.000    -17.35437   -5.064819
+                           FT hrs vary  |  -5.652573   8.030828    -0.70   0.482    -21.39271    10.08756
+                                        |
+                             spousepres |
+             unmarried partner present  |  -12.50094   5.004765    -2.50   0.012     -22.3101   -2.691784
+no spouse or unmarried partner present  |   3.161466   5.450597     0.58   0.562    -7.521507    13.84444
+                                        |
+                                    age |  -.0428685    .190056    -0.23   0.822    -.4153714    .3296344
+                                        |
+                                  race4 |
+                    non-Hispanic black  |  -2.282036   7.140709    -0.32   0.749    -16.27757     11.7135
+                              Hispanic  |  -13.62119   3.482488    -3.91   0.000    -20.44674   -6.795643
+                            other race  |   -7.03589   4.793936    -1.47   0.142    -16.43183    2.360052
+                                        |
+                           1.prof_manag |  -5.291061   3.740226    -1.41   0.157    -12.62177    2.039647
+                                    kid |   1.469837   1.483711     0.99   0.322    -1.438183    4.377857
+                                   agec |  -3.239348    .465917    -6.95   0.000    -4.152528   -2.326167
+                              1.weekend |   6.947445   3.017005     2.30   0.021     1.034225    12.86067
+                                        |
+                                   year |
+                                  2018  |  -3.136143    2.85442    -1.10   0.272    -8.730704    2.458417
+                                        |
+                               1.summer |    .858197   3.622354     0.24   0.813    -6.241487    7.957881
+                                        |
+                              shift#col |
+                       evening/night#1  |  -7.725763   8.596751    -0.90   0.369    -24.57509    9.123559
+                               other#1  |  -36.27706   12.26815    -2.96   0.003    -60.32219   -12.23194
+                                        |
+                                  _cons |   61.99819   8.363711     7.41   0.000     45.60562    78.39077
+---------------------------------------------------------------------------------------------------------
+
+. margins shift, subpop(if reg_male==1) at(col=1) atmeans post
+
+Adjusted predictions                         Number of obs   =           4,743
+                                             Population size = 105,335,334,706
+                                             Subpop. no. obs =           1,698
+Model VCE: SDR                               Subpop. size    =               .
+
+Expression: Linear prediction, predict()
+At: 1.access3     = .0515606 (mean)
+    2.access3     = .1772735 (mean)
+    3.access3     = .7711659 (mean)
+    1.shift       = .8664587 (mean)
+    2.shift       = .0660491 (mean)
+    3.shift       = .0674922 (mean)
+    1.wkwkend3    = .7284318 (mean)
+    2.wkwkend3    = .2166881 (mean)
+    3.wkwkend3    = .0548801 (mean)
+    0.inflex      =  .584117 (mean)
+    1.inflex      =  .415883 (mean)
+    0.shortnotice = .6238789 (mean)
+    1.shortnotice = .3761211 (mean)
+    col           =        1
+    1.wkhr        = .0355959 (mean)
+    2.wkhr        = .4881498 (mean)
+    3.wkhr        = .4314556 (mean)
+    4.wkhr        = .0447987 (mean)
+    1.spousepres  = .8672784 (mean)
+    2.spousepres  = .0765082 (mean)
+    3.spousepres  = .0562134 (mean)
+    age           = 38.36956 (mean)
+    1.race4       = .6433919 (mean)
+    2.race4       = .0790931 (mean)
+    3.race4       = .1918394 (mean)
+    4.race4       = .0856755 (mean)
+    0.prof_manag  = .5489911 (mean)
+    1.prof_manag  = .4510089 (mean)
+    kid           = 1.993713 (mean)
+    agec          = 4.995281 (mean)
+    0.weekend     =  .701445 (mean)
+    1.weekend     =  .298555 (mean)
+    2017.year     =    .4923 (mean)
+    2018.year     =    .5077 (mean)
+    0.summer      =  .756084 (mean)
+    1.summer      =  .243916 (mean)
+
+--------------------------------------------------------------------------------
+               |            Delta-method
+               |     Margin   std. err.      z    P>|z|     [95% conf. interval]
+---------------+----------------------------------------------------------------
+         shift |
+          day  |   45.70869   2.694035    16.97   0.000     40.42848     50.9889
+evening/night  |   36.13727   7.056293     5.12   0.000     22.30719    49.96735
+        other  |   31.00941   7.254496     4.27   0.000     16.79086    45.22796
+--------------------------------------------------------------------------------
+
+. estimates store m1_routine
+
+. 
+. coefplot        (m0_routine, label("Less than BA") msymbol(o) mlcolor(gs0) mfcolor(gs16) ciopt(color(gs0)) mlabel mlab
+> color(gs0) mlabposition(12)) ///
+>                         (m1_routine, label("BA or above") msymbol(o) mlcolor(gs8) mfcolor(gs8) ciopt(color(gs8)) mlabe
+> l mlabcolor(gs8) mlabposition(12)), ///
+>                         ||, title("2A: Type of Work Shift") format(%5.2f) ylabel(1 "A regular day shift" 2 "A regular 
+> evening/night shift" 3 "Other shifts", notick) ///
+>                         xtitle("Fathers' Routine Child Care Time (Minutes)") yscale(noline) xlabel(0 30 60 90 120) leg
+> end(position(6) rows(1) region(lcolor(black))) 
+
+. graph save "F2A"        
+file F2A.gph saved
+
+. 
+. 
+. **figure 2B
+. svy, subpop(reg_male): reg routine $predictor $control ///
+>                 shortnotice#col
+(running regress on estimation sample)
+
+SDR replications (160): .........10.........20.........30.........40.........50.........60.........70.........80........
+> .90.........100.........110.........120.........130.........140.........150.........160 done
+
+Survey: Linear regression                   Number of obs   =           10,071
+                                            Population size =  105,335,334,706
+                                            Subpop. no. obs =            1,698
+                                            Subpop. size    = 13,804,355,471.4
+                                            Replications    =              160
+                                            Wald chi2(25)   =           259.51
+                                            Prob > chi2     =           0.0000
+                                            R-squared       =           0.1080
+
+---------------------------------------------------------------------------------------------------------
+                                        |                 SDR
+                                routine | Coefficient  std. err.      z    P>|z|     [95% conf. interval]
+----------------------------------------+----------------------------------------------------------------
+                                access3 |
+                              no leave  |   -20.8827   4.080679    -5.12   0.000    -28.88069   -12.88472
+                          unpaid leave  |  -9.661516   3.827312    -2.52   0.012    -17.16291   -2.160122
+                                        |
+                                  shift |
+                         evening/night  |  -4.040026   4.440945    -0.91   0.363    -12.74412    4.664067
+                                 other  |   11.60892   8.572019     1.35   0.176    -5.191931    28.40977
+                                        |
+                               wkwkend3 |
+                              weekends  |  -.9481729   4.275442    -0.22   0.824    -9.327885     7.43154
+                                  vary  |  -7.629323   6.960286    -1.10   0.273    -21.27123    6.012586
+                                        |
+                               1.inflex |  -8.724134   3.421487    -2.55   0.011    -15.43013   -2.018142
+                          1.shortnotice |   3.238905   4.292931     0.75   0.451    -5.175084    11.65289
+                                  1.col |   17.98283   4.289826     4.19   0.000     9.574931    26.39074
+                                        |
+                                   wkhr |
+                                    PT  |    11.4692   6.823454     1.68   0.093     -1.90452    24.84293
+                               long FT  |  -10.72754   3.104823    -3.46   0.001    -16.81288   -4.642199
+                           FT hrs vary  |  -3.590138   8.130714    -0.44   0.659    -19.52604    12.34577
+                                        |
+                             spousepres |
+             unmarried partner present  |  -12.78132   5.040675    -2.54   0.011    -22.66086   -2.901774
+no spouse or unmarried partner present  |   3.437844   5.406165     0.64   0.525    -7.158046    14.03373
+                                        |
+                                    age |   -.064926   .1902109    -0.34   0.733    -.4377325    .3078805
+                                        |
+                                  race4 |
+                    non-Hispanic black  |  -1.735028   7.230577    -0.24   0.810     -15.9067    12.43664
+                              Hispanic  |  -13.84273   3.414112    -4.05   0.000    -20.53427   -7.151197
+                            other race  |  -6.170714   4.752193    -1.30   0.194    -15.48484    3.143413
+                                        |
+                           1.prof_manag |  -5.151702   3.736553    -1.38   0.168    -12.47521    2.171806
+                                    kid |    1.53176   1.445322     1.06   0.289     -1.30102    4.364539
+                                   agec |  -3.273787    .465667    -7.03   0.000    -4.186478   -2.361096
+                              1.weekend |   6.836508   3.000516     2.28   0.023     .9556052    12.71741
+                                        |
+                                   year |
+                                  2018  |  -3.741998   2.838808    -1.32   0.187    -9.305959    1.821964
+                                        |
+                               1.summer |   .4580056   3.614868     0.13   0.899    -6.627005    7.543016
+                                        |
+                        shortnotice#col |
+                                   1 1  |  -12.41455   5.897892    -2.10   0.035    -23.97421   -.8548938
+                                        |
+                                  _cons |   62.81758    8.43594     7.45   0.000     46.28344    79.35172
+---------------------------------------------------------------------------------------------------------
+
+. margins shortnotice, subpop(if reg_male==1) at(col=0) atmeans post
+
+Adjusted predictions                         Number of obs   =           4,743
+                                             Population size = 105,335,334,706
+                                             Subpop. no. obs =           1,698
+Model VCE: SDR                               Subpop. size    =               .
+
+Expression: Linear prediction, predict()
+At: 1.access3     = .0515606 (mean)
+    2.access3     = .1772735 (mean)
+    3.access3     = .7711659 (mean)
+    1.shift       = .8664587 (mean)
+    2.shift       = .0660491 (mean)
+    3.shift       = .0674922 (mean)
+    1.wkwkend3    = .7284318 (mean)
+    2.wkwkend3    = .2166881 (mean)
+    3.wkwkend3    = .0548801 (mean)
+    0.inflex      =  .584117 (mean)
+    1.inflex      =  .415883 (mean)
+    0.shortnotice = .6238789 (mean)
+    1.shortnotice = .3761211 (mean)
+    col           =        0
+    1.wkhr        = .0355959 (mean)
+    2.wkhr        = .4881498 (mean)
+    3.wkhr        = .4314556 (mean)
+    4.wkhr        = .0447987 (mean)
+    1.spousepres  = .8672784 (mean)
+    2.spousepres  = .0765082 (mean)
+    3.spousepres  = .0562134 (mean)
+    age           = 38.36956 (mean)
+    1.race4       = .6433919 (mean)
+    2.race4       = .0790931 (mean)
+    3.race4       = .1918394 (mean)
+    4.race4       = .0856755 (mean)
+    0.prof_manag  = .5489911 (mean)
+    1.prof_manag  = .4510089 (mean)
+    kid           = 1.993713 (mean)
+    agec          = 4.995281 (mean)
+    0.weekend     =  .701445 (mean)
+    1.weekend     =  .298555 (mean)
+    2017.year     =    .4923 (mean)
+    2018.year     =    .5077 (mean)
+    0.summer      =  .756084 (mean)
+    1.summer      =  .243916 (mean)
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+ shortnotice |
+          0  |   29.94401   2.536657    11.80   0.000     24.97225    34.91576
+          1  |   33.18291   3.511137     9.45   0.000     26.30121    40.06461
+------------------------------------------------------------------------------
+
+. estimates store m2_routine
+
+. 
+. svy, subpop(reg_male): reg routine $predictor $control ///
+>                 shortnotice#col
+(running regress on estimation sample)
+
+SDR replications (160): .........10.........20.........30.........40.........50.........60.........70.........80........
+> .90.........100.........110.........120.........130.........140.........150.........160 done
+
+Survey: Linear regression                   Number of obs   =           10,071
+                                            Population size =  105,335,334,706
+                                            Subpop. no. obs =            1,698
+                                            Subpop. size    = 13,804,355,471.4
+                                            Replications    =              160
+                                            Wald chi2(25)   =           259.51
+                                            Prob > chi2     =           0.0000
+                                            R-squared       =           0.1080
+
+---------------------------------------------------------------------------------------------------------
+                                        |                 SDR
+                                routine | Coefficient  std. err.      z    P>|z|     [95% conf. interval]
+----------------------------------------+----------------------------------------------------------------
+                                access3 |
+                              no leave  |   -20.8827   4.080679    -5.12   0.000    -28.88069   -12.88472
+                          unpaid leave  |  -9.661516   3.827312    -2.52   0.012    -17.16291   -2.160122
+                                        |
+                                  shift |
+                         evening/night  |  -4.040026   4.440945    -0.91   0.363    -12.74412    4.664067
+                                 other  |   11.60892   8.572019     1.35   0.176    -5.191931    28.40977
+                                        |
+                               wkwkend3 |
+                              weekends  |  -.9481729   4.275442    -0.22   0.824    -9.327885     7.43154
+                                  vary  |  -7.629323   6.960286    -1.10   0.273    -21.27123    6.012586
+                                        |
+                               1.inflex |  -8.724134   3.421487    -2.55   0.011    -15.43013   -2.018142
+                          1.shortnotice |   3.238905   4.292931     0.75   0.451    -5.175084    11.65289
+                                  1.col |   17.98283   4.289826     4.19   0.000     9.574931    26.39074
+                                        |
+                                   wkhr |
+                                    PT  |    11.4692   6.823454     1.68   0.093     -1.90452    24.84293
+                               long FT  |  -10.72754   3.104823    -3.46   0.001    -16.81288   -4.642199
+                           FT hrs vary  |  -3.590138   8.130714    -0.44   0.659    -19.52604    12.34577
+                                        |
+                             spousepres |
+             unmarried partner present  |  -12.78132   5.040675    -2.54   0.011    -22.66086   -2.901774
+no spouse or unmarried partner present  |   3.437844   5.406165     0.64   0.525    -7.158046    14.03373
+                                        |
+                                    age |   -.064926   .1902109    -0.34   0.733    -.4377325    .3078805
+                                        |
+                                  race4 |
+                    non-Hispanic black  |  -1.735028   7.230577    -0.24   0.810     -15.9067    12.43664
+                              Hispanic  |  -13.84273   3.414112    -4.05   0.000    -20.53427   -7.151197
+                            other race  |  -6.170714   4.752193    -1.30   0.194    -15.48484    3.143413
+                                        |
+                           1.prof_manag |  -5.151702   3.736553    -1.38   0.168    -12.47521    2.171806
+                                    kid |    1.53176   1.445322     1.06   0.289     -1.30102    4.364539
+                                   agec |  -3.273787    .465667    -7.03   0.000    -4.186478   -2.361096
+                              1.weekend |   6.836508   3.000516     2.28   0.023     .9556052    12.71741
+                                        |
+                                   year |
+                                  2018  |  -3.741998   2.838808    -1.32   0.187    -9.305959    1.821964
+                                        |
+                               1.summer |   .4580056   3.614868     0.13   0.899    -6.627005    7.543016
+                                        |
+                        shortnotice#col |
+                                   1 1  |  -12.41455   5.897892    -2.10   0.035    -23.97421   -.8548938
+                                        |
+                                  _cons |   62.81758    8.43594     7.45   0.000     46.28344    79.35172
+---------------------------------------------------------------------------------------------------------
+
+. margins shortnotice, subpop(if reg_male==1) at(col=1) atmeans post
+
+Adjusted predictions                         Number of obs   =           4,743
+                                             Population size = 105,335,334,706
+                                             Subpop. no. obs =           1,698
+Model VCE: SDR                               Subpop. size    =               .
+
+Expression: Linear prediction, predict()
+At: 1.access3     = .0515606 (mean)
+    2.access3     = .1772735 (mean)
+    3.access3     = .7711659 (mean)
+    1.shift       = .8664587 (mean)
+    2.shift       = .0660491 (mean)
+    3.shift       = .0674922 (mean)
+    1.wkwkend3    = .7284318 (mean)
+    2.wkwkend3    = .2166881 (mean)
+    3.wkwkend3    = .0548801 (mean)
+    0.inflex      =  .584117 (mean)
+    1.inflex      =  .415883 (mean)
+    0.shortnotice = .6238789 (mean)
+    1.shortnotice = .3761211 (mean)
+    col           =        1
+    1.wkhr        = .0355959 (mean)
+    2.wkhr        = .4881498 (mean)
+    3.wkhr        = .4314556 (mean)
+    4.wkhr        = .0447987 (mean)
+    1.spousepres  = .8672784 (mean)
+    2.spousepres  = .0765082 (mean)
+    3.spousepres  = .0562134 (mean)
+    age           = 38.36956 (mean)
+    1.race4       = .6433919 (mean)
+    2.race4       = .0790931 (mean)
+    3.race4       = .1918394 (mean)
+    4.race4       = .0856755 (mean)
+    0.prof_manag  = .5489911 (mean)
+    1.prof_manag  = .4510089 (mean)
+    kid           = 1.993713 (mean)
+    agec          = 4.995281 (mean)
+    0.weekend     =  .701445 (mean)
+    1.weekend     =  .298555 (mean)
+    2017.year     =    .4923 (mean)
+    2018.year     =    .5077 (mean)
+    0.summer      =  .756084 (mean)
+    1.summer      =  .243916 (mean)
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   std. err.      z    P>|z|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+ shortnotice |
+          0  |   47.92684   3.358583    14.27   0.000     41.34414    54.50954
+          1  |    38.7512   3.008738    12.88   0.000     32.85418    44.64821
+------------------------------------------------------------------------------
+
+. estimates store m3_routine
+
+. 
+. coefplot (m2_routine, label("Less than BA") msymbol(o) mlcolor(gs0) mfcolor(gs16) ciopt(color(gs0)) mlabel mlabcolor(g
+> s0) mlabposition(12)) ///
+>                         (m3_routine, label("BA or above") msymbol(o) mlcolor(gs8) mfcolor(gs8) ciopt(color(gs8)) mlabe
+> l mlabcolor(gs8) mlabposition(12)), ///
+>                         ||, title("2B: Advance Notice of Work Schedules") format(%5.2f) ylabel(1 "At least two-weeks a
+> dvanced notice" 2 "Less than two-weeks advanced notice", notick) ///
+>                         xtitle("Fathers' Routine Child Care Time (Minutes)") yscale(noline) xlabel(0 30 60 90 120) leg
+> end(position(6) rows(1) region(lcolor(black))) 
+
+. graph save "F2B"
+file F2B.gph saved
+
+. 
+. 
+. **figure 2
+. graph combine F2A.gph F2B.gph, col(2)           
+
+. graph export "graph_Qian_Sayer_2022_Socius_Figure2.pdf"
+file /Users/yueqian/Desktop/graph_Qian_Sayer_2022_Socius_Figure2.pdf saved as PDF format
+
+.                 
+. 
+. log close
+      name:  <unnamed>
+       log:  /Users/yueqian/Desktop/graph_Qian_Sayer_2022_Socius.log
+  log type:  text
+ closed on:  14 Aug 2025, 18:48:47
+------------------------------------------------------------------------------------------------------------------------

@@ -1,0 +1,1608 @@
+------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/yueqian/Desktop/graph_Qian_Fan_2024_BJS.log
+  log type:  text
+ opened on:  13 Aug 2025, 19:53:18
+
+. 
+. // #0
+. // program setup
+. version 18.0
+
+. clear all
+
+. set more off
+
+. matrix drop _all
+
+. set linesize 120
+
+. 
+. // #1
+. // open data
+. clear
+
+. use regdata_bjs.dta, clear 
+
+. 
+. * survey set the data
+. svyset RespId [pweight=weight]
+
+Sampling weights: weight
+             VCE: linearized
+     Single unit: missing
+        Strata 1: <one>
+ Sampling unit 1: RespId
+           FPC 1: <zero>
+
+. 
+. // #2
+. // define macro
+. global events "none money relation lockdown death worry moving society health jobloss care politics work freetime novi
+> sit allother"
+
+. global events_yes "money relation lockdown death worry moving society health jobloss care politics work freetime novis
+> it allother"
+
+. global controls "ppage i.ppeducat i.race4 i.mar i.ppreg4"
+
+. 
+. // #3
+. // life events by gender: Figure 1
+. foreach v in $events{   
+  2.         svy, subpop(female): proportion `v'
+  3.         estimates store `v'f
+  4.         svy, subpop(male): proportion `v'
+  5.         estimates store `v'm
+  6. }
+(running proportion on estimation sample)
+
+Survey: Proportion estimation
+
+Number of strata =     1          Number of obs   =      1,733
+Number of PSUs   = 1,733          Population size = 1,709.0213
+                                  Subpop. no. obs =        861
+                                  Subpop. size    =   891.4125
+                                  Design df       =      1,732
+
+--------------------------------------------------------------
+             |             Linearized            Logit
+             | Proportion   std. err.     [95% conf. interval]
+-------------+------------------------------------------------
+        none |
+          0  |   .9128389   .0118044      .8867345     .933379
+          1  |   .0871611   .0118044       .066621    .1132655
+--------------------------------------------------------------
+(running proportion on estimation sample)
+
+Survey: Proportion estimation
+
+Number of strata =     1          Number of obs   =      1,733
+Number of PSUs   = 1,733          Population size = 1,709.0213
+                                  Subpop. no. obs =        872
+                                  Subpop. size    =   817.6088
+                                  Design df       =      1,732
+
+--------------------------------------------------------------
+             |             Linearized            Logit
+             | Proportion   std. err.     [95% conf. interval]
+-------------+------------------------------------------------
+        none |
+          0  |   .8532024    .014544      .8223264    .8794991
+          1  |   .1467976    .014544      .1205009    .1776736
+--------------------------------------------------------------
+(running proportion on estimation sample)
+
+Survey: Proportion estimation
+
+Number of strata =     1          Number of obs   =      1,733
+Number of PSUs   = 1,733          Population size = 1,709.0213
+                                  Subpop. no. obs =        861
+                                  Subpop. size    =   891.4125
+                                  Design df       =      1,732
+
+--------------------------------------------------------------
+             |             Linearized            Logit
+             | Proportion   std. err.     [95% conf. interval]
+-------------+------------------------------------------------
+       money |
+          0  |   .9404361   .0120486      .9119297    .9601191
+          1  |   .0595639   .0120486      .0398809    .0880703
+--------------------------------------------------------------
+(running proportion on estimation sample)
+
+Survey: Proportion estimation
+
+Number of strata =     1          Number of obs   =      1,733
+Number of PSUs   = 1,733          Population size = 1,709.0213
+                                  Subpop. no. obs =        872
+                                  Subpop. size    =   817.6088
+                                  Design df       =      1,732
+
+--------------------------------------------------------------
+             |             Linearized            Logit
+             | Proportion   std. err.     [95% conf. interval]
+-------------+------------------------------------------------
+       money |
+          0  |   .9561708   .0089641      .9348145    .9707493
+          1  |   .0438292   .0089641      .0292507    .0651855
+--------------------------------------------------------------
+(running proportion on estimation sample)
+
+Survey: Proportion estimation
+
+Number of strata =     1          Number of obs   =      1,733
+Number of PSUs   = 1,733          Population size = 1,709.0213
+                                  Subpop. no. obs =        861
+                                  Subpop. size    =   891.4125
+                                  Design df       =      1,732
+
+--------------------------------------------------------------
+             |             Linearized            Logit
+             | Proportion   std. err.     [95% conf. interval]
+-------------+------------------------------------------------
+    relation |
+          0  |   .9417711   .0093835      .9203983    .9576693
+          1  |   .0582289   .0093835      .0423307    .0796017
+--------------------------------------------------------------
+(running proportion on estimation sample)
+
+Survey: Proportion estimation
+
+Number of strata =     1          Number of obs   =      1,733
+Number of PSUs   = 1,733          Population size = 1,709.0213
+                                  Subpop. no. obs =        872
+                                  Subpop. size    =   817.6088
+                                  Design df       =      1,732
+
+--------------------------------------------------------------
+             |             Linearized            Logit
+             | Proportion   std. err.     [95% conf. interval]
+-------------+------------------------------------------------
+    relation |
+          0  |   .9424762   .0112348      .9160516    .9609377
+          1  |   .0575238   .0112348      .0390623    .0839484
+--------------------------------------------------------------
+(running proportion on estimation sample)
+
+Survey: Proportion estimation
+
+Number of strata =     1          Number of obs   =      1,733
+Number of PSUs   = 1,733          Population size = 1,709.0213
+                                  Subpop. no. obs =        861
+                                  Subpop. size    =   891.4125
+                                  Design df       =      1,732
+
+--------------------------------------------------------------
+             |             Linearized            Logit
+             | Proportion   std. err.     [95% conf. interval]
+-------------+------------------------------------------------
+    lockdown |
+          0  |    .954787   .0083493      .9352793    .9686122
+          1  |    .045213   .0083493      .0313878    .0647207
+--------------------------------------------------------------
+(running proportion on estimation sample)
+
+Survey: Proportion estimation
+
+Number of strata =     1          Number of obs   =      1,733
+Number of PSUs   = 1,733          Population size = 1,709.0213
+                                  Subpop. no. obs =        872
+                                  Subpop. size    =   817.6088
+                                  Design df       =      1,732
+
+--------------------------------------------------------------
+             |             Linearized            Logit
+             | Proportion   std. err.     [95% conf. interval]
+-------------+------------------------------------------------
+    lockdown |
+          0  |   .9563569   .0103104      .9310281    .9726573
+          1  |   .0436431   .0103104      .0273427    .0689719
+--------------------------------------------------------------
+(running proportion on estimation sample)
+
+Survey: Proportion estimation
+
+Number of strata =     1          Number of obs   =      1,733
+Number of PSUs   = 1,733          Population size = 1,709.0213
+                                  Subpop. no. obs =        861
+                                  Subpop. size    =   891.4125
+                                  Design df       =      1,732
+
+--------------------------------------------------------------
+             |             Linearized            Logit
+             | Proportion   std. err.     [95% conf. interval]
+-------------+------------------------------------------------
+       death |
+          0  |   .9023692   .0114745      .8774365    .9226769
+          1  |   .0976308   .0114745      .0773231    .1225635
+--------------------------------------------------------------
+(running proportion on estimation sample)
+
+Survey: Proportion estimation
+
+Number of strata =     1          Number of obs   =      1,733
+Number of PSUs   = 1,733          Population size = 1,709.0213
+                                  Subpop. no. obs =        872
+                                  Subpop. size    =   817.6088
+                                  Design df       =      1,732
+
+--------------------------------------------------------------
+             |             Linearized            Logit
+             | Proportion   std. err.     [95% conf. interval]
+-------------+------------------------------------------------
+       death |
+          0  |     .93522   .0096941      .9134059    .9518287
+          1  |     .06478   .0096941      .0481713    .0865941
+--------------------------------------------------------------
+(running proportion on estimation sample)
+
+Survey: Proportion estimation
+
+Number of strata =     1          Number of obs   =      1,733
+Number of PSUs   = 1,733          Population size = 1,709.0213
+                                  Subpop. no. obs =        861
+                                  Subpop. size    =   891.4125
+                                  Design df       =      1,732
+
+--------------------------------------------------------------
+             |             Linearized            Logit
+             | Proportion   std. err.     [95% conf. interval]
+-------------+------------------------------------------------
+       worry |
+          0  |     .90927   .0125041      .8815799    .9309921
+          1  |     .09073   .0125041      .0690079    .1184201
+--------------------------------------------------------------
+(running proportion on estimation sample)
+
+Survey: Proportion estimation
+
+Number of strata =     1          Number of obs   =      1,733
+Number of PSUs   = 1,733          Population size = 1,709.0213
+                                  Subpop. no. obs =        872
+                                  Subpop. size    =   817.6088
+                                  Design df       =      1,732
+
+--------------------------------------------------------------
+             |             Linearized            Logit
+             | Proportion   std. err.     [95% conf. interval]
+-------------+------------------------------------------------
+       worry |
+          0  |   .9282498   .0101012      .9057356     .945709
+          1  |   .0717502   .0101012       .054291    .0942644
+--------------------------------------------------------------
+(running proportion on estimation sample)
+
+Survey: Proportion estimation
+
+Number of strata =     1          Number of obs   =      1,733
+Number of PSUs   = 1,733          Population size = 1,709.0213
+                                  Subpop. no. obs =        861
+                                  Subpop. size    =   891.4125
+                                  Design df       =      1,732
+
+--------------------------------------------------------------
+             |             Linearized            Logit
+             | Proportion   std. err.     [95% conf. interval]
+-------------+------------------------------------------------
+      moving |
+          0  |   .9623085   .0074477      .9446515    .9744847
+          1  |   .0376915   .0074477      .0255153    .0553485
+--------------------------------------------------------------
+(running proportion on estimation sample)
+
+Survey: Proportion estimation
+
+Number of strata =     1          Number of obs   =      1,733
+Number of PSUs   = 1,733          Population size = 1,709.0213
+                                  Subpop. no. obs =        872
+                                  Subpop. size    =   817.6088
+                                  Design df       =      1,732
+
+--------------------------------------------------------------
+             |             Linearized            Logit
+             | Proportion   std. err.     [95% conf. interval]
+-------------+------------------------------------------------
+      moving |
+          0  |   .9627122   .0070784      .9460554    .9743652
+          1  |   .0372878   .0070784      .0256348    .0539446
+--------------------------------------------------------------
+(running proportion on estimation sample)
+
+Survey: Proportion estimation
+
+Number of strata =     1          Number of obs   =      1,733
+Number of PSUs   = 1,733          Population size = 1,709.0213
+                                  Subpop. no. obs =        861
+                                  Subpop. size    =   891.4125
+                                  Design df       =      1,732
+
+--------------------------------------------------------------
+             |             Linearized            Logit
+             | Proportion   std. err.     [95% conf. interval]
+-------------+------------------------------------------------
+     society |
+          0  |   .9518235   .0079372      .9336413    .9652095
+          1  |   .0481765   .0079372      .0347905    .0663587
+--------------------------------------------------------------
+(running proportion on estimation sample)
+
+Survey: Proportion estimation
+
+Number of strata =     1          Number of obs   =      1,733
+Number of PSUs   = 1,733          Population size = 1,709.0213
+                                  Subpop. no. obs =        872
+                                  Subpop. size    =   817.6088
+                                  Design df       =      1,732
+
+--------------------------------------------------------------
+             |             Linearized            Logit
+             | Proportion   std. err.     [95% conf. interval]
+-------------+------------------------------------------------
+     society |
+          0  |   .9403193   .0099839      .9174563    .9571455
+          1  |   .0596807   .0099839      .0428545    .0825437
+--------------------------------------------------------------
+(running proportion on estimation sample)
+
+Survey: Proportion estimation
+
+Number of strata =     1          Number of obs   =      1,733
+Number of PSUs   = 1,733          Population size = 1,709.0213
+                                  Subpop. no. obs =        861
+                                  Subpop. size    =   891.4125
+                                  Design df       =      1,732
+
+--------------------------------------------------------------
+             |             Linearized            Logit
+             | Proportion   std. err.     [95% conf. interval]
+-------------+------------------------------------------------
+      health |
+          0  |   .8373964   .0140293      .8079741    .8630745
+          1  |   .1626036   .0140293      .1369255    .1920259
+--------------------------------------------------------------
+(running proportion on estimation sample)
+
+Survey: Proportion estimation
+
+Number of strata =     1          Number of obs   =      1,733
+Number of PSUs   = 1,733          Population size = 1,709.0213
+                                  Subpop. no. obs =        872
+                                  Subpop. size    =   817.6088
+                                  Design df       =      1,732
+
+--------------------------------------------------------------
+             |             Linearized            Logit
+             | Proportion   std. err.     [95% conf. interval]
+-------------+------------------------------------------------
+      health |
+          0  |   .8755506   .0125093      .8488723    .8980849
+          1  |   .1244494   .0125093      .1019151    .1511277
+--------------------------------------------------------------
+(running proportion on estimation sample)
+
+Survey: Proportion estimation
+
+Number of strata =     1          Number of obs   =      1,733
+Number of PSUs   = 1,733          Population size = 1,709.0213
+                                  Subpop. no. obs =        861
+                                  Subpop. size    =   891.4125
+                                  Design df       =      1,732
+
+--------------------------------------------------------------
+             |             Linearized            Logit
+             | Proportion   std. err.     [95% conf. interval]
+-------------+------------------------------------------------
+     jobloss |
+          0  |   .9326943     .01158      .9061096    .9521492
+          1  |   .0673057     .01158      .0478508    .0938904
+--------------------------------------------------------------
+(running proportion on estimation sample)
+
+Survey: Proportion estimation
+
+Number of strata =     1          Number of obs   =      1,733
+Number of PSUs   = 1,733          Population size = 1,709.0213
+                                  Subpop. no. obs =        872
+                                  Subpop. size    =   817.6088
+                                  Design df       =      1,732
+
+--------------------------------------------------------------
+             |             Linearized            Logit
+             | Proportion   std. err.     [95% conf. interval]
+-------------+------------------------------------------------
+     jobloss |
+          0  |    .941388    .009938      .9185759    .9581005
+          1  |    .058612    .009938      .0418995    .0814241
+--------------------------------------------------------------
+(running proportion on estimation sample)
+
+Survey: Proportion estimation
+
+Number of strata =     1          Number of obs   =      1,733
+Number of PSUs   = 1,733          Population size = 1,709.0213
+                                  Subpop. no. obs =        861
+                                  Subpop. size    =   891.4125
+                                  Design df       =      1,732
+
+--------------------------------------------------------------
+             |             Linearized            Logit
+             | Proportion   std. err.     [95% conf. interval]
+-------------+------------------------------------------------
+        care |
+          0  |   .9563625   .0079834      .9377325    .9695992
+          1  |   .0436375   .0079834      .0304008    .0622675
+--------------------------------------------------------------
+(running proportion on estimation sample)
+
+Survey: Proportion estimation
+
+Number of strata =     1          Number of obs   =      1,733
+Number of PSUs   = 1,733          Population size = 1,709.0213
+                                  Subpop. no. obs =        872
+                                  Subpop. size    =   817.6088
+                                  Design df       =      1,732
+
+--------------------------------------------------------------
+             |             Linearized            Logit
+             | Proportion   std. err.     [95% conf. interval]
+-------------+------------------------------------------------
+        care |
+          0  |   .9763268   .0062244      .9605039    .9859038
+          1  |   .0236732   .0062244      .0140962    .0394961
+--------------------------------------------------------------
+(running proportion on estimation sample)
+
+Survey: Proportion estimation
+
+Number of strata =     1          Number of obs   =      1,733
+Number of PSUs   = 1,733          Population size = 1,709.0213
+                                  Subpop. no. obs =        861
+                                  Subpop. size    =   891.4125
+                                  Design df       =      1,732
+
+--------------------------------------------------------------
+             |             Linearized            Logit
+             | Proportion   std. err.     [95% conf. interval]
+-------------+------------------------------------------------
+    politics |
+          0  |   .9487393   .0073984      .9321275    .9614535
+          1  |   .0512607   .0073984      .0385465    .0678725
+--------------------------------------------------------------
+(running proportion on estimation sample)
+
+Survey: Proportion estimation
+
+Number of strata =     1          Number of obs   =      1,733
+Number of PSUs   = 1,733          Population size = 1,709.0213
+                                  Subpop. no. obs =        872
+                                  Subpop. size    =   817.6088
+                                  Design df       =      1,732
+
+--------------------------------------------------------------
+             |             Linearized            Logit
+             | Proportion   std. err.     [95% conf. interval]
+-------------+------------------------------------------------
+    politics |
+          0  |   .8874745   .0113892      .8631277    .9079524
+          1  |   .1125255   .0113892      .0920476    .1368723
+--------------------------------------------------------------
+(running proportion on estimation sample)
+
+Survey: Proportion estimation
+
+Number of strata =     1          Number of obs   =      1,733
+Number of PSUs   = 1,733          Population size = 1,709.0213
+                                  Subpop. no. obs =        861
+                                  Subpop. size    =   891.4125
+                                  Design df       =      1,732
+
+--------------------------------------------------------------
+             |             Linearized            Logit
+             | Proportion   std. err.     [95% conf. interval]
+-------------+------------------------------------------------
+        work |
+          0  |   .8889458   .0142046      .8578822    .9139011
+          1  |   .1110542   .0142046      .0860989    .1421178
+--------------------------------------------------------------
+(running proportion on estimation sample)
+
+Survey: Proportion estimation
+
+Number of strata =     1          Number of obs   =      1,733
+Number of PSUs   = 1,733          Population size = 1,709.0213
+                                  Subpop. no. obs =        872
+                                  Subpop. size    =   817.6088
+                                  Design df       =      1,732
+
+--------------------------------------------------------------
+             |             Linearized            Logit
+             | Proportion   std. err.     [95% conf. interval]
+-------------+------------------------------------------------
+        work |
+          0  |   .9362848   .0098086      .9141202     .953023
+          1  |   .0637152   .0098086       .046977    .0858798
+--------------------------------------------------------------
+(running proportion on estimation sample)
+
+Survey: Proportion estimation
+
+Number of strata =     1          Number of obs   =      1,733
+Number of PSUs   = 1,733          Population size = 1,709.0213
+                                  Subpop. no. obs =        861
+                                  Subpop. size    =   891.4125
+                                  Design df       =      1,732
+
+--------------------------------------------------------------
+             |             Linearized            Logit
+             | Proportion   std. err.     [95% conf. interval]
+-------------+------------------------------------------------
+    freetime |
+          0  |   .9217466   .0096329      .9006425    .9386732
+          1  |   .0782534   .0096329      .0613268    .0993575
+--------------------------------------------------------------
+(running proportion on estimation sample)
+
+Survey: Proportion estimation
+
+Number of strata =     1          Number of obs   =      1,733
+Number of PSUs   = 1,733          Population size = 1,709.0213
+                                  Subpop. no. obs =        872
+                                  Subpop. size    =   817.6088
+                                  Design df       =      1,732
+
+--------------------------------------------------------------
+             |             Linearized            Logit
+             | Proportion   std. err.     [95% conf. interval]
+-------------+------------------------------------------------
+    freetime |
+          0  |   .9259942   .0105754      .9023885     .944244
+          1  |   .0740058   .0105754       .055756    .0976115
+--------------------------------------------------------------
+(running proportion on estimation sample)
+
+Survey: Proportion estimation
+
+Number of strata =     1          Number of obs   =      1,733
+Number of PSUs   = 1,733          Population size = 1,709.0213
+                                  Subpop. no. obs =        861
+                                  Subpop. size    =   891.4125
+                                  Design df       =      1,732
+
+--------------------------------------------------------------
+             |             Linearized            Logit
+             | Proportion   std. err.     [95% conf. interval]
+-------------+------------------------------------------------
+     novisit |
+          0  |    .921824   .0102117      .8992995    .9396483
+          1  |    .078176   .0102117      .0603517    .1007005
+--------------------------------------------------------------
+(running proportion on estimation sample)
+
+Survey: Proportion estimation
+
+Number of strata =     1          Number of obs   =      1,733
+Number of PSUs   = 1,733          Population size = 1,709.0213
+                                  Subpop. no. obs =        872
+                                  Subpop. size    =   817.6088
+                                  Design df       =      1,732
+
+--------------------------------------------------------------
+             |             Linearized            Logit
+             | Proportion   std. err.     [95% conf. interval]
+-------------+------------------------------------------------
+     novisit |
+          0  |   .9500552   .0077955      .9323512    .9633083
+          1  |   .0499448   .0077955      .0366917    .0676488
+--------------------------------------------------------------
+(running proportion on estimation sample)
+
+Survey: Proportion estimation
+
+Number of strata =     1          Number of obs   =      1,733
+Number of PSUs   = 1,733          Population size = 1,709.0213
+                                  Subpop. no. obs =        861
+                                  Subpop. size    =   891.4125
+                                  Design df       =      1,732
+
+--------------------------------------------------------------
+             |             Linearized            Logit
+             | Proportion   std. err.     [95% conf. interval]
+-------------+------------------------------------------------
+    allother |
+          0  |   .9547829   .0080624        .93606    .9682096
+          1  |   .0452171   .0080624      .0317904      .06394
+--------------------------------------------------------------
+(running proportion on estimation sample)
+
+Survey: Proportion estimation
+
+Number of strata =     1          Number of obs   =      1,733
+Number of PSUs   = 1,733          Population size = 1,709.0213
+                                  Subpop. no. obs =        872
+                                  Subpop. size    =   817.6088
+                                  Design df       =      1,732
+
+--------------------------------------------------------------
+             |             Linearized            Logit
+             | Proportion   std. err.     [95% conf. interval]
+-------------+------------------------------------------------
+    allother |
+          0  |   .9507588   .0089204      .9300084    .9655851
+          1  |   .0492412   .0089204      .0344149    .0699916
+--------------------------------------------------------------
+
+. 
+. coefplot (nonem, keep(1.none)) ///
+>         (politicsm, keep(1.politics)) ///
+>         (novisitm, keep(1.novisit)) /// 
+>         (workm, keep(1.work)) ///
+>         (carem, keep(1.care)) ///
+>         (healthm, keep(1.health)) ///
+>         (deathm, keep(1.death)) ///
+>         (freetimem, keep(1.freetime)) ///
+>         (joblossm, keep(1.jobloss)) ///
+>         (societym, keep(1.society)) /// 
+>         (movingm, keep(1.moving)) ///
+>         (worrym, keep(1.worry)) ///
+>         (lockdownm, keep(1.lockdown)) ///
+>         (relationm, keep(1.relation)) ///       
+>         (moneym, keep(1.money)) ///
+>         (allotherm, keep(1.allother)), ///
+>         fcolor(green*.5) lcolor(green*.5) ciopts(recast(rcap) color(green)) ///
+>         recast(bar) barwidth(0.3) ///
+>         citop citype(logit) legend(off) ///
+>         rescale(100) ///
+>         offset(0) bylabel(Men) nokey ///     
+>         || ///
+>         (nonef, keep(1.none)) ///
+>         (politicsf, keep(1.politics)) ///
+>         (novisitf, keep(1.novisit)) /// 
+>         (workf, keep(1.work)) ///
+>         (caref, keep(1.care)) ///
+>         (healthf, keep(1.health)) ///
+>         (deathf, keep(1.death)) ///
+>         (freetimef, keep(1.freetime)) ///
+>         (joblossf, keep(1.jobloss)) ///
+>         (societyf, keep(1.society)) ///
+>         (movingf, keep(1.moving)) ///
+>         (worryf, keep(1.worry)) ///
+>         (lockdownf, keep(1.lockdown)) ///
+>         (relationf, keep(1.relation)) ///       
+>         (moneyf, keep(1.money)) ///
+>         (allotherf, keep(1.allother)), ///
+>         fcolor(orange*.5) lcolor(orange*.5) ciopts(recast(rcap) color(orange)) ///
+>         recast(bar) barwidth(0.3) ///
+>         citop citype(logit) nokey ///
+>         rescale(100) ///
+>         offset(0) bylabel(Women) legend(off) /// 
+>         ||,     norecycle coeflabels(1.none = "None**" 1.politics = "Politics***" 1.death = "Death*" ///
+>         1.novisit = "No social life*" 1.work = "Paid work**" 1.health = "Health*" 1.care = "Care work*" ///
+>         1.relation = "Relationships" 1.freetime = "Activities" 1.lockdown = "Staying home" ///
+>         1.jobloss = "Job loss" 1.money = "Finances" 1.moving = "Residential" ///
+>         1.society = "Society" 1.worry = "Emotional state" 1.allother = "Other", labgap(2)) ///
+>         headings(1.none = "{bf:women < men}" 1.novisit = "{bf:women > men}" 1.freetime = "{bf:women = men}") ///
+>         ytitle("Type of Life Events", size(small)) xtitle("Percentage", margin(20 0 0 0) size(small)) ///
+>         xlabel(, nogrid) xscale(range(0(5)20)) yscale(noline) ///
+>         addplot(scatter @at @b, ms(i) mlabel(@b) mlabcolor(black) mlabposition(2) mlabformat("%9.2f")) ///
+>         grid(none) subtitle(, bcolor(gs15) bmargin(zero))
+(note:  named style i not found in class symbol, default attributes used)
+
+. graph export "graph_Qian_Fan_2024_BJS_Figure1.pdf"
+file /Users/yueqian/Desktop/graph_Qian_Fan_2024_BJS_Figure1.pdf saved as PDF format
+
+. 
+. // #4
+. // life events and mental distress: Figure 2    
+. foreach v in $events_yes{
+  2.         gen `v'3 = 0 if none==1
+  3.         replace `v'3 = 1 if `v'==1
+  4.         replace `v'3 = 2 if `v'==0 & none==0
+  5.         label define `v'3 0 "none" 1 "`v'" 2 "other"
+  6.         label values `v'3 `v'3
+  7.         tab `v'3, m
+  8. }
+(1,541 missing values generated)
+(63 real changes made)
+(1,478 real changes made)
+
+     money3 |      Freq.     Percent        Cum.
+------------+-----------------------------------
+       none |        192       11.08       11.08
+      money |         63        3.64       14.71
+      other |      1,478       85.29      100.00
+------------+-----------------------------------
+      Total |      1,733      100.00
+(1,541 missing values generated)
+(83 real changes made)
+(1,458 real changes made)
+
+  relation3 |      Freq.     Percent        Cum.
+------------+-----------------------------------
+       none |        192       11.08       11.08
+   relation |         83        4.79       15.87
+      other |      1,458       84.13      100.00
+------------+-----------------------------------
+      Total |      1,733      100.00
+(1,541 missing values generated)
+(70 real changes made)
+(1,471 real changes made)
+
+  lockdown3 |      Freq.     Percent        Cum.
+------------+-----------------------------------
+       none |        192       11.08       11.08
+   lockdown |         70        4.04       15.12
+      other |      1,471       84.88      100.00
+------------+-----------------------------------
+      Total |      1,733      100.00
+(1,541 missing values generated)
+(145 real changes made)
+(1,396 real changes made)
+
+     death3 |      Freq.     Percent        Cum.
+------------+-----------------------------------
+       none |        192       11.08       11.08
+      death |        145        8.37       19.45
+      other |      1,396       80.55      100.00
+------------+-----------------------------------
+      Total |      1,733      100.00
+(1,541 missing values generated)
+(138 real changes made)
+(1,403 real changes made)
+
+     worry3 |      Freq.     Percent        Cum.
+------------+-----------------------------------
+       none |        192       11.08       11.08
+      worry |        138        7.96       19.04
+      other |      1,403       80.96      100.00
+------------+-----------------------------------
+      Total |      1,733      100.00
+(1,541 missing values generated)
+(68 real changes made)
+(1,473 real changes made)
+
+    moving3 |      Freq.     Percent        Cum.
+------------+-----------------------------------
+       none |        192       11.08       11.08
+     moving |         68        3.92       15.00
+      other |      1,473       85.00      100.00
+------------+-----------------------------------
+      Total |      1,733      100.00
+(1,541 missing values generated)
+(91 real changes made)
+(1,450 real changes made)
+
+   society3 |      Freq.     Percent        Cum.
+------------+-----------------------------------
+       none |        192       11.08       11.08
+    society |         91        5.25       16.33
+      other |      1,450       83.67      100.00
+------------+-----------------------------------
+      Total |      1,733      100.00
+(1,541 missing values generated)
+(284 real changes made)
+(1,257 real changes made)
+
+    health3 |      Freq.     Percent        Cum.
+------------+-----------------------------------
+       none |        192       11.08       11.08
+     health |        284       16.39       27.47
+      other |      1,257       72.53      100.00
+------------+-----------------------------------
+      Total |      1,733      100.00
+(1,541 missing values generated)
+(89 real changes made)
+(1,452 real changes made)
+
+   jobloss3 |      Freq.     Percent        Cum.
+------------+-----------------------------------
+       none |        192       11.08       11.08
+    jobloss |         89        5.14       16.21
+      other |      1,452       83.79      100.00
+------------+-----------------------------------
+      Total |      1,733      100.00
+(1,541 missing values generated)
+(56 real changes made)
+(1,485 real changes made)
+
+      care3 |      Freq.     Percent        Cum.
+------------+-----------------------------------
+       none |        192       11.08       11.08
+       care |         56        3.23       14.31
+      other |      1,485       85.69      100.00
+------------+-----------------------------------
+      Total |      1,733      100.00
+(1,541 missing values generated)
+(167 real changes made)
+(1,374 real changes made)
+
+  politics3 |      Freq.     Percent        Cum.
+------------+-----------------------------------
+       none |        192       11.08       11.08
+   politics |        167        9.64       20.72
+      other |      1,374       79.28      100.00
+------------+-----------------------------------
+      Total |      1,733      100.00
+(1,541 missing values generated)
+(129 real changes made)
+(1,412 real changes made)
+
+      work3 |      Freq.     Percent        Cum.
+------------+-----------------------------------
+       none |        192       11.08       11.08
+       work |        129        7.44       18.52
+      other |      1,412       81.48      100.00
+------------+-----------------------------------
+      Total |      1,733      100.00
+(1,541 missing values generated)
+(147 real changes made)
+(1,394 real changes made)
+
+  freetime3 |      Freq.     Percent        Cum.
+------------+-----------------------------------
+       none |        192       11.08       11.08
+   freetime |        147        8.48       19.56
+      other |      1,394       80.44      100.00
+------------+-----------------------------------
+      Total |      1,733      100.00
+(1,541 missing values generated)
+(125 real changes made)
+(1,416 real changes made)
+
+   novisit3 |      Freq.     Percent        Cum.
+------------+-----------------------------------
+       none |        192       11.08       11.08
+    novisit |        125        7.21       18.29
+      other |      1,416       81.71      100.00
+------------+-----------------------------------
+      Total |      1,733      100.00
+(1,541 missing values generated)
+(80 real changes made)
+(1,461 real changes made)
+
+  allother3 |      Freq.     Percent        Cum.
+------------+-----------------------------------
+       none |        192       11.08       11.08
+   allother |         80        4.62       15.70
+      other |      1,461       84.30      100.00
+------------+-----------------------------------
+      Total |      1,733      100.00
+
+. 
+. svy: reg mh female $controls
+(running regress on estimation sample)
+
+Survey: Linear regression
+
+Number of strata =     1                          Number of obs   =      1,733
+Number of PSUs   = 1,733                          Population size = 1,709.0213
+                                                  Design df       =      1,732
+                                                  F(13, 1720)     =       8.89
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.0961
+
+---------------------------------------------------------------------------------------------
+                            |             Linearized
+                         mh | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+----------------------------+----------------------------------------------------------------
+                     female |   .5604124   .2215968     2.53   0.012      .125787    .9950378
+                      ppage |  -.0407422   .0073454    -5.55   0.000     -.055149   -.0263354
+                            |
+                   ppeducat |
+               High school  |  -.1435936   .5054181    -0.28   0.776    -1.134888    .8477004
+              Some college  |  -.3111665    .502411    -0.62   0.536    -1.296563    .6742296
+Bachelors degree or higher  |  -.4362813   .4946614    -0.88   0.378    -1.406478    .5339152
+                            |
+                      race4 |
+       Black, Non-Hispanic  |  -.2469324   .4209153    -0.59   0.558    -1.072488    .5786233
+       Other, Non-Hispanic  |   .6467032   .4171752     1.55   0.121     -.171517    1.464923
+                  Hispanic  |   .6212844   .3724563     1.67   0.095     -.109227    1.351796
+                            |
+                        mar |
+                   pre mar  |   1.471559   .3146128     4.68   0.000      .854498     2.08862
+                 never mar  |    1.42245   .3263842     4.36   0.000     .7823018    2.062599
+                            |
+                     ppreg4 |
+                   MidWest  |   .4902244    .375643     1.31   0.192    -.2465371    1.226986
+                     South  |  -.1165735   .3372452    -0.35   0.730    -.7780242    .5448773
+                      West  |  -.9147294   .3603061    -2.54   0.011     -1.62141   -.2080485
+                            |
+                      _cons |   6.450328   .7343143     8.78   0.000     5.010092    7.890564
+---------------------------------------------------------------------------------------------
+
+.         estimates store base
+
+.         
+. foreach v in $events_yes{       
+  2.         svy: reg mh female $controls i.`v'3 dmultiple
+  3.         estimates store `v'
+  4. }
+(running regress on estimation sample)
+
+Survey: Linear regression
+
+Number of strata =     1                          Number of obs   =      1,733
+Number of PSUs   = 1,733                          Population size = 1,709.0213
+                                                  Design df       =      1,732
+                                                  F(16, 1717)     =      12.14
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.1407
+
+---------------------------------------------------------------------------------------------
+                            |             Linearized
+                         mh | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+----------------------------+----------------------------------------------------------------
+                     female |    .371927   .2207158     1.69   0.092    -.0609704    .8048245
+                      ppage |  -.0340292   .0071121    -4.78   0.000    -.0479784     -.02008
+                            |
+                   ppeducat |
+               High school  |   .1232578   .4686967     0.26   0.793    -.7960133    1.042529
+              Some college  |  -.2184765   .4657595    -0.47   0.639    -1.131987    .6950337
+Bachelors degree or higher  |  -.2463565   .4561114    -0.54   0.589    -1.140943    .6482305
+                            |
+                      race4 |
+       Black, Non-Hispanic  |  -.1347668   .3935617    -0.34   0.732     -.906673    .6371394
+       Other, Non-Hispanic  |     .75136   .4136167     1.82   0.069    -.0598808    1.562601
+                  Hispanic  |   .6377672   .3619833     1.76   0.078    -.0722031    1.347738
+                            |
+                        mar |
+                   pre mar  |   1.538744   .3105904     4.95   0.000     .9295722    2.147915
+                 never mar  |   1.516858   .3119406     4.86   0.000     .9050377    2.128677
+                            |
+                     ppreg4 |
+                   MidWest  |   .4451625   .3556393     1.25   0.211    -.2523652     1.14269
+                     South  |  -.0459801   .3225436    -0.14   0.887    -.6785961    .5866359
+                      West  |   -.982905   .3435968    -2.86   0.004    -1.656813   -.3089966
+                            |
+                     money3 |
+                     money  |   4.065008   .6530074     6.23   0.000     2.784242    5.345774
+                     other  |   1.720402   .3102628     5.54   0.000     1.111873    2.328932
+                            |
+                  dmultiple |   .7035267    .427792     1.64   0.100    -.1355166     1.54257
+                      _cons |   4.286396   .7400442     5.79   0.000     2.834922    5.737871
+---------------------------------------------------------------------------------------------
+(running regress on estimation sample)
+
+Survey: Linear regression
+
+Number of strata =     1                          Number of obs   =      1,733
+Number of PSUs   = 1,733                          Population size = 1,709.0213
+                                                  Design df       =      1,732
+                                                  F(16, 1717)     =      10.56
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.1295
+
+---------------------------------------------------------------------------------------------
+                            |             Linearized
+                         mh | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+----------------------------+----------------------------------------------------------------
+                     female |   .3817629   .2205186     1.73   0.084    -.0507478    .8142735
+                      ppage |  -.0365466   .0071321    -5.12   0.000    -.0505351   -.0225582
+                            |
+                   ppeducat |
+               High school  |  -.0572191   .4945325    -0.12   0.908    -1.027163    .9127246
+              Some college  |  -.3963124   .4884042    -0.81   0.417    -1.354237    .5616117
+Bachelors degree or higher  |  -.4725823   .4836304    -0.98   0.329    -1.421143    .4759788
+                            |
+                      race4 |
+       Black, Non-Hispanic  |  -.0237199   .4211145    -0.06   0.955    -.8496664    .8022265
+       Other, Non-Hispanic  |    .771828   .4135706     1.87   0.062    -.0393224    1.582978
+                  Hispanic  |   .6563756   .3566298     1.84   0.066    -.0430948    1.355846
+                            |
+                        mar |
+                   pre mar  |   1.497072   .3141459     4.77   0.000     .8809265    2.113217
+                 never mar  |   1.404836   .3167776     4.43   0.000     .7835287    2.026143
+                            |
+                     ppreg4 |
+                   MidWest  |     .48891   .3603392     1.36   0.175    -.2178358    1.195656
+                     South  |  -.0477166   .3175357    -0.15   0.881    -.6705104    .5750772
+                      West  |  -.9585915    .338346    -2.83   0.005    -1.622201   -.2949817
+                            |
+                  relation3 |
+                  relation  |   2.876597   .5982919     4.81   0.000     1.703146    4.050047
+                     other  |   1.754414   .3114475     5.63   0.000     1.143561    2.365267
+                            |
+                  dmultiple |    1.01353   .4014449     2.52   0.012     .2261618    1.800897
+                      _cons |   4.578352   .7497799     6.11   0.000     3.107783    6.048921
+---------------------------------------------------------------------------------------------
+(running regress on estimation sample)
+
+Survey: Linear regression
+
+Number of strata =     1                          Number of obs   =      1,733
+Number of PSUs   = 1,733                          Population size = 1,709.0213
+                                                  Design df       =      1,732
+                                                  F(16, 1717)     =      10.43
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.1276
+
+---------------------------------------------------------------------------------------------
+                            |             Linearized
+                         mh | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+----------------------------+----------------------------------------------------------------
+                     female |   .3800169   .2204492     1.72   0.085    -.0523578    .8123916
+                      ppage |  -.0384714   .0071769    -5.36   0.000    -.0525477   -.0243951
+                            |
+                   ppeducat |
+               High school  |  -.0160826   .4969602    -0.03   0.974    -.9907879    .9586227
+              Some college  |  -.3506118   .4918423    -0.71   0.476    -1.315279    .6140556
+Bachelors degree or higher  |  -.4369603   .4853569    -0.90   0.368    -1.388907     .514987
+                            |
+                      race4 |
+       Black, Non-Hispanic  |  -.0818992   .4162647    -0.20   0.844    -.8983335    .7345351
+       Other, Non-Hispanic  |   .6928036   .4131913     1.68   0.094    -.1176028     1.50321
+                  Hispanic  |   .6508987   .3561417     1.83   0.068    -.0476142    1.349412
+                            |
+                        mar |
+                   pre mar  |   1.543731   .3107155     4.97   0.000     .9343143    2.153149
+                 never mar  |   1.418777   .3189891     4.45   0.000     .7931322    2.044421
+                            |
+                     ppreg4 |
+                   MidWest  |    .500932    .362522     1.38   0.167     -.210095    1.211959
+                     South  |  -.0528489   .3207306    -0.16   0.869    -.6819088    .5762111
+                      West  |  -.9387615   .3417588    -2.75   0.006    -1.609065   -.2684581
+                            |
+                  lockdown3 |
+                  lockdown  |   2.720877   .6704464     4.06   0.000     1.405907    4.035847
+                     other  |    1.77088   .3098332     5.72   0.000     1.163194    2.378567
+                            |
+                  dmultiple |   .9800678   .4069915     2.41   0.016     .1818213    1.778314
+                      _cons |   4.646219   .7514743     6.18   0.000     3.172327    6.120112
+---------------------------------------------------------------------------------------------
+(running regress on estimation sample)
+
+Survey: Linear regression
+
+Number of strata =     1                          Number of obs   =      1,733
+Number of PSUs   = 1,733                          Population size = 1,709.0213
+                                                  Design df       =      1,732
+                                                  F(16, 1717)     =      11.18
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.1289
+
+---------------------------------------------------------------------------------------------
+                            |             Linearized
+                         mh | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+----------------------------+----------------------------------------------------------------
+                     female |   .3544896   .2224549     1.59   0.111    -.0818189    .7907982
+                      ppage |  -.0384817   .0071123    -5.41   0.000    -.0524313   -.0245322
+                            |
+                   ppeducat |
+               High school  |  -.0477166   .4934128    -0.10   0.923    -1.015464    .9200309
+              Some college  |  -.3843084   .4890548    -0.79   0.432    -1.343509    .5748917
+Bachelors degree or higher  |  -.4728522   .4824405    -0.98   0.327    -1.419079     .473375
+                            |
+                      race4 |
+       Black, Non-Hispanic  |  -.1061149   .4210638    -0.25   0.801    -.9319619     .719732
+       Other, Non-Hispanic  |   .7414009   .4109853     1.80   0.071    -.0646789    1.547481
+                  Hispanic  |   .6334555   .3586792     1.77   0.078    -.0700344    1.336945
+                            |
+                        mar |
+                   pre mar  |   1.523596    .308112     4.94   0.000     .9192853    2.127907
+                 never mar  |   1.469865   .3184957     4.62   0.000     .8451885    2.094542
+                            |
+                     ppreg4 |
+                   MidWest  |   .4602269   .3635653     1.27   0.206    -.2528463      1.1733
+                     South  |  -.0510779   .3232647    -0.16   0.874    -.6851081    .5829524
+                      West  |  -.9793912   .3435791    -2.85   0.004    -1.653265   -.3055176
+                            |
+                     death3 |
+                     death  |   2.615186   .4402979     5.94   0.000     1.751615    3.478758
+                     other  |   1.731078   .3134362     5.52   0.000     1.116325    2.345832
+                            |
+                  dmultiple |   1.081613   .4014257     2.69   0.007      .294283    1.868943
+                      _cons |   4.695696   .7534955     6.23   0.000     3.217839    6.173553
+---------------------------------------------------------------------------------------------
+(running regress on estimation sample)
+
+Survey: Linear regression
+
+Number of strata =     1                          Number of obs   =      1,733
+Number of PSUs   = 1,733                          Population size = 1,709.0213
+                                                  Design df       =      1,732
+                                                  F(16, 1717)     =      10.55
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.1265
+
+---------------------------------------------------------------------------------------------
+                            |             Linearized
+                         mh | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+----------------------------+----------------------------------------------------------------
+                     female |   .3702766    .222144     1.67   0.096     -.065422    .8059753
+                      ppage |  -.0382318   .0071685    -5.33   0.000    -.0522916    -.024172
+                            |
+                   ppeducat |
+               High school  |  -.0524299   .4928388    -0.11   0.915    -1.019052    .9141919
+              Some college  |  -.3854762   .4883408    -0.79   0.430    -1.343276    .5723235
+Bachelors degree or higher  |  -.5013122   .4807594    -1.04   0.297    -1.444242    .4416179
+                            |
+                      race4 |
+       Black, Non-Hispanic  |  -.0842683   .4224327    -0.20   0.842    -.9128002    .7442636
+       Other, Non-Hispanic  |   .7609713   .4116018     1.85   0.065    -.0463176     1.56826
+                  Hispanic  |   .6431699   .3578713     1.80   0.072    -.0587354    1.345075
+                            |
+                        mar |
+                   pre mar  |   1.532098   .3101937     4.94   0.000     .9237047    2.140492
+                 never mar  |   1.422324   .3175253     4.48   0.000     .7995505    2.045097
+                            |
+                     ppreg4 |
+                   MidWest  |   .4902742    .363635     1.35   0.178    -.2229358    1.203484
+                     South  |  -.0402487   .3249884    -0.12   0.901    -.6776597    .5971623
+                      West  |  -.9582139   .3454832    -2.77   0.006    -1.635822   -.2806058
+                            |
+                     worry3 |
+                     worry  |    2.28594   .4659882     4.91   0.000     1.371981    3.199899
+                     other  |   1.774134   .3123032     5.68   0.000     1.161603    2.386665
+                            |
+                  dmultiple |   1.017537   .4155104     2.45   0.014     .2025822    1.832492
+                      _cons |   4.674375   .7531285     6.21   0.000     3.197238    6.151512
+---------------------------------------------------------------------------------------------
+(running regress on estimation sample)
+
+Survey: Linear regression
+
+Number of strata =     1                          Number of obs   =      1,733
+Number of PSUs   = 1,733                          Population size = 1,709.0213
+                                                  Design df       =      1,732
+                                                  F(16, 1717)     =      10.19
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.1255
+
+---------------------------------------------------------------------------------------------
+                            |             Linearized
+                         mh | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+----------------------------+----------------------------------------------------------------
+                     female |    .373956   .2223006     1.68   0.093    -.0620499    .8099619
+                      ppage |  -.0378515   .0071741    -5.28   0.000    -.0519223   -.0237807
+                            |
+                   ppeducat |
+               High school  |  -.0607014   .4948895    -0.12   0.902    -1.031345    .9099424
+              Some college  |  -.4009648   .4902377    -0.82   0.414    -1.362485    .5605554
+Bachelors degree or higher  |  -.5062495   .4835456    -1.05   0.295    -1.454644    .4421453
+                            |
+                      race4 |
+       Black, Non-Hispanic  |  -.0698073   .4217435    -0.17   0.869    -.8969874    .7573727
+       Other, Non-Hispanic  |   .7422547    .413126     1.80   0.073    -.0680236    1.552533
+                  Hispanic  |   .6486614   .3578082     1.81   0.070    -.0531203    1.350443
+                            |
+                        mar |
+                   pre mar  |   1.533713    .311385     4.93   0.000     .9229827    2.144443
+                 never mar  |   1.442984    .317844     4.54   0.000     .8195853    2.066382
+                            |
+                     ppreg4 |
+                   MidWest  |   .4972672   .3633736     1.37   0.171      -.21543    1.209964
+                     South  |   -.048054   .3230748    -0.15   0.882    -.6817117    .5856037
+                      West  |  -.9610788   .3443631    -2.79   0.005     -1.63649   -.2856675
+                            |
+                    moving3 |
+                    moving  |   2.018363    .623818     3.24   0.001     .7948476    3.241879
+                     other  |    1.80462   .3109617     5.80   0.000      1.19472     2.41452
+                            |
+                  dmultiple |    1.09548   .4057216     2.70   0.007     .2997237    1.891235
+                      _cons |    4.65751   .7546863     6.17   0.000     3.177317    6.137702
+---------------------------------------------------------------------------------------------
+(running regress on estimation sample)
+
+Survey: Linear regression
+
+Number of strata =     1                          Number of obs   =      1,733
+Number of PSUs   = 1,733                          Population size = 1,709.0213
+                                                  Design df       =      1,732
+                                                  F(16, 1717)     =      10.19
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.1254
+
+---------------------------------------------------------------------------------------------
+                            |             Linearized
+                         mh | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+----------------------------+----------------------------------------------------------------
+                     female |   .3729419   .2215599     1.68   0.093    -.0616112     .807495
+                      ppage |  -.0378977   .0071691    -5.29   0.000    -.0519587   -.0238366
+                            |
+                   ppeducat |
+               High school  |  -.0575445    .493577    -0.12   0.907    -1.025614    .9105253
+              Some college  |  -.3987712   .4899799    -0.81   0.416    -1.359786    .5622433
+Bachelors degree or higher  |  -.4963152   .4826995    -1.03   0.304     -1.44305      .45042
+                            |
+                      race4 |
+       Black, Non-Hispanic  |  -.0739961   .4237348    -0.17   0.861    -.9050818    .7570896
+       Other, Non-Hispanic  |   .7433486   .4141633     1.79   0.073    -.0689643    1.555661
+                  Hispanic  |   .6493869   .3581037     1.81   0.070    -.0529742    1.351748
+                            |
+                        mar |
+                   pre mar  |   1.532495   .3111998     4.92   0.000     .9221277    2.142861
+                 never mar  |   1.440343   .3182309     4.53   0.000     .8161857      2.0645
+                            |
+                     ppreg4 |
+                   MidWest  |   .4945337   .3636908     1.36   0.174    -.2187857    1.207853
+                     South  |  -.0490488   .3236586    -0.15   0.880    -.6838517     .585754
+                      West  |  -.9619901    .344413    -2.79   0.005    -1.637499    -.286481
+                            |
+                   society3 |
+                   society  |   1.768519   .5705434     3.10   0.002      .649492    2.887545
+                     other  |   1.815283   .3119802     5.82   0.000     1.203385    2.427181
+                            |
+                  dmultiple |    1.10081   .4070825     2.70   0.007     .3023849    1.899235
+                      _cons |   4.658172   .7539424     6.18   0.000     3.179438    6.136905
+---------------------------------------------------------------------------------------------
+(running regress on estimation sample)
+
+Survey: Linear regression
+
+Number of strata =     1                          Number of obs   =      1,733
+Number of PSUs   = 1,733                          Population size = 1,709.0213
+                                                  Design df       =      1,732
+                                                  F(16, 1717)     =      10.22
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.1259
+
+---------------------------------------------------------------------------------------------
+                            |             Linearized
+                         mh | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+----------------------------+----------------------------------------------------------------
+                     female |   .3803154   .2222217     1.71   0.087    -.0555357    .8161666
+                      ppage |  -.0373001   .0071278    -5.23   0.000    -.0512802     -.02332
+                            |
+                   ppeducat |
+               High school  |  -.0366915   .4953251    -0.07   0.941     -1.00819    .9348068
+              Some college  |   -.374518   .4904161    -0.76   0.445    -1.336388    .5873521
+Bachelors degree or higher  |  -.4701422   .4833198    -0.97   0.331    -1.418094    .4778096
+                            |
+                      race4 |
+       Black, Non-Hispanic  |  -.0824982   .4212213    -0.20   0.845    -.9086541    .7436577
+       Other, Non-Hispanic  |   .7339988   .4135731     1.77   0.076    -.0771565    1.545154
+                  Hispanic  |   .6453135   .3574937     1.81   0.071    -.0558512    1.346478
+                            |
+                        mar |
+                   pre mar  |   1.525875   .3109171     4.91   0.000     .9160621    2.135687
+                 never mar  |   1.442924   .3178471     4.54   0.000     .8195193    2.066328
+                            |
+                     ppreg4 |
+                   MidWest  |   .4924688   .3634414     1.36   0.176    -.2203615    1.205299
+                     South  |  -.0487988   .3231125    -0.15   0.880    -.6825305    .5849329
+                      West  |  -.9686475    .345064    -2.81   0.005    -1.645433   -.2918616
+                            |
+                    health3 |
+                    health  |   1.581825   .3726701     4.24   0.000     .8508941    2.312756
+                     other  |   1.852436   .3149425     5.88   0.000     1.234728    2.470144
+                            |
+                  dmultiple |   1.127538   .4065624     2.77   0.006     .3301335    1.924943
+                      _cons |   4.609422   .7525065     6.13   0.000     3.133505    6.085339
+---------------------------------------------------------------------------------------------
+(running regress on estimation sample)
+
+Survey: Linear regression
+
+Number of strata =     1                          Number of obs   =      1,733
+Number of PSUs   = 1,733                          Population size = 1,709.0213
+                                                  Design df       =      1,732
+                                                  F(16, 1717)     =      10.19
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.1259
+
+---------------------------------------------------------------------------------------------
+                            |             Linearized
+                         mh | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+----------------------------+----------------------------------------------------------------
+                     female |   .3714717   .2218745     1.67   0.094    -.0636984    .8066418
+                      ppage |  -.0385378   .0072406    -5.32   0.000    -.0527391   -.0243365
+                            |
+                   ppeducat |
+               High school  |  -.0403801   .4931143    -0.08   0.935    -1.007542     .926782
+              Some college  |  -.3807367     .49093    -0.78   0.438    -1.343615    .5821414
+Bachelors degree or higher  |  -.4950828   .4827339    -1.03   0.305    -1.441885    .4517198
+                            |
+                      race4 |
+       Black, Non-Hispanic  |   -.066628   .4206902    -0.16   0.874    -.8917422    .7584862
+       Other, Non-Hispanic  |    .738145   .4123332     1.79   0.074    -.0705784    1.546868
+                  Hispanic  |   .6470537    .357402     1.81   0.070    -.0539311    1.348039
+                            |
+                        mar |
+                   pre mar  |   1.526033   .3114039     4.90   0.000     .9152653      2.1368
+                 never mar  |   1.434654   .3168505     4.53   0.000     .8132041    2.056104
+                            |
+                     ppreg4 |
+                   MidWest  |   .4880633   .3640009     1.34   0.180    -.2258642    1.201991
+                     South  |  -.0490915   .3228795    -0.15   0.879    -.6823661    .5841832
+                      West  |  -.9475901   .3431001    -2.76   0.006    -1.620524    -.274656
+                            |
+                   jobloss3 |
+                   jobloss  |   1.441842   .5314058     2.71   0.007     .3995771    2.484106
+                     other  |   1.833189    .311402     5.89   0.000     1.222426    2.443953
+                            |
+                  dmultiple |   1.157319    .413849     2.80   0.005     .3456222    1.969015
+                      _cons |    4.68064   .7555356     6.20   0.000     3.198782    6.162498
+---------------------------------------------------------------------------------------------
+(running regress on estimation sample)
+
+Survey: Linear regression
+
+Number of strata =     1                          Number of obs   =      1,733
+Number of PSUs   = 1,733                          Population size = 1,709.0213
+                                                  Design df       =      1,732
+                                                  F(16, 1717)     =      10.39
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.1257
+
+---------------------------------------------------------------------------------------------
+                            |             Linearized
+                         mh | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+----------------------------+----------------------------------------------------------------
+                     female |   .3772822   .2220278     1.70   0.089    -.0581886    .8127529
+                      ppage |  -.0383346     .00716    -5.35   0.000    -.0523778   -.0242914
+                            |
+                   ppeducat |
+               High school  |  -.0603448   .4947081    -0.12   0.903    -1.030633    .9099433
+              Some college  |  -.3960652   .4897299    -0.81   0.419    -1.356589     .564459
+Bachelors degree or higher  |  -.4882307   .4830281    -1.01   0.312     -1.43561    .4591491
+                            |
+                      race4 |
+       Black, Non-Hispanic  |  -.0825294   .4204568    -0.20   0.844    -.9071858     .742127
+       Other, Non-Hispanic  |   .7445149   .4129417     1.80   0.072    -.0654019    1.554432
+                  Hispanic  |   .6381553   .3562473     1.79   0.073    -.0605649    1.336876
+                            |
+                        mar |
+                   pre mar  |   1.540696   .3093184     4.98   0.000     .9340187    2.147372
+                 never mar  |   1.424302   .3182627     4.48   0.000     .8000826    2.048522
+                            |
+                     ppreg4 |
+                   MidWest  |   .5064336   .3638832     1.39   0.164    -.2072631     1.22013
+                     South  |  -.0390238   .3221116    -0.12   0.904    -.6707925    .5927449
+                      West  |  -.9527891   .3439839    -2.77   0.006    -1.627457   -.2781215
+                            |
+                      care3 |
+                      care  |   1.403185    .690894     2.03   0.042     .0481103    2.758259
+                     other  |   1.818461   .3109379     5.85   0.000     1.208607    2.428314
+                            |
+                  dmultiple |    1.15944   .4055593     2.86   0.004      .364002    1.954877
+                      _cons |   4.674159   .7543465     6.20   0.000     3.194633    6.153685
+---------------------------------------------------------------------------------------------
+(running regress on estimation sample)
+
+Survey: Linear regression
+
+Number of strata =     1                          Number of obs   =      1,733
+Number of PSUs   = 1,733                          Population size = 1,709.0213
+                                                  Design df       =      1,732
+                                                  F(16, 1717)     =      10.23
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.1265
+
+---------------------------------------------------------------------------------------------
+                            |             Linearized
+                         mh | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+----------------------------+----------------------------------------------------------------
+                     female |   .3394681   .2247101     1.51   0.131    -.1012635    .7801998
+                      ppage |  -.0371184   .0071884    -5.16   0.000    -.0512172   -.0230196
+                            |
+                   ppeducat |
+               High school  |  -.0338299   .4956974    -0.07   0.946    -1.006058    .9383984
+              Some college  |  -.3780311   .4902812    -0.77   0.441    -1.339637    .5835743
+Bachelors degree or higher  |  -.4836375   .4827483    -1.00   0.317    -1.430468    .4631934
+                            |
+                      race4 |
+       Black, Non-Hispanic  |  -.0942899   .4203645    -0.22   0.823    -.9187653    .7301856
+       Other, Non-Hispanic  |    .734945   .4147451     1.77   0.077    -.0785089    1.548399
+                  Hispanic  |   .6401917   .3574307     1.79   0.073    -.0608494    1.341233
+                            |
+                        mar |
+                   pre mar  |   1.533046   .3110782     4.93   0.000     .9229176    2.143174
+                 never mar  |   1.444357   .3179372     4.54   0.000     .8207761    2.067938
+                            |
+                     ppreg4 |
+                   MidWest  |   .5017755   .3631207     1.38   0.167    -.2104257    1.213977
+                     South  |  -.0505785   .3229141    -0.16   0.876    -.6839212    .5827642
+                      West  |  -.9589042   .3445233    -2.78   0.005     -1.63463   -.2831788
+                            |
+                  politics3 |
+                  politics  |   1.359824   .4483749     3.03   0.002      .480411    2.239238
+                     other  |   1.863032   .3141146     5.93   0.000     1.246948    2.479115
+                            |
+                  dmultiple |   1.096022   .4052407     2.70   0.007     .3012091    1.890834
+                      _cons |   4.619019   .7558966     6.11   0.000     3.136453    6.101585
+---------------------------------------------------------------------------------------------
+(running regress on estimation sample)
+
+Survey: Linear regression
+
+Number of strata =     1                          Number of obs   =      1,733
+Number of PSUs   = 1,733                          Population size = 1,709.0213
+                                                  Design df       =      1,732
+                                                  F(16, 1717)     =      10.47
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.1267
+
+---------------------------------------------------------------------------------------------
+                            |             Linearized
+                         mh | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+----------------------------+----------------------------------------------------------------
+                     female |   .3971652    .220114     1.80   0.071    -.0345519    .8288823
+                      ppage |  -.0394871   .0072864    -5.42   0.000    -.0537782   -.0251961
+                            |
+                   ppeducat |
+               High school  |  -.0395352   .4937219    -0.08   0.936    -1.007889    .9288186
+              Some college  |  -.3736545   .4876738    -0.77   0.444    -1.330146    .5828371
+Bachelors degree or higher  |  -.4592474   .4804638    -0.96   0.339    -1.401598    .4831028
+                            |
+                      race4 |
+       Black, Non-Hispanic  |  -.0739618   .4193802    -0.18   0.860    -.8965066     .748583
+       Other, Non-Hispanic  |   .7228007   .4123171     1.75   0.080    -.0858911    1.531492
+                  Hispanic  |   .6357584   .3597078     1.77   0.077     -.069749    1.341266
+                            |
+                        mar |
+                   pre mar  |   1.535852   .3116834     4.93   0.000     .9245369    2.147168
+                 never mar  |   1.452609   .3180736     4.57   0.000     .8287601    2.076458
+                            |
+                     ppreg4 |
+                   MidWest  |   .4976806   .3625234     1.37   0.170     -.213349     1.20871
+                     South  |  -.0398108   .3221031    -0.12   0.902    -.6715626    .5919411
+                      West  |  -.9735454   .3436583    -2.83   0.005    -1.647574   -.2995165
+                            |
+                      work3 |
+                      work  |   1.315563   .5132368     2.56   0.010     .3089336    2.322192
+                     other  |   1.856313   .3117027     5.96   0.000      1.24496    2.467666
+                            |
+                  dmultiple |   1.122724   .4062374     2.76   0.006      .325956    1.919491
+                      _cons |   4.704111   .7584864     6.20   0.000     3.216465    6.191757
+---------------------------------------------------------------------------------------------
+(running regress on estimation sample)
+
+Survey: Linear regression
+
+Number of strata =     1                          Number of obs   =      1,733
+Number of PSUs   = 1,733                          Population size = 1,709.0213
+                                                  Design df       =      1,732
+                                                  F(16, 1717)     =      11.02
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.1269
+
+---------------------------------------------------------------------------------------------
+                            |             Linearized
+                         mh | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+----------------------------+----------------------------------------------------------------
+                     female |   .3688455   .2225839     1.66   0.098     -.067716    .8054071
+                      ppage |   -.036876   .0072242    -5.10   0.000    -.0510451   -.0227068
+                            |
+                   ppeducat |
+               High school  |  -.0608646   .4940952    -0.12   0.902    -1.029951    .9082214
+              Some college  |  -.3966302   .4890672    -0.81   0.417    -1.355855    .5625942
+Bachelors degree or higher  |  -.4967761   .4821177    -1.03   0.303     -1.44237     .448818
+                            |
+                      race4 |
+       Black, Non-Hispanic  |  -.1051331   .4211022    -0.25   0.803    -.9310554    .7207892
+       Other, Non-Hispanic  |    .766969   .4142198     1.85   0.064    -.0454546    1.579393
+                  Hispanic  |   .6759502   .3584638     1.89   0.060    -.0271172    1.379018
+                            |
+                        mar |
+                   pre mar  |   1.541651   .3094844     4.98   0.000     .9346483    2.148653
+                 never mar  |   1.453362   .3179552     4.57   0.000     .8297455    2.076978
+                            |
+                     ppreg4 |
+                   MidWest  |    .488758   .3637734     1.34   0.179    -.2247234    1.202239
+                     South  |  -.0212661   .3237905    -0.07   0.948    -.6563275    .6137954
+                      West  |  -.9541041   .3448391    -2.77   0.006    -1.630449   -.2777593
+                            |
+                  freetime3 |
+                  freetime  |   1.254382   .5003119     2.51   0.012      .273103    2.235661
+                     other  |   1.856462   .3124848     5.94   0.000     1.243575    2.469349
+                            |
+                  dmultiple |   1.195621   .3984534     3.00   0.003     .4141208    1.977122
+                      _cons |   4.590301   .7560158     6.07   0.000     3.107501    6.073101
+---------------------------------------------------------------------------------------------
+(running regress on estimation sample)
+
+Survey: Linear regression
+
+Number of strata =     1                          Number of obs   =      1,733
+Number of PSUs   = 1,733                          Population size = 1,709.0213
+                                                  Design df       =      1,732
+                                                  F(16, 1717)     =      10.61
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.1268
+
+---------------------------------------------------------------------------------------------
+                            |             Linearized
+                         mh | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+----------------------------+----------------------------------------------------------------
+                     female |   .3874934   .2224496     1.74   0.082    -.0488047    .8237914
+                      ppage |  -.0368224   .0072592    -5.07   0.000    -.0510602   -.0225846
+                            |
+                   ppeducat |
+               High school  |  -.1083898   .4874569    -0.22   0.824    -1.064456    .8476763
+              Some college  |  -.4489937   .4846613    -0.93   0.354    -1.399577    .5015893
+Bachelors degree or higher  |  -.5504683   .4773917    -1.15   0.249    -1.486793    .3858565
+                            |
+                      race4 |
+       Black, Non-Hispanic  |  -.0877607   .4200241    -0.21   0.835    -.9115684     .736047
+       Other, Non-Hispanic  |   .7735214   .4175283     1.85   0.064    -.0453913    1.592434
+                  Hispanic  |   .6393864   .3573301     1.79   0.074    -.0614575     1.34023
+                            |
+                        mar |
+                   pre mar  |    1.52364   .3131144     4.87   0.000     .9095183    2.137763
+                 never mar  |   1.447794   .3162395     4.58   0.000     .8275427    2.068046
+                            |
+                     ppreg4 |
+                   MidWest  |    .465801   .3608041     1.29   0.197    -.2418565    1.173459
+                     South  |  -.0810876   .3200417    -0.25   0.800    -.7087964    .5466213
+                      West  |  -.9907038   .3424778    -2.89   0.004    -1.662417   -.3189903
+                            |
+                   novisit3 |
+                   novisit  |   1.226468   .5127243     2.39   0.017     .2208445    2.232092
+                     other  |   1.853008   .3129129     5.92   0.000     1.239281    2.466735
+                            |
+                  dmultiple |   1.138349   .4037729     2.82   0.005     .3464152    1.930283
+                      _cons |   4.671158   .7473972     6.25   0.000     3.205262    6.137054
+---------------------------------------------------------------------------------------------
+(running regress on estimation sample)
+
+Survey: Linear regression
+
+Number of strata =     1                          Number of obs   =      1,733
+Number of PSUs   = 1,733                          Population size = 1,709.0213
+                                                  Design df       =      1,732
+                                                  F(16, 1717)     =      10.33
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.1266
+
+---------------------------------------------------------------------------------------------
+                            |             Linearized
+                         mh | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+----------------------------+----------------------------------------------------------------
+                     female |    .370399   .2221544     1.67   0.096    -.0653201    .8061181
+                      ppage |  -.0390036   .0072399    -5.39   0.000    -.0532036   -.0248037
+                            |
+                   ppeducat |
+               High school  |  -.0730528   .4954119    -0.15   0.883    -1.044721    .8986156
+              Some college  |  -.4051241   .4898184    -0.83   0.408    -1.365822    .5555736
+Bachelors degree or higher  |  -.4826795   .4807963    -1.00   0.316    -1.425682    .4603228
+                            |
+                      race4 |
+       Black, Non-Hispanic  |  -.0704104   .4199469    -0.17   0.867    -.8940668    .7532459
+       Other, Non-Hispanic  |   .7345125   .4124238     1.78   0.075    -.0743885    1.543413
+                  Hispanic  |   .6261782    .361718     1.73   0.084    -.0832718    1.335628
+                            |
+                        mar |
+                   pre mar  |   1.526587   .3107475     4.91   0.000     .9171075    2.136067
+                 never mar  |    1.41387   .3195173     4.43   0.000     .7871894     2.04055
+                            |
+                     ppreg4 |
+                   MidWest  |   .4967073   .3640879     1.36   0.173    -.2173909    1.210806
+                     South  |  -.0625809   .3244243    -0.19   0.847    -.6988855    .5737238
+                      West  |  -.9451635   .3468772    -2.72   0.006    -1.625506   -.2648212
+                            |
+                  allother3 |
+                  allother  |   1.174324   .5896549     1.99   0.047     .0178131    2.330834
+                     other  |   1.843072   .3123674     5.90   0.000     1.230415    2.455729
+                            |
+                  dmultiple |   1.082434   .4082724     2.65   0.008     .2816749    1.883193
+                      _cons |   4.732752    .759924     6.23   0.000     3.242287    6.223217
+---------------------------------------------------------------------------------------------
+
+. 
+. coefplot allother novisit freetime work politics care jobloss health society moving worry death lockdown relation mone
+> y, ///
+>         keep(1.allother3 1.novisit3 1.freetime3 1.work3 1.politics3 ///
+>         1.care3 1.jobloss3 1.health3 1.society3 1.moving3 1.worry3 ///
+>         1.death3 1.lockdown3 1.relation3 1.money3) /// 
+>         legend(off) nooffset msymbol(O) msize(vsmall) mcolor(blue*.7) ciopts(recast(rcap) color(blue*.7)) ///
+>         mlabel mlabcolor(blue*.7) format(%9.2f) mlabposition(12) ///
+>         yscale(noline) xlabel(-1(1)5, nogrid) xscale(range(-1(1)5)) xline(0, lcolor(red*.7)) ///
+>         coeflabels(1.politics3 = "Politics" 1.death3 = "Death" 1.novisit3 = "No social life" ///
+>         1.work3 = "Paid work" 1.health3 = "Health" 1.care3 = "Care work" ///
+>         1.relation3 = "Relationships" 1.freetime3 = "Activities" 1.lockdown3 = "Staying home" ///
+>         1.jobloss3 = "Job loss" 1.money3 = "Finances" 1.moving3 = "Residential" ///
+>         1.society3 = "Society" 1.worry3 = "Emotional state" 1.allother3 = "Other", labgap(2)) ///
+>         grid(none) ///
+>         ytitle("Type of Life Events", size(small)) ///
+>         xtitle("Coefficient (Relative to No Stressful Life Events)", size(small) margin(0 5 0 2.5)) 
+
+. graph export "graph_Qian_Fan_2024_BJS_Figure2.pdf"
+file /Users/yueqian/Desktop/graph_Qian_Fan_2024_BJS_Figure2.pdf saved as PDF format
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /Users/yueqian/Desktop/graph_Qian_Fan_2024_BJS.log
+  log type:  text
+ closed on:  13 Aug 2025, 19:53:24
+------------------------------------------------------------------------------------------------------------------------
