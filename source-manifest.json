@@ -1,0 +1,332 @@
+[
+  {
+    "path": "Qian and Hu 2025 JMF/graph_Qian_Hu_2025_JMF_Figure1.pdf",
+    "bytes": 20674,
+    "sha256": "02dbb0a5fb8f59d888e036e45e7fbb8090bc02fc1e286cb85e09998c3226c354"
+  },
+  {
+    "path": "Qian and Hu 2025 JMF/graph_Qian_Hu_2025_JMF.do",
+    "bytes": 4184,
+    "sha256": "03e6c008f538e25963603701dd1caf68c5793ae07bdf23ac500ff19dc40adf54"
+  },
+  {
+    "path": "Qian and Hu 2025 JMF/graph_Qian_Hu_2025_JMF_Figure2.pdf",
+    "bytes": 50867,
+    "sha256": "c6cf32648359390d77cb8b57cf71cd6fd7fb7736631f7cb587b53a6d7caa34a2"
+  },
+  {
+    "path": "Qian and Hu 2025 JMF/graph_Qian_Hu_2025_JMF.log",
+    "bytes": 97245,
+    "sha256": "f478ec3df6e06132734c628ab3735f040a0ff49948f26e03c79dc40d6d53a511"
+  },
+  {
+    "path": "Qian and Hu 2025 SocSci/graph_Qian_Hu_2025_SocSci_Figure1.pdf",
+    "bytes": 31160,
+    "sha256": "efeb41f133a5cab1becbce517e8f8b876330258f008db481c7734e4e6a4d8332"
+  },
+  {
+    "path": "Qian and Hu 2025 SocSci/graph_Qian_Hu_2025_SocSci.do",
+    "bytes": 3438,
+    "sha256": "ed234787ba07c7f279bd8080c639f36b1f4bbd559ea0614f484e0f6a32b2ed74"
+  },
+  {
+    "path": "Qian and Hu 2025 SocSci/graph_Qian_Hu_2025_SocSci_Figure2.pdf",
+    "bytes": 31792,
+    "sha256": "8d3cf1d4ba2256d7cdcdcd5cd3fb897761ba14b713671a394fa503beace394b3"
+  },
+  {
+    "path": "Qian and Hu 2025 SocSci/graph_Qian_Hu_2025_SocSci.log",
+    "bytes": 21266,
+    "sha256": "2779d660641d222287c94fca7438bbfcadbb034eff4eafea416dd4486b9632a8"
+  },
+  {
+    "path": "Qian and Fan 2024 BJS/graph_Qian_Fan_2024_BJS.do",
+    "bytes": 5391,
+    "sha256": "cf79d84180324c9a49c7c9011c912fc1d2e312afe03adbf68f94d02c5507926c"
+  },
+  {
+    "path": "Qian and Fan 2024 BJS/graph_Qian_Fan_2024_BJS_Figure1.pdf",
+    "bytes": 24881,
+    "sha256": "b00a012bc8e6c67bee5bc005f641ad2176846a46816f248a920a7d3fa175e5e1"
+  },
+  {
+    "path": "Qian and Fan 2024 BJS/graph_Qian_Fan_2024_BJS.log",
+    "bytes": 85577,
+    "sha256": "860a84a9121014a9f0a17c1014d26713117e3ab0c373ae268d2211b4911b55a0"
+  },
+  {
+    "path": "Qian and Fan 2024 BJS/graph_Qian_Fan_2024_BJS_Figure2.pdf",
+    "bytes": 22976,
+    "sha256": "3660f67e792d5426de5bf124676a032d16909759cf8fa5752839aa88e8fab1d9"
+  },
+  {
+    "path": "Qian Glauber and Yavorsky 2023 JMF/graph_Qian_et_al_2023_JMF.do",
+    "bytes": 9271,
+    "sha256": "42d4191a41ff23db3d731db53a8b106779575add620b6df3e7b33480df941f8e"
+  },
+  {
+    "path": "Qian Glauber and Yavorsky 2023 JMF/graph_Qian_et_al_2023_JMF_Figure1.pdf",
+    "bytes": 37271,
+    "sha256": "921dfecad84ae35016ed88a652b4b1c155377132417573b0638351c57014c210"
+  },
+  {
+    "path": "Qian Glauber and Yavorsky 2023 JMF/graph_Qian_et_al_2023_JMF_Figure2.pdf",
+    "bytes": 39186,
+    "sha256": "4ab8aa1d36672e537a938f39abec6abd925375ed2b279dda647811a9bcb95814"
+  },
+  {
+    "path": "Qian Glauber and Yavorsky 2023 JMF/graph_Qian_et_al_2023_JMF_Figure3.pdf",
+    "bytes": 39359,
+    "sha256": "73b9726efdb24625e50763fbd7e88b78917698bb4b426891b81aeed23c6c9c14"
+  },
+  {
+    "path": "Qian Glauber and Yavorsky 2023 JMF/graph_Qian_et_al_2023_JMF.log",
+    "bytes": 63292,
+    "sha256": "4a5a7c2445121f2f2e8283fdc87f56f0708ef61b9d183204e32190d7fe4b001b"
+  },
+  {
+    "path": "Fan and Qian 2023 JOHS/graph_Fan_Qian_2023_JOHS.do",
+    "bytes": 2406,
+    "sha256": "28d7122ce593fc010bf6dd2ece5df9de4c1ab292d5d35907e4b03f2fae9927a6"
+  },
+  {
+    "path": "Fan and Qian 2023 JOHS/graph_Fan_Qian_2023_JOHS_Figure2.pdf",
+    "bytes": 33971,
+    "sha256": "ba8c21987255de4f72e134b248f629e099b484700b19a856e2b60f6b2a576970"
+  },
+  {
+    "path": "Fan and Qian 2023 JOHS/graph_Fan_Qian_2023_JOHS.log",
+    "bytes": 15116,
+    "sha256": "e501c97a76069e08084e7105915fe420a0e459b1fc782bfa7b42f25271032d91"
+  },
+  {
+    "path": "Qian and Sayer 2022 Socius/graph_Qian_Sayer_2022_Socius_Figure1.pdf",
+    "bytes": 47107,
+    "sha256": "7b8552a53c915d92cad9d0878df25d596dac7aacd976626bdd0ed9a5d35e8ad6"
+  },
+  {
+    "path": "Qian and Sayer 2022 Socius/graph_Qian_Sayer_2022_Socius.do",
+    "bytes": 6270,
+    "sha256": "39e7420ce2fee2428ca1089643f360a58181f130e394d27ba56408109787c027"
+  },
+  {
+    "path": "Qian and Sayer 2022 Socius/graph_Qian_Sayer_2022_Socius_Figure2.pdf",
+    "bytes": 45355,
+    "sha256": "6785723d1a3e15881f0ab5e63ae694d3bb0558feb99304ec51f0ddf82a602ed0"
+  },
+  {
+    "path": "Qian and Sayer 2022 Socius/graph_Qian_Sayer_2022_Socius.log",
+    "bytes": 65879,
+    "sha256": "001d2d8dad685542aae618b124b41d1a738e8f0cc5e448cc9a1f003510b4e72c"
+  },
+  {
+    "path": "Qian and Yavorsky 2021 SF/graph_Qian_Yavorsky_2021_SF_Figure1A.pdf",
+    "bytes": 31138,
+    "sha256": "4792703ae9d30ae589640eeb1abbe531dca41a2d205464df8a709af7c374d748"
+  },
+  {
+    "path": "Qian and Yavorsky 2021 SF/graph_Qian_Yavorsky_2021_SF.do",
+    "bytes": 20593,
+    "sha256": "3ed9fbaa2c5dcd7ab225803d3cd0b3a58f9c6b745bc6a10496bdddf3f9942fd8"
+  },
+  {
+    "path": "Qian and Yavorsky 2021 SF/graph_Qian_Yavorsky_2021_SF_Figure1B.pdf",
+    "bytes": 37155,
+    "sha256": "96c2f446aab3051fe83cdd4933907209918abd4e788541a5381af290348e1152"
+  },
+  {
+    "path": "Qian and Yavorsky 2021 SF/graph_Qian_Yavorsky_2021_SF_Figure2A.pdf",
+    "bytes": 32113,
+    "sha256": "31471509504a92348e2b1043c51d6d8fdf3e57b9972d3e90c6f9d2face290cb6"
+  },
+  {
+    "path": "Qian and Yavorsky 2021 SF/graph_Qian_Yavorsky_2021_SF_Figure2B.pdf",
+    "bytes": 38686,
+    "sha256": "1b79d44667c420bc0ae9929ee4e0a6b3f3157984d0df4baaad23780fda5c8d06"
+  },
+  {
+    "path": "Qian and Yavorsky 2021 SF/graph_Qian_Yavorsky_2021_SF_Figure3.pdf",
+    "bytes": 50698,
+    "sha256": "8acb0dca2de964f73f8485d48a48594ebd51ef277f0a028cea7fffac369f1627"
+  },
+  {
+    "path": "Qian and Yavorsky 2021 SF/graph_Qian_Yavorsky_2021_SF.log",
+    "bytes": 185122,
+    "sha256": "8209443cf07f6e45bfeb720bce15f058a126ac469f4500911d82512f5909e541"
+  },
+  {
+    "path": "Tian and Qian 2022 PSP/graph_Tian_Qian_2022_PSP_Figure1.pdf",
+    "bytes": 55693,
+    "sha256": "adec65d439f91fdf8e5629e06feef535470dbb4e1013fb26fc0f187b3757f97d"
+  },
+  {
+    "path": "Tian and Qian 2022 PSP/graph_Tian_Qian_2022_PSP.do",
+    "bytes": 7969,
+    "sha256": "b925cee2075276f255a85e111f0700702c3617dabfb50db088d7617047c8ba28"
+  },
+  {
+    "path": "Tian and Qian 2022 PSP/graph_Tian_Qian_2022_PSP.log",
+    "bytes": 23253,
+    "sha256": "e5e0b501cba08680d39cc45178549cd1fb455c2f7f58de82dc8ff1dbbb33807d"
+  },
+  {
+    "path": "Tian and Qian 2022 PSP/graph_Tian_Qian_2022_PSP_Figure2.pdf",
+    "bytes": 58102,
+    "sha256": "ea7f1e0859434aeb9d3ffc62e9a203cc0c5c078ec92f7514e393418b28f86029"
+  },
+  {
+    "path": "Qian and Qian 2023 JEMS/table_Qian_Qian_2023_JEMS.do",
+    "bytes": 5897,
+    "sha256": "86aee8962f1c3c25b59186ecd76f36c0bdb51fd99a170129f00ef2917b3f6c5d"
+  },
+  {
+    "path": "Qian and Qian 2023 JEMS/table_Qian_Qian_2023_JEMS.log",
+    "bytes": 56689,
+    "sha256": "b18a3044b2d11afb41372cae27f630a1cf4fe50d2a6f49bd1e6a4ca0f88cd4fd"
+  },
+  {
+    "path": "Fuller and Qian 2021 GS/graph_Fuller_Qian_2021_GS.do",
+    "bytes": 5603,
+    "sha256": "abf052d7810794beeb9e24f59406444c4cb7b35942c8b340a230dd4bb4c4bb13"
+  },
+  {
+    "path": "Fuller and Qian 2021 GS/graph_Fuller_Qian_2021_GS_Figure1.pdf",
+    "bytes": 51848,
+    "sha256": "83eb2d95f8580d6df2d0d309192408eb243223dd2059b66a2d318011ccd943b1"
+  },
+  {
+    "path": "Fuller and Qian 2021 GS/graph_Fuller_Qian_2021_GS_FigureA1.pdf",
+    "bytes": 75192,
+    "sha256": "9c892972f732cec7c840dcdd7d6dd1047d429bde3c13485808b1f8c965a86bcf"
+  },
+  {
+    "path": "Fuller and Qian 2021 GS/graph_Fuller_Qian_2021_GS_Figure2.pdf",
+    "bytes": 41164,
+    "sha256": "930fec778b81bce5cee9a4b2e35e4f5215bc3a5f119d6949bd74ba94825a415a"
+  },
+  {
+    "path": "Fuller and Qian 2021 GS/graph_Fuller_Qian_2021_GS_FigureA2.pdf",
+    "bytes": 61441,
+    "sha256": "fc8c775db3a5010779e03ffc06970adb2179c164efcfec82002a9d03ad75014f"
+  },
+  {
+    "path": "Fuller and Qian 2021 GS/graph_Fuller_Qian_2021_GS.log",
+    "bytes": 100181,
+    "sha256": "cc644f4aab39099a6a68e46584a5cbcd1114a5f43d91b479dfbad2b952b8c6a9"
+  },
+  {
+    "path": "Qian 2018 JMF/table_Qian_2018_JMF.do",
+    "bytes": 3813,
+    "sha256": "6312f13809ac988c7aa2ca49cadc3b5d78a448bcf9ac74471c18fad53b1d6a4a"
+  },
+  {
+    "path": "Qian 2018 JMF/table_Qian_2018_JMF.log",
+    "bytes": 26104,
+    "sha256": "8ad10d224718e9432ea69bdf1b351958da10b2cc9d3f7840099676ed2dc0663b"
+  },
+  {
+    "path": "Qian and Qian 2017 CSR/table_Qian_Qian_2017_CSR.do",
+    "bytes": 3421,
+    "sha256": "191e6336a0d24c1158e930c36779e60ec4f712cc43d7c64969b59a7ce4affd52"
+  },
+  {
+    "path": "Qian and Qian 2017 CSR/table_Qian_Qian_2017_CSR.log",
+    "bytes": 20404,
+    "sha256": "a016834f6c5ff9a83b35528bcb9791c552a7d0ed2a5a3d9710d9c955b6eeb49a"
+  },
+  {
+    "path": "Qian and Sayer 2016 JMF/graph_Qian_Sayer_2016_JMF.do",
+    "bytes": 1592,
+    "sha256": "0baa100bc9554cdc711d295aa2d2dc0aa22bf43880098b236e7b6c5c3422e90f"
+  },
+  {
+    "path": "Qian and Sayer 2016 JMF/graph_Qian_Sayer_2016_JMF_Figure1.pdf",
+    "bytes": 29222,
+    "sha256": "d64b45c20d867be98f0611ff0d31351b988a9c0af2ca5fa42c33cbc69aaa8a4e"
+  },
+  {
+    "path": "Qian and Sayer 2016 JMF/graph_Qian_Sayer_2016_JMF.log",
+    "bytes": 8584,
+    "sha256": "cc9b2bd9d33bd0d0f5a7a0d3f53ae6b5a62ac59170effb045c7c150f0683e517"
+  },
+  {
+    "path": "Yavorsky Qian and Glauber 2025 GWO/graph_Yavorsky_et_al_2025_GWO_Figure5.pdf",
+    "bytes": 35640,
+    "sha256": "0b593c32adac13e64503d20491b23bc78e927df823fc56bf73fc003c1e729812"
+  },
+  {
+    "path": "Yavorsky Qian and Glauber 2025 GWO/graph_Yavorsky_et_al_2025_GWO_Figure4.pdf",
+    "bytes": 36063,
+    "sha256": "13c0b8283eca55ff2fddeb48d7af2b2514cbd6d36f0630f1977185b0c06062ef"
+  },
+  {
+    "path": "Yavorsky Qian and Glauber 2025 GWO/graph_Yavorsky_et_al_2025_GWO_Figure3.pdf",
+    "bytes": 44131,
+    "sha256": "ef9fd992dd0990b1c7c6f7cd6548a594df4fcf2671e2356b8738e5bdbdb46fc2"
+  },
+  {
+    "path": "Yavorsky Qian and Glauber 2025 GWO/graph_Yavorsky_et_al_2025_GWO_Figure2.pdf",
+    "bytes": 35214,
+    "sha256": "ef9cd290d293d1d95ccddfc10bfd4de833f3255ce033c23d629c27b487b4839b"
+  },
+  {
+    "path": "Yavorsky Qian and Glauber 2025 GWO/graph_Yavorsky_et_al_2025_GWO_Figure1.pdf",
+    "bytes": 33880,
+    "sha256": "069b0b76024c0a4c0f3109a72417b948f93845558771b4946e24db12eefe5a1b"
+  },
+  {
+    "path": "Yavorsky Qian and Glauber 2025 GWO/graph_Yavorsky_et_al_2025_GWO.log",
+    "bytes": 45451,
+    "sha256": "211090e205f57d4f021b68d82f58732b2d3955711fd8c6d03bb69a6fda9afb5f"
+  },
+  {
+    "path": "Yavorsky Qian and Glauber 2025 GWO/graph_Yavorsky_et_al_2025_GWO.do",
+    "bytes": 6719,
+    "sha256": "088500b1b2e12c15a26fe10bd536de80269484122abdf453f6a478733f07256f"
+  },
+  {
+    "path": "Qian and Fan 2025 ILR Review/graph_Qian_Fan_2025_ILRReview.do",
+    "bytes": 13365,
+    "sha256": "1099d19bebceac2bb3693ec58180207d627b30a261ee96e67f24cbdd49696726"
+  },
+  {
+    "path": "Qian and Fan 2025 ILR Review/graph_Qian_Fan_2025_ILRReview.log",
+    "bytes": 106660,
+    "sha256": "72b8c987ed8cf2d12940429e641b09881f6e7282320ff783e8f2b2f84ce689b1"
+  },
+  {
+    "path": "Qian and Fan 2025 ILR Review/Figure 2.pdf",
+    "bytes": 36563,
+    "sha256": "d466b6ebba4c3588a989f68581def91904d322538a046f5937264d9014ade033"
+  },
+  {
+    "path": "Qian and Fan 2025 ILR Review/Figure 1.pdf",
+    "bytes": 34901,
+    "sha256": "d0a0ac3247b84dfa3891b266df379bbf6b169a47a46bc9bd83b2884c9c46f4f7"
+  },
+  {
+    "path": "Qian and Fan 2025 ILR Review/Figure 3.pdf",
+    "bytes": 55427,
+    "sha256": "f6335e73240ed26e8a70133bb86eda2c6bda727813c8381e00cd25e7ea627258"
+  },
+  {
+    "path": "Qian and Fan 2025 ILR Review/Figure 4.pdf",
+    "bytes": 64429,
+    "sha256": "11943c06414cfdd3e461eda4e92d343e3ccbb99fb048f68b08ca103ad8388bc7"
+  },
+  {
+    "path": "Fan and Qian 2025 JCCA/graph_Fan_Qian_2025_JCCA.do",
+    "bytes": 2478,
+    "sha256": "26184e8252eb9cc049532539bc371b44829484046a99c114c9bcd06fab3d736d"
+  },
+  {
+    "path": "Fan and Qian 2025 JCCA/graph_Fan_Qian_2025_JCCA.log",
+    "bytes": 15628,
+    "sha256": "a646fbab5a3c03edc9632f4ecb3ebd4e3e5a7f80854b8bcdf923b2fc94134047"
+  },
+  {
+    "path": "Fan and Qian 2025 JCCA/Figure 2.pdf",
+    "bytes": 62170,
+    "sha256": "194ed06c3321e758693c377db60e3782e3377a01f6f3850bd8edeea5954456aa"
+  }
+]
