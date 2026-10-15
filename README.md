@@ -2,9 +2,9 @@
 
 Stata syntax used for producing graphs and tables in Yue Qian’s research, with accompanying logs and PDF figures.
 
-Private draft copied from [OSF Syntax for Graphs](https://osf.io/784ju/) on 9 October 2026. The original OSF project remains intact.
-
 ## Browse by paper
+
+Copied from [OSF Syntax for Graphs](https://osf.io/784ju/) on 9 October 2026. Original folder names, filenames, and file contents are preserved. The original OSF project remains intact.
 
 - [Fan and Qian 2023 JOHS](<Fan%20and%20Qian%202023%20JOHS>)
 - [Fan and Qian 2025 JCCA](<Fan%20and%20Qian%202025%20JCCA>)
@@ -29,8 +29,4 @@ Private draft copied from [OSF Syntax for Graphs](https://osf.io/784ju/) on 9 Oc
 - `.log`: original Stata logs.
 - `.pdf`: example figures.
 
-Original folder names, filenames, and file contents are preserved. Review local paths and software requirements in each script before running it. Some scripts use paper-specific inputs; this collection is graphing syntax, not a guarantee of a complete replication package. Scripts have not been executed during the transfer.
-
-## Source and verification
-
-The OSF ZIP contained 66 files across 16 paper folders. `source-manifest.json` records file sizes and SHA-256 checksums. OSF listed no license; no new license has been assigned.
+Review local paths and software requirements in each script before running it. Some scripts use paper-specific inputs; this collection is graphing syntax, not a guarantee of a complete replication package.
